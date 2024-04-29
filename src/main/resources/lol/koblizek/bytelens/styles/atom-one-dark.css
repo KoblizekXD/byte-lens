@@ -1,0 +1,18 @@
+
+Button {
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #3d424b;
+    -fx-text-fill: #a0a7b4;
+    -fx-padding: 2px 14px 2px 14px;
+    -fx-border-color: #464c55;
+    -fx-min-width: 72px;
+}
+
+Button:disabled {
+    -fx-background-color: transparent;
+}
+
+VBox, AnchorPane {
+    -fx-background-color: #21252b;
+}

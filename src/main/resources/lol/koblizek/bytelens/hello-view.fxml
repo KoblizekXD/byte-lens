@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import lol.koblizek.bytelens.api.ui.BrowseButton?>
+<?import lol.koblizek.bytelens.api.ui.IconButton?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="lol.koblizek.bytelens.core.controllers.HelloView"
+      prefHeight="400.0" prefWidth="600.0"
+      stylesheets="@styles/atom-one-dark.css"
+      alignment="CENTER_LEFT">
+    <Button>Hello everynan</Button>
+    <IconButton iconProperty="/lol/koblizek/bytelens/resources/wallet.png">Yep</IconButton>
+</VBox>
