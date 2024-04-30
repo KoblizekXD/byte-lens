@@ -2,17 +2,20 @@ package lol.koblizek.bytelens.api.resource;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 public class Resource {
 
     private final URL url;
     private final byte[] bytes;
 
-    Resource(URL url) {
+    Resource(@NotNull URL url) {
         this.url = url;
         try {
             bytes = url.openStream().readAllBytes();
@@ -40,5 +43,15 @@ public class Resource {
 
     public ImageView toImageView() {
         return new ImageView(url.toExternalForm());
+    }
+
+    public Properties toProperties() {
+        var properties = new Properties();
+        try (var stream = url.openStream()) {
+            properties.load(stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return properties;
     }
 }

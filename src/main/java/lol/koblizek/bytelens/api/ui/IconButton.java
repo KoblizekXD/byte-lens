@@ -20,6 +20,16 @@ public class IconButton extends Button {
         setGraphic(imageView);
     }
 
+    public IconButton(StringProperty icon) {
+        super();
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(16);
+        imageView.setFitWidth(16);
+        this.icon = icon;
+        imageView.imageProperty().bind(icon.map(Image::new));
+        setGraphic(imageView);
+    }
+
     public void setIcon(String icon) {
         this.icon.set(icon);
     }

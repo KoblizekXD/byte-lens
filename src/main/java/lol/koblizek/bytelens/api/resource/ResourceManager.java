@@ -17,6 +17,9 @@ public final class ResourceManager {
     }
 
     public Resource get(String path) {
-        return new Resource(getClass().getResource(path));
+        var resource = getClass().getResource(path);
+        if (resource == null)
+            throw new IllegalArgumentException("Resource not found: " + path);
+        return new Resource(resource);
     }
 }

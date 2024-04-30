@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import lol.koblizek.bytelens.api.ui.BrowseButton?>
+<?import lol.koblizek.bytelens.api.ui.PathTextField?>
 <?import lol.koblizek.bytelens.api.ui.IconButton?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
@@ -15,8 +15,8 @@
       stylesheets="@styles/atom-one-dark.css"
       alignment="CENTER_LEFT">
     <Button>Hello everynan</Button>
-    <StackPane maxWidth="300">
+    <StackPane alignment="CENTER_RIGHT" maxWidth="300">
         <TextField>Hello</TextField>
-        <IconButton alignment="BASELINE_RIGHT" icon="/lol/koblizek/bytelens/resources/wallet.png" />
+        <IconButton onMouseClicked="" icon="/lol/koblizek/bytelens/resources/wallet.png" />
     </StackPane>
 </VBox>
