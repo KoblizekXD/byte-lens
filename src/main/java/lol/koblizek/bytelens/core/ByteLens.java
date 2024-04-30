@@ -3,9 +3,8 @@ package lol.koblizek.bytelens.core;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
+import lol.koblizek.bytelens.api.resource.Resource;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 
 public final class ByteLens extends Application {
@@ -20,10 +19,12 @@ public final class ByteLens extends Application {
         launch();
     }
 
+    private Stage currentStage;
+
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 840, 480);
+        currentStage = stage;
+        Scene scene = getResourceManager().getScene("/lol/koblizek/bytelens/hello-view.fxml");
         stage.setTitle("ByteLens");
         stage.setScene(scene);
         stage.show();
@@ -33,5 +34,9 @@ public final class ByteLens extends Application {
         ResourceManager.init();
 
         instance = this;
+    }
+
+    public ResourceManager getResourceManager() {
+        return ResourceManager.getInstance();
     }
 }

@@ -1,5 +1,7 @@
 package lol.koblizek.bytelens.api.resource;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
@@ -53,5 +55,9 @@ public class Resource {
             throw new RuntimeException(e);
         }
         return properties;
+    }
+
+    public FXMLLoader toLoader() {
+        return new FXMLLoader(url);
     }
 }

@@ -15,8 +15,5 @@
       stylesheets="@styles/atom-one-dark.css"
       alignment="CENTER_LEFT">
     <Button>Hello everynan</Button>
-    <StackPane alignment="CENTER_RIGHT" maxWidth="300">
-        <TextField>Hello</TextField>
-        <IconButton onMouseClicked="" icon="/lol/koblizek/bytelens/resources/wallet.png" />
-    </StackPane>
+    <PathTextField />
 </VBox>

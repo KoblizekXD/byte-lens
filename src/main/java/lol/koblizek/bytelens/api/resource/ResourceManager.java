@@ -1,5 +1,9 @@
 package lol.koblizek.bytelens.api.resource;
 
+import javafx.scene.Scene;
+
+import java.io.IOException;
+
 public final class ResourceManager {
 
     private static ResourceManager instance;
@@ -21,5 +25,13 @@ public final class ResourceManager {
         if (resource == null)
             throw new IllegalArgumentException("Resource not found: " + path);
         return new Resource(resource);
+    }
+
+    public Scene getScene(String path) {
+        try {
+            return new Scene(get(path).toLoader().load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
