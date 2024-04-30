@@ -16,3 +16,17 @@ Button:disabled {
 VBox, AnchorPane {
     -fx-background-color: #21252b;
 }
+
+IconButton {
+    -fx-text-fill: #a0a7b4;
+    -fx-background-color: transparent;
+}
+
+TextField {
+    -fx-text-fill: #a0a7b4;
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #333841;
+}

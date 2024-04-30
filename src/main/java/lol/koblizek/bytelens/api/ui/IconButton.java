@@ -8,21 +8,23 @@ import javafx.scene.image.ImageView;
 
 public class IconButton extends Button {
 
-    private StringProperty iconProperty;
+    private StringProperty icon;
 
     public IconButton() {
         super();
         ImageView imageView = new ImageView();
-        iconProperty = new SimpleStringProperty();
-        imageView.imageProperty().bind(iconProperty.map(Image::new));
+        imageView.setFitHeight(16);
+        imageView.setFitWidth(16);
+        icon = new SimpleStringProperty();
+        imageView.imageProperty().bind(icon.map(Image::new));
         setGraphic(imageView);
     }
 
-    public void setIconProperty(String iconProperty) {
-        this.iconProperty.set(iconProperty);
+    public void setIcon(String icon) {
+        this.icon.set(icon);
     }
 
-    public String getIconProperty() {
-        return iconProperty.get();
+    public String getIcon() {
+        return icon.get();
     }
 }
