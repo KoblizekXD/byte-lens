@@ -5,8 +5,11 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.SVGPath;
+import lol.koblizek.bytelens.api.util.InstanceAccessor;
+import lol.koblizek.bytelens.core.ByteLens;
 
-public class IconButton extends Button {
+public class IconButton extends Button implements InstanceAccessor {
 
     private StringProperty icon;
 
@@ -26,7 +29,7 @@ public class IconButton extends Button {
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         this.icon = icon;
-        imageView.imageProperty().bind(icon.map(Image::new));
+        imageView.imageProperty().bind(icon.map(x -> resource(x).toSVG()));
         setGraphic(imageView);
     }
 

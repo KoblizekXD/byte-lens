@@ -1,13 +1,18 @@
 package lol.koblizek.bytelens.api.resource;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import lol.koblizek.bytelens.core.svg.SVGTranscoder;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -59,5 +64,15 @@ public class Resource {
 
     public FXMLLoader toLoader() {
         return new FXMLLoader(url);
+    }
+
+    public Image toSVG() {
+        SVGTranscoder transcoder = new SVGTranscoder();
+        try (InputStream stream = url.openStream()) {
+            transcoder.transcode(new TranscoderInput(stream), null);
+            return SwingFXUtils.toFXImage(transcoder.getImg(), null);
+        } catch (IOException | TranscoderException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

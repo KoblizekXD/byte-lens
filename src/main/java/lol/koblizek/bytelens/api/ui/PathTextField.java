@@ -21,7 +21,7 @@ public class PathTextField extends StackPane {
         TextField t = new TextField();
         t.promptTextProperty().bind(placeholder);
         getChildren().add(t);
-        IconButton i = new IconButton(new SimpleStringProperty("/lol/koblizek/bytelens/resources/wallet.png"));
+        IconButton i = new IconButton(new SimpleStringProperty("/lol/koblizek/bytelens/resources/structure.svg"));
         getChildren().add(i);
         setAlignment(i, Pos.CENTER_RIGHT);
         onIconClick = new SimpleObjectProperty<>();

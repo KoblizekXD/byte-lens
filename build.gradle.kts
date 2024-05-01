@@ -24,7 +24,7 @@ application {
 
 javafx {
     version = "22.0.1"
-    modules = listOf("javafx.controls", "javafx.fxml")
+    modules = listOf("javafx.controls", "javafx.fxml", "javafx.swing")
 }
 
 tasks.withType<JavaCompile> {
@@ -32,6 +32,7 @@ tasks.withType<JavaCompile> {
 }
 
 dependencies {
+    implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
     compileOnly("org.jetbrains:annotations:24.1.0")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
