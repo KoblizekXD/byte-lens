@@ -12,4 +12,12 @@ public interface InstanceAccessor {
     default Resource resource(String path) {
         return ByteLens.getInstance().getResourceManager().get(path);
     }
+
+    default Resource jbIcon(String path, boolean isDark) {
+        return instance().getResourceManager().getJBIcon(path, isDark);
+    }
+
+    default Resource jbIcon(String path) {
+        return instance().getResourceManager().getJBIcon(path, true);
+    }
 }

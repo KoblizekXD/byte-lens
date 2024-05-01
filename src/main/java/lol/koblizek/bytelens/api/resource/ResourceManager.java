@@ -3,6 +3,8 @@ package lol.koblizek.bytelens.api.resource;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public final class ResourceManager {
 
@@ -31,6 +33,17 @@ public final class ResourceManager {
         try {
             return new Scene(get(path).toLoader().load());
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Resource getJBIcon(String path, boolean isDark) {
+        try {
+            return new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
+                    + path.toLowerCase().replace(".", "/").replace("allicons", "AllIcons")
+                    + (isDark ? "_dark" : "")
+                    + ".svg"));
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
     }
