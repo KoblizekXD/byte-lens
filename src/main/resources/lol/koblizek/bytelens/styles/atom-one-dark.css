@@ -17,7 +17,7 @@ VBox, AnchorPane {
     -fx-background-color: #21252b;
 }
 
-IconButton {
+IconButton, JetBrainsButton {
     -fx-text-fill: #a0a7b4;
     -fx-background-color: transparent;
 }

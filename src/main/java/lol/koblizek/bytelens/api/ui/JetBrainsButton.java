@@ -6,27 +6,27 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import lol.koblizek.bytelens.api.util.InstanceAccessor;
 
-public class IconButton extends Button implements InstanceAccessor {
+public class JetBrainsButton extends Button implements InstanceAccessor {
 
     private StringProperty icon;
 
-    public IconButton() {
+    public JetBrainsButton() {
         super();
         ImageView imageView = new ImageView();
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         icon = new SimpleStringProperty();
-        imageView.imageProperty().bind(icon.map(x -> resource(x).toSVG()));
+        imageView.imageProperty().bind(icon.map(x -> jbIcon(x).toSVG()));
         setGraphic(imageView);
     }
 
-    public IconButton(StringProperty icon) {
+    public JetBrainsButton(StringProperty icon) {
         super();
         ImageView imageView = new ImageView();
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         this.icon = icon;
-        imageView.imageProperty().bind(icon.map(x -> resource(x).toSVG()));
+        imageView.imageProperty().bind(icon.map(x -> jbIcon(x).toSVG()));
         setGraphic(imageView);
     }
 

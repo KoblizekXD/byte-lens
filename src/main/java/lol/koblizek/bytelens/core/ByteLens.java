@@ -1,10 +1,8 @@
 package lol.koblizek.bytelens.core;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import lol.koblizek.bytelens.api.resource.Resource;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 
 public final class ByteLens extends Application {

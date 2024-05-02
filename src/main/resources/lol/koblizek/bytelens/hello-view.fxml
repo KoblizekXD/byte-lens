@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import lol.koblizek.bytelens.api.ui.PathTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
 <?import lol.koblizek.bytelens.api.ui.IconButton?>
+<?import lol.koblizek.bytelens.api.ui.JetBrainsButton?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="lol.koblizek.bytelens.core.controllers.HelloView"
@@ -15,5 +11,5 @@
       stylesheets="@styles/atom-one-dark.css"
       alignment="CENTER_LEFT">
     <Button>Hello everynan</Button>
-    <IconButton icon="AllIcons.Expui.Inline.Browse" />
+    <JetBrainsButton icon="AllIcons.Expui.Inline.Browse" />
 </VBox>
