@@ -1,0 +1,26 @@
+
+ToolBar {
+    -fx-background-color: #2b2d30;
+    -fx-border-color: #1e1f22;
+}
+
+#left-toolbar {
+    -fx-border-width: 0 1 0 0;
+}
+
+#top-toolbar {
+    -fx-border-width: 0 0 1 0;
+}
+
+.split-pane {
+    -fx-box-border: transparent;
+}
+
+.split-pane-divider {
+    -fx-background-color: #2b2d30;
+    -fx-padding: 0 20px 0 20px;
+}
+
+AnchorPane {
+    -fx-background-color: #1e1f22;
+}

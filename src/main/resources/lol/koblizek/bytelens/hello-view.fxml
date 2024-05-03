@@ -2,8 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
-<?import lol.koblizek.bytelens.api.ui.IconButton?>
-<?import lol.koblizek.bytelens.api.ui.JetBrainsButton?>
+<?import lol.koblizek.bytelens.api.ui.*?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="lol.koblizek.bytelens.core.controllers.HelloView"
