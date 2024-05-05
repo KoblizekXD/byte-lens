@@ -1,7 +1,9 @@
 package lol.koblizek.bytelens.core;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 
@@ -29,12 +31,16 @@ public final class ByteLens extends Application {
     }
 
     public ByteLens() {
+        Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         ResourceManager.init();
-
         instance = this;
     }
 
     public ResourceManager getResourceManager() {
         return ResourceManager.getInstance();
+    }
+
+    public Stage getCurrentStage() {
+        return currentStage;
     }
 }

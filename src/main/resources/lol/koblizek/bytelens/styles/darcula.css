@@ -2,25 +2,30 @@
 ToolBar {
     -fx-background-color: #2b2d30;
     -fx-border-color: #1e1f22;
-}
-
-#left-toolbar {
-    -fx-border-width: 0 1 0 0;
-}
-
-#top-toolbar {
-    -fx-border-width: 0 0 1 0;
+    -fx-border-width: 0;
 }
 
 .split-pane {
-    -fx-box-border: transparent;
+    -fx-padding: 0;
 }
 
 .split-pane-divider {
-    -fx-background-color: #2b2d30;
-    -fx-padding: 0 20px 0 20px;
+    -fx-pref-width: 1;
+    -fx-background-color: #1e1f22;
+}
+
+.split-pane-divider:vertical {
+    -fx-pref-height: 2;
 }
 
 AnchorPane {
     -fx-background-color: #1e1f22;
+}
+
+.left-toolbar {
+    -fx-border-width: 0 1 0 0;
+}
+
+#main-toolbar {
+    -fx-border-width: 0 0 1 0;
 }
