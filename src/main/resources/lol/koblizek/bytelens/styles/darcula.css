@@ -1,8 +1,24 @@
 
-ToolBar {
+ToolBar, MenuBar {
     -fx-background-color: #2b2d30;
     -fx-border-color: #1e1f22;
+    -fx-text-fill: #ffffff;
     -fx-border-width: 0;
+}
+
+.menu:hover {
+    -fx-accent: rgba(255, 255, 255, 0.25);
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+}
+
+
+.menu .label {
+    -fx-text-fill: #dfe1e5;
+}
+
+
+.menu {
+    -fx-pref-height: 40;
 }
 
 .split-pane {
@@ -20,6 +36,7 @@ ToolBar {
 
 AnchorPane {
     -fx-background-color: #1e1f22;
+    -fx-font-family: Inter;
 }
 
 .left-toolbar {
@@ -28,4 +45,9 @@ AnchorPane {
 
 #main-toolbar {
     -fx-border-width: 0 0 1 0;
+}
+
+#left-panel ToolBar:hover {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #1e1f22;
 }

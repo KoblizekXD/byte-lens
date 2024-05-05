@@ -33,6 +33,8 @@ public final class ByteLens extends Application {
     public ByteLens() {
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         ResourceManager.init();
+        getResourceManager().get("/lol/koblizek/bytelens/fonts/inter-font.ttf")
+                .toFont();
         instance = this;
     }
 

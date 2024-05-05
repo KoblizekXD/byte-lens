@@ -4,11 +4,13 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import lol.koblizek.bytelens.core.svg.SVGTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -72,5 +74,9 @@ public class Resource {
         } catch (IOException | TranscoderException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Font toFont() {
+        return Font.loadFont(url.toExternalForm(), 12);
     }
 }
