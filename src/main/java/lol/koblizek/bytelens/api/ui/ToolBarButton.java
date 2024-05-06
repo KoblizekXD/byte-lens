@@ -1,12 +1,10 @@
 package lol.koblizek.bytelens.api.ui;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
+import javafx.event.Event;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 public class ToolBarButton extends ToggleButton {
     public ToolBarButton(Image image) {
@@ -26,5 +24,9 @@ public class ToolBarButton extends ToggleButton {
                 }
             });
         });
+    }
+
+    public void setupListening(ChangeListener<? super Boolean> listener) {
+        selectedProperty().addListener(listener);
     }
 }

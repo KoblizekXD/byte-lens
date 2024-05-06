@@ -6,7 +6,7 @@ import lol.koblizek.bytelens.api.resource.ResourceManager;
 
 import java.io.IOException;
 
-public record ToolWindow(Node node, Image icon, Placement placement) {
+public record ToolWindow(String name, Node node, Image icon, Placement placement) {
 
     public enum Placement {
         LEFT,
@@ -18,8 +18,10 @@ public record ToolWindow(Node node, Image icon, Placement placement) {
         private Node node;
         private Image icon;
         private Placement placement;
+        private String name;
 
         ToolWindowBuilder() {
+            name = "Untitled Tool Window";
         }
 
         public ToolWindowBuilder node(Node node) {
@@ -48,7 +50,12 @@ public record ToolWindow(Node node, Image icon, Placement placement) {
         }
 
         public ToolWindow build() {
-            return new ToolWindow(node, icon, placement);
+            return new ToolWindow(name, node, icon, placement);
+        }
+
+        public ToolWindowBuilder name(String name) {
+            this.name = name;
+            return this;
         }
     }
 

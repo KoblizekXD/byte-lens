@@ -41,9 +41,9 @@ public final class ByteLens extends Application {
                 .toFont();
 
         toolWindows = new ArrayList<>();
-        toolWindows.add(new ToolWindow(null, getResourceManager()
+        toolWindows.add(new ToolWindow("Project", null, getResourceManager()
                 .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.LEFT));
-        toolWindows.add(new ToolWindow(null, getResourceManager()
+        toolWindows.add(new ToolWindow("Project", null, getResourceManager()
                 .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.LEFT));
 
         instance = this;

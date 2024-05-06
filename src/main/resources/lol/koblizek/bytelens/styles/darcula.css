@@ -58,8 +58,8 @@ AnchorPane {
     -fx-border-width: 0;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
-    -fx-pref-width: 24;
-    -fx-pref-height: 24;
+    -fx-pref-width: 26;
+    -fx-pref-height: 26;
 }
 
 .tool-bar-button:hover, .tool-bar-button:selected {
