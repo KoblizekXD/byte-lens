@@ -44,7 +44,7 @@ public final class ByteLens extends Application {
         toolWindows.add(new ToolWindow("Project", null, getResourceManager()
                 .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.LEFT));
         toolWindows.add(new ToolWindow("Project", null, getResourceManager()
-                .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.LEFT));
+                .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.BOTTOM));
 
         instance = this;
     }

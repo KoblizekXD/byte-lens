@@ -37,11 +37,20 @@ public class MainViewController implements Controller {
                     }
                     leftToolbar.getItems().add(bt);
                 }
+            } else if (entry.getKey() == ToolWindow.Placement.BOTTOM) {
+                Pane spacer = new Pane();
+                VBox.setVgrow(spacer, Priority.ALWAYS);
+                leftToolbar.getItems().add(spacer);
+                for (ToolWindow tw : entry.getValue()) {
+                    ToolBarButton bt = getButton(tw);
+                    if (entry.getValue().get(0).equals(tw)) {
+                        leftPanelTopTitle.setText(tw.name());
+                        bt.setSelected(true);
+                    }
+                    leftToolbar.getItems().add(bt);
+                }
             }
         }
-        Pane spacer = new Pane();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
-        leftToolbar.getItems().add(spacer);
     }
 
     private @NotNull ToolBarButton getButton(ToolWindow tw) {
