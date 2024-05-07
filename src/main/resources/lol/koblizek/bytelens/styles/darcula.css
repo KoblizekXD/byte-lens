@@ -12,7 +12,7 @@ ToolBar, MenuBar {
 }
 
 
-.menu .label {
+.menu .label, .label {
     -fx-text-fill: #dfe1e5;
 }
 

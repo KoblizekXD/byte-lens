@@ -1,15 +1,21 @@
 package lol.koblizek.bytelens.core.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.ToolBarButton;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MainViewController implements Controller {
-
 
     public MenuBar menubar;
     public ToolBar leftToolbar;
@@ -19,19 +25,38 @@ public class MainViewController implements Controller {
 
     @Override
     public void initialize() {
-        for (int i = 0; i < instance().getToolWindows().size(); i++) {
-            ToolBarButton bt = new ToolBarButton(instance().getToolWindows().get(i).icon());
-            int finalI = i;
-            bt.setupListening((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    if (leftPanel.getChildren().size() > 1)
-                        leftPanel.getChildren().remove(1, leftPanel.getChildren().size() - 1);
-                    leftPanel.getChildren().add(instance().getToolWindows().get(finalI).node());
+        var collected = instance().getToolWindows().stream()
+                .collect(Collectors.groupingBy(ToolWindow::placement));
+        for (Map.Entry<ToolWindow.Placement, List<ToolWindow>> entry : collected.entrySet()) {
+            if (entry.getKey() == ToolWindow.Placement.LEFT) {
+                for (ToolWindow tw : entry.getValue()) {
+                    ToolBarButton bt = getButton(tw);
+                    if (entry.getValue().get(0).equals(tw)) {
+                        leftPanelTopTitle.setText(tw.name());
+                        bt.setSelected(true);
+                    }
+                    leftToolbar.getItems().add(bt);
                 }
-            });
-            if (i == 0)
-                bt.setSelected(true);
-            leftToolbar.getItems().add(bt);
+            }
         }
+        Pane spacer = new Pane();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        leftToolbar.getItems().add(spacer);
+    }
+
+    private @NotNull ToolBarButton getButton(ToolWindow tw) {
+        ToolBarButton bt = new ToolBarButton(tw.icon());
+        bt.setupListening((observable, oldValue, newValue) -> {
+            if (newValue) {
+                if (leftPanel.getChildren().size() > 1)
+                    leftPanel.getChildren().remove(1, leftPanel.getChildren().size() - 1);
+                if (tw.node() != null && tw.name() != null) {
+                    leftPanel.getChildren().add(tw.node());
+                    leftPanelTopTitle.setText(tw.name());
+
+                }
+            }
+        });
+        return bt;
     }
 }
