@@ -7,7 +7,23 @@
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
             <Menu text="_File">
-                <MenuItem mnemonicParsing="false" text="Close" />
+                <MenuItem mnemonicParsing="false" text="New" />
+                <MenuItem mnemonicParsing="false" text="Open" />
+                <MenuItem mnemonicParsing="false" text="Recent Projects" />
+                <MenuItem mnemonicParsing="false" text="Close Project" />
+                <SeparatorMenuItem />
+                <MenuItem mnemonicParsing="false" text="Settings" />
+                <MenuItem mnemonicParsing="false" text="Project Settings" />
+                <SeparatorMenuItem />
+                <Menu mnemonicParsing="false" text="Export">
+                    <MenuItem mnemonicParsing="false" text="JAR" />
+                    <Menu mnemonicParsing="false" text="Patches">
+                        <MenuItem mnemonicParsing="false" text="Binary" />
+                        <MenuItem mnemonicParsing="false" text="Text" />
+                    </Menu>
+                </Menu>
+                <SeparatorMenuItem />
+                <MenuItem mnemonicParsing="false" text="Exit" />
             </Menu>
             <Menu text="_Edit">
                 <MenuItem mnemonicParsing="false" text="Delete" />
@@ -33,12 +49,21 @@
     <SplitPane dividerPositions="0.7" layoutX="228.0" layoutY="100.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <SplitPane dividerPositions="0.1" layoutX="-1.0" layoutY="10.0" prefHeight="160.0" prefWidth="411.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <AnchorPane fx:id="leftPanel" id="left-panel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="76.0" style="-fx-background-color: #2b2d30">
+                <AnchorPane id="left-panel" fx:id="leftPanel" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="76.0" style="-fx-background-color: #2b2d30">
                     <ToolBar fx:id="leftPanelTop" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         <Label fx:id="leftPanelTopTitle" />
                     </ToolBar>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="179.0" prefWidth="332.0" />
+                <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0" />
+                    <AnchorPane id="left-panel" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                prefWidth="76.0" style="-fx-background-color: #2b2d30">
+                        <ToolBar prefHeight="40.0" AnchorPane.leftAnchor="0.0"
+                                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <Label />
+                        </ToolBar>
+                    </AnchorPane>
+                </SplitPane>
             </SplitPane>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="122.0" prefWidth="560.0">

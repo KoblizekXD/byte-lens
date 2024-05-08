@@ -6,19 +6,30 @@ ToolBar, MenuBar {
     -fx-border-width: 0;
 }
 
-.menu:hover {
-    -fx-accent: rgba(255, 255, 255, 0.25);
-    -fx-background-color: rgba(255, 255, 255, 0.25);
+.menu:hover, .menu-item:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
 }
 
+.menu-item, .menu {
+    -fx-pref-height: 20;
+}
+
+.menu-bar > .menu > * {
+    -fx-pref-width: 200;
+}
+
+.menu-bar .menu {
+    -fx-pref-height: 40;
+}
 
 .menu .label, .label {
     -fx-text-fill: #dfe1e5;
 }
 
-
-.menu {
-    -fx-pref-height: 40;
+.context-menu {
+    -fx-background-color: #2b2d30;
+    -fx-border-width: 0;
+    -fx-text-fill: #dfe1e5;
 }
 
 .split-pane {

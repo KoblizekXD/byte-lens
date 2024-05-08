@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.api.util;
 
 import lol.koblizek.bytelens.api.resource.Resource;
 import lol.koblizek.bytelens.core.ByteLens;
+import org.slf4j.Logger;
 
 public interface InstanceAccessor {
 
@@ -19,5 +20,9 @@ public interface InstanceAccessor {
 
     default Resource jbIcon(String path) {
         return instance().getResourceManager().getJBIcon(path, true);
+    }
+
+    default Logger logger() {
+        return instance().getLogger();
     }
 }

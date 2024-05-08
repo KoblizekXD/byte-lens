@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +25,8 @@ public final class ByteLens extends Application {
     }
 
     private Stage currentStage;
-    private List<ToolWindow> toolWindows;
+    private final List<ToolWindow> toolWindows;
+    private final Logger logger;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -35,6 +38,8 @@ public final class ByteLens extends Application {
     }
 
     public ByteLens() {
+        logger = LoggerFactory.getLogger(getClass());
+
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         ResourceManager.init();
         getResourceManager().get("/lol/koblizek/bytelens/fonts/inter-font.ttf")
@@ -59,5 +64,9 @@ public final class ByteLens extends Application {
 
     public List<ToolWindow> getToolWindows() {
         return Collections.unmodifiableList(toolWindows);
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 }
