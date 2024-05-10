@@ -8,6 +8,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lol.koblizek.bytelens.api.ToolWindow;
+import lol.koblizek.bytelens.api.ui.SideToolBar;
+import lol.koblizek.bytelens.api.ui.SideToolButton;
 import lol.koblizek.bytelens.api.ui.ToolBarButton;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 public class MainViewController implements Controller {
 
     public MenuBar menubar;
-    public ToolBar leftToolbar;
+    public SideToolBar leftToolbar;
     public ToolBar leftPanelTop;
     public Label leftPanelTopTitle;
     public AnchorPane leftPanel;
@@ -28,28 +30,34 @@ public class MainViewController implements Controller {
         var collected = instance().getToolWindows().stream()
                 .collect(Collectors.groupingBy(ToolWindow::placement));
         for (Map.Entry<ToolWindow.Placement, List<ToolWindow>> entry : collected.entrySet()) {
-            if (entry.getKey() == ToolWindow.Placement.LEFT) {
-                for (ToolWindow tw : entry.getValue()) {
-                    ToolBarButton bt = getButton(tw);
-                    if (entry.getValue().get(0).equals(tw)) {
-                        leftPanelTopTitle.setText(tw.name());
-                        bt.setSelected(true);
-                    }
-                    leftToolbar.getItems().add(bt);
-                }
-            } else if (entry.getKey() == ToolWindow.Placement.BOTTOM) {
-                Pane spacer = new Pane();
-                VBox.setVgrow(spacer, Priority.ALWAYS);
-                leftToolbar.getItems().add(spacer);
-                for (ToolWindow tw : entry.getValue()) {
-                    ToolBarButton bt = getButton(tw);
-                    if (entry.getValue().get(0).equals(tw)) {
-                        leftPanelTopTitle.setText(tw.name());
-                        bt.setSelected(true);
-                    }
-                    leftToolbar.getItems().add(bt);
+            ToolWindow.Placement placement = entry.getKey();
+            for (ToolWindow toolWindow : entry.getValue()) {
+                if (placement == ToolWindow.Placement.LEFT) {
+                    leftToolbar.addToolButton(new SideToolButton(toolWindow.icon()), 0);
                 }
             }
+//            if (entry.getKey() == ToolWindow.Placement.LEFT) {
+//                for (ToolWindow tw : entry.getValue()) {
+//                    ToolBarButton bt = getButton(tw);
+//                    if (entry.getValue().get(0).equals(tw)) {
+//                        leftPanelTopTitle.setText(tw.name());
+//                        bt.setSelected(true);
+//                    }
+//                    leftToolbar.getItems().add(bt);
+//                }
+//            } else if (entry.getKey() == ToolWindow.Placement.BOTTOM) {
+//                Pane spacer = new Pane();
+//                VBox.setVgrow(spacer, Priority.ALWAYS);
+//                leftToolbar.getItems().add(spacer);
+//                for (ToolWindow tw : entry.getValue()) {
+//                    ToolBarButton bt = getButton(tw);
+//                    if (entry.getValue().get(0).equals(tw)) {
+//                        leftPanelTopTitle.setText(tw.name());
+//                        bt.setSelected(true);
+//                    }
+//                    leftToolbar.getItems().add(bt);
+//                }
+//            }
         }
     }
 

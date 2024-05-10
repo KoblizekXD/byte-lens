@@ -1,5 +1,5 @@
 
-ToolBar, MenuBar {
+ToolBar, MenuBar, SideToolBar {
     -fx-background-color: #2b2d30;
     -fx-border-color: #1e1f22;
     -fx-text-fill: #ffffff;

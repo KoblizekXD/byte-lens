@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import lol.koblizek.bytelens.api.ui.SideToolBar?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.MainViewController">
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
@@ -45,7 +46,7 @@
             </Menu>
         </MenuBar>
     </VBox>
-    <ToolBar fx:id="leftToolbar" layoutY="40.0" orientation="VERTICAL" prefHeight="360.0" prefWidth="40.0" styleClass="left-toolbar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
+    <SideToolBar fx:id="leftToolbar" layoutY="40.0" orientation="VERTICAL" prefHeight="360.0" prefWidth="40.0" styleClass="left-toolbar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
     <SplitPane dividerPositions="0.7" layoutX="228.0" layoutY="100.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <SplitPane dividerPositions="0.1" layoutX="-1.0" layoutY="10.0" prefHeight="160.0" prefWidth="411.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
