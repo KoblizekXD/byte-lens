@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SideToolBar extends ToolBar implements InstanceAccessor {
 
-    private List<ToggleGroup> groups;
+    private final List<ToggleGroup> groups;
 
     public SideToolBar() {
         super();
