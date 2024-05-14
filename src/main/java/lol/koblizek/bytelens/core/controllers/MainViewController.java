@@ -39,8 +39,6 @@ public class MainViewController implements Controller {
                     tb.setOnMouseClicked(e -> {
                         if (tb.isSelected()) {
                             splitPaneInner.showPane(leftPanel);
-                            // splitPaneInner.getItems().add(0, leftPanel);
-                            // splitPaneInner.setDividerPosition(0, 0.2);
                         } else {
                             splitPaneInner.hidePane(leftPanel);
                         }

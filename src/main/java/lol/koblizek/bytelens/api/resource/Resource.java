@@ -43,14 +43,25 @@ public class Resource {
         return new String(bytes, StandardCharsets.UTF_8);
     }
 
+    /**
+     * @return A copy of the resource as a byte array.
+     */
     public byte[] toBytes() {
         return bytes.clone();
     }
 
+    /**
+     * Attempts to convert the resource to an image.
+     * @return The resource as an image.
+     */
     public ImageView toImageView() {
         return new ImageView(url.toExternalForm());
     }
 
+    /**
+     * Attempts to convert the resource to a properties object.
+     * @return The resource as a properties object.
+     */
     public Properties toProperties() {
         var properties = new Properties();
         try (var stream = url.openStream()) {
@@ -61,10 +72,18 @@ public class Resource {
         return properties;
     }
 
+    /**
+     * Attempts to load the resource as an FXML file.
+     * @return A new FXMLLoader instance for the resource.
+     */
     public FXMLLoader toLoader() {
         return new FXMLLoader(url);
     }
 
+    /**
+     * Attempts to convert the resource to an SVG image.
+     * @return The resource as a read SVG image.
+     */
     public Image toSVG() {
         SVGTranscoder transcoder = new SVGTranscoder();
         try (InputStream stream = url.openStream()) {
@@ -75,6 +94,10 @@ public class Resource {
         }
     }
 
+    /**
+     * Attempts to convert the resource to a font.
+     * @return The resource as a font.
+     */
     public Font toFont() {
         return Font.loadFont(url.toExternalForm(), 12);
     }

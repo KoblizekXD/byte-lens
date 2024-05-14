@@ -5,6 +5,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +19,13 @@ public final class ByteLens extends Application {
 
     private static ByteLens instance;
 
-    public static ByteLens getInstance() {
+    /**
+     * Obtains the currently running instance of the application.
+     * It is never null.
+     *
+     * @return The singleton instance of the application.
+     */
+    public static @NotNull ByteLens getInstance() {
         return instance;
     }
 
@@ -62,10 +71,14 @@ public final class ByteLens extends Application {
         return currentStage;
     }
 
-    public List<ToolWindow> getToolWindows() {
+    @Contract(pure = true)
+    public @NotNull @UnmodifiableView List<ToolWindow> getToolWindows() {
         return Collections.unmodifiableList(toolWindows);
     }
 
+    /**
+     * @return Main ByteLens logger
+     */
     public Logger getLogger() {
         return logger;
     }

@@ -4,6 +4,11 @@ import lol.koblizek.bytelens.api.resource.Resource;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.slf4j.Logger;
 
+/**
+ * Provides non-static access to various application instances.
+ * This may come useful, as it allows to access the application methods
+ * without using {@link ByteLens#getInstance()}.
+ */
 public interface InstanceAccessor {
 
     default ByteLens instance() {
