@@ -2,7 +2,6 @@ package lol.koblizek.bytelens.core.controllers;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
 import lol.koblizek.bytelens.api.ToolWindow;
@@ -24,7 +23,7 @@ public class MainViewController implements Controller {
     public AnchorPane leftPanel;
     public PersistentSplitPane splitPaneInner;
     public AnchorPane bottomPanel;
-    public SplitPane splitPaneOuter;
+    public PersistentSplitPane splitPaneOuter;
 
     @Override
     public void initialize() {
@@ -47,10 +46,9 @@ public class MainViewController implements Controller {
                     leftToolbar.addToolButton((tb = new SideToolButton(toolWindow, bottomPanel)), 1);
                     tb.setOnMouseClicked(e -> {
                         if (tb.isSelected()) {
-                            splitPaneOuter.getItems().add(1, bottomPanel);
-                            splitPaneOuter.setDividerPosition(0, 0.8);
+                            splitPaneOuter.showPane(bottomPanel);
                         } else {
-                            splitPaneOuter.getItems().remove(bottomPanel);
+                            splitPaneOuter.hidePane(bottomPanel);
                         }
                     });
                 }

@@ -14,32 +14,22 @@ import java.util.Map;
  */
 public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
 
-    private final Map<Integer, Pair<Node, Double>> removedNodes;
+    private final Map<Position, Pair<Node, Double>> removedNodes;
 
     public PersistentSplitPane() {
         super();
         removedNodes = new HashMap<>();
     }
 
-    public void hidePane(int index) {
-        removedNodes.put(
-            index,
-            new Pair<>(
-                    getItems().remove(index),
-                    getDividerPositions()[index]
-            )
-        );
-    }
-
     public int hidePane(Node n) {
         int index = getItems().indexOf(n);
-        logger().warn("Hiding pane with divider {}", getDividerPositions()[index]);
-        double pos = getDividerPositions()[index];
+        double j = getDividerPositions()[index - 1 == -1 ? 0 : index - 1];
+        logger().warn("Hiding pane with divider {}", j);
         removedNodes.put(
-                index,
+                new Position(index, index - 1 == -1 ? 0 : index - 1),
                 new Pair<>(
                         getItems().remove(index),
-                        pos
+                        j
                 )
         );
         return index;
@@ -48,29 +38,25 @@ public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
     public void showPane(Node n) {
         var entry = findEntry(n);
         removedNodes.remove(entry.getKey());
-        int index = entry.getKey();
+        Position index = entry.getKey();
         Pair<Node, Double> pair = entry.getValue();
         if (pair != null) {
             logger().warn("Showing pane at index {} with value {}", index, pair.getValue());
-            getItems().add(index, pair.getKey());
-            setDividerPosition(index, pair.getValue());
+            getItems().add(index.index, pair.getKey());
+            setDividerPosition(index.dividerIndex, pair.getValue());
         }
     }
 
-    public void showPane(int index) {
-        Pair<Node, Double> pair = removedNodes.remove(index);
-        if (pair != null) {
-            getItems().add(index, pair.getKey());
-            setDividerPosition(index, pair.getValue());
-        }
-    }
-
-    private Map.Entry<Integer, Pair<Node, Double>> findEntry(Node n) {
-        for (Map.Entry<Integer, Pair<Node, Double>> entry : removedNodes.entrySet()) {
+    private Map.Entry<Position, Pair<Node, Double>> findEntry(Node n) {
+        for (Map.Entry<Position, Pair<Node, Double>> entry : removedNodes.entrySet()) {
             if (entry.getValue().getKey().equals(n)) {
                 return entry;
             }
         }
         return null;
+    }
+
+    protected record Position(int index, int dividerIndex) {
+
     }
 }
