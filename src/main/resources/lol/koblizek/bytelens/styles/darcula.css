@@ -6,19 +6,18 @@ ToolBar, MenuBar, SideToolBar {
     -fx-border-width: 0;
 }
 
-.menu:hover, .menu-item:hover, .menu:selected, .menu:focused, .context-menu:selected, .menu-item:selected, .menu:pressed, .menu-item:pressed {
+.menu:hover, .menu-item:hover, .menu:showing, .menu:focused, .context-menu:selected, .menu-item:selected, .menu:pressed, .menu-item:pressed {
     -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 4;
 }
 
-.menu-item, .menu {
-    -fx-pref-height: 20;
+.menu-bar > * > .menu > .menu-item, .menu-bar > * > .menu > .menu, .menu > .menu {
+    -fx-pref-height: 26;
+    -fx-padding: 4 0 0 4;
+    -fx-min-width: 200;
 }
 
-.menu-bar > .menu > * {
-    -fx-pref-width: 200;
-}
-
-.menu-bar .menu {
+.menu-bar > * > .menu {
     -fx-pref-height: 40;
 }
 
@@ -26,9 +25,18 @@ ToolBar, MenuBar, SideToolBar {
     -fx-text-fill: #dfe1e5;
 }
 
+.separator .line {
+    -fx-border-color: #37393E;
+    -fx-border-width: 1;
+}
+
 .context-menu {
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-padding: 4 0 4 0;
+    -fx-pref-width: 300;
+    -fx-background-radius: 4;
     -fx-background-color: #2b2d30;
-    -fx-border-width: 0;
     -fx-text-fill: #dfe1e5;
 }
 
