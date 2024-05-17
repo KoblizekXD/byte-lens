@@ -1,5 +1,6 @@
 package lol.koblizek.bytelens.core.controllers;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -70,17 +71,12 @@ public class MainViewController implements Controller {
         initializeCodeArea();
     }
 
-    @FXML
-    public void exitApplication(ActionEvent event) {
-        executorService.shutdown();
-    }
-
     private ExecutorService executorService;
 
     private void initializeCodeArea() {
         executorService = Executors.newSingleThreadExecutor();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-        codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(500))
+        codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(5))
                 .retainLatestUntilLater(executorService)
                 .supplyTask(this::computeHighlightingAsync)
                 .awaitLatest(codeArea.multiPlainChanges())
@@ -93,6 +89,7 @@ public class MainViewController implements Controller {
                     }
                 })
                 .subscribe(this::applyHighlighting);
+        instance().getExecutors().add(executorService);
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
@@ -118,7 +115,6 @@ public class MainViewController implements Controller {
                 = new StyleSpansBuilder<>();
         while(matcher.find()) {
             String styleClass = getStyleClass(matcher);
-            System.out.println(styleClass);
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();

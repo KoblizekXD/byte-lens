@@ -1,6 +1,7 @@
 package lol.koblizek.bytelens.core;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.ToolWindow;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public final class ByteLens extends Application {
 
@@ -36,6 +38,7 @@ public final class ByteLens extends Application {
     private Stage currentStage;
     private final List<ToolWindow> toolWindows;
     private final Logger logger;
+    private final List<ExecutorService> executors;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -48,6 +51,7 @@ public final class ByteLens extends Application {
 
     public ByteLens() {
         logger = LoggerFactory.getLogger(getClass());
+        executors = new ArrayList<>();
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         ResourceManager.init();
@@ -81,5 +85,18 @@ public final class ByteLens extends Application {
      */
     public Logger getLogger() {
         return logger;
+    }
+
+    @Override
+    public void stop() {
+        logger.warn("Stopping...");
+        executors.forEach((k -> {
+            logger.info("\tStopping executor {}", k.toString());
+            k.shutdown();
+        }));
+    }
+
+    public List<ExecutorService> getExecutors() {
+        return executors;
     }
 }
