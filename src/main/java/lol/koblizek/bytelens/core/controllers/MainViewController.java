@@ -1,5 +1,8 @@
 package lol.koblizek.bytelens.core.controllers;
 
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
@@ -8,11 +11,20 @@ import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.PersistentSplitPane;
 import lol.koblizek.bytelens.api.ui.SideToolBar;
 import lol.koblizek.bytelens.api.ui.SideToolButton;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
+
+import static lol.koblizek.bytelens.api.util.JavaPatterns.PATTERN;
 
 public class MainViewController implements Controller {
 
@@ -24,6 +36,7 @@ public class MainViewController implements Controller {
     public PersistentSplitPane splitPaneInner;
     public AnchorPane bottomPanel;
     public PersistentSplitPane splitPaneOuter;
+    public CodeArea codeArea;
 
     @Override
     public void initialize() {
@@ -54,5 +67,77 @@ public class MainViewController implements Controller {
                 }
             }
         }
+        initializeCodeArea();
+    }
+
+    @FXML
+    public void exitApplication(ActionEvent event) {
+        executorService.shutdown();
+    }
+
+    private ExecutorService executorService;
+
+    private void initializeCodeArea() {
+        executorService = Executors.newSingleThreadExecutor();
+        codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+        codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(500))
+                .retainLatestUntilLater(executorService)
+                .supplyTask(this::computeHighlightingAsync)
+                .awaitLatest(codeArea.multiPlainChanges())
+                .filterMap(t -> {
+                    if(t.isSuccess()) {
+                        return Optional.of(t.get());
+                    } else {
+                        t.getFailure().printStackTrace();
+                        return Optional.empty();
+                    }
+                })
+                .subscribe(this::applyHighlighting);
+    }
+
+    private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
+        String text = codeArea.getText();
+        Task<StyleSpans<Collection<String>>> task = new Task<>() {
+            @Override
+            protected StyleSpans<Collection<String>> call() {
+                return computeHighlighting(text);
+            }
+        };
+        executorService.execute(task);
+        return task;
+    }
+
+    private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
+        codeArea.setStyleSpans(0, highlighting);
+    }
+
+    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+        Matcher matcher = PATTERN.matcher(text);
+        int lastKwEnd = 0;
+        StyleSpansBuilder<Collection<String>> spansBuilder
+                = new StyleSpansBuilder<>();
+        while(matcher.find()) {
+            String styleClass = getStyleClass(matcher);
+            System.out.println(styleClass);
+            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+            lastKwEnd = matcher.end();
+        }
+        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        return spansBuilder.create();
+    }
+
+    private static @NotNull String getStyleClass(Matcher matcher) {
+        String styleClass =
+                matcher.group("KEYWORD") != null ? "keyword" :
+                        matcher.group("PAREN") != null ? "paren" :
+                                matcher.group("BRACE") != null ? "brace" :
+                                        matcher.group("BRACKET") != null ? "bracket" :
+                                                matcher.group("SEMICOLON") != null ? "semicolon" :
+                                                        matcher.group("STRING") != null ? "string" :
+                                                                matcher.group("COMMENT") != null ? "comment" :
+                                                                        null; /* never happens */
+        assert styleClass != null;
+        return styleClass;
     }
 }

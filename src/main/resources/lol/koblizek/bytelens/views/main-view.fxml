@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import lol.koblizek.bytelens.api.ui.SideToolBar?>
 <?import lol.koblizek.bytelens.api.ui.PersistentSplitPane?>
+<?import org.fxmisc.richtext.CodeArea?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.MainViewController">
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
@@ -55,7 +56,9 @@
                         <Label fx:id="leftPanelTopTitle" />
                     </ToolBar>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0">
+                    <CodeArea AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" fx:id="codeArea" />
+                </AnchorPane>
                 <AnchorPane id="left-panel" minHeight="0.0" prefHeight="180.0"
                             prefWidth="76.0" style="-fx-background-color: #2b2d30">
                     <ToolBar prefHeight="40.0" AnchorPane.leftAnchor="0.0"

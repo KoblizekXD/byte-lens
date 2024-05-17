@@ -88,3 +88,54 @@ AnchorPane {
 .left-toolbar {
     -fx-alignment: top-center;
 }
+
+/* Code Area */
+
+.styled-text-area .text {
+    -fx-font-family: "JetBrains Mono";
+    -fx-fill: #ffffff;
+}
+
+.styled-text-area {
+    -fx-background-color: transparent;
+}
+
+.styled-text-area .caret {
+    -fx-stroke: #ffffff;
+}
+
+.styled-text-area .lineno {
+    -fx-background-color: transparent;
+}
+
+ .styled-text-area .lineno .text {
+     -fx-fill: #697086;
+ }
+
+.keyword {
+    -fx-fill: #c678dd !important;
+    -fx-font-weight: bold;
+}
+
+.semicolon {
+    -fx-font-weight: bold;
+}
+.paren {
+    -fx-fill: firebrick;
+    -fx-font-weight: bold;
+}
+.bracket {
+    -fx-fill: darkgreen;
+    -fx-font-weight: bold;
+}
+.brace {
+    -fx-fill: teal;
+    -fx-font-weight: bold;
+}
+.string {
+    -fx-fill: blue;
+}
+
+.comment {
+    -fx-fill: cadetblue;
+}
