@@ -92,8 +92,14 @@ AnchorPane {
 /* Code Area */
 
 .styled-text-area .text {
+
     -fx-font-family: "JetBrains Mono";
     -fx-fill: #ffffff;
+    -fx-font-size: 12pt;
+}
+
+ParagraphText {
+    -fx-tab-size: 4;
 }
 
 .styled-text-area {
@@ -113,12 +119,11 @@ AnchorPane {
  }
 
 .keyword {
-    -fx-fill: #c678dd !important;
-    -fx-font-weight: bold;
+    -fx-fill: #CF8D6A !important;
 }
 
 .semicolon {
-    -fx-font-weight: bold;
+    -fx-fill: #B9BEC4 !important;
 }
 
 .paren {

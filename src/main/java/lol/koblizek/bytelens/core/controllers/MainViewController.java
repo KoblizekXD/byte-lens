@@ -2,8 +2,8 @@ package lol.koblizek.bytelens.core.controllers;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
@@ -12,8 +12,10 @@ import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.PersistentSplitPane;
 import lol.koblizek.bytelens.api.ui.SideToolBar;
 import lol.koblizek.bytelens.api.ui.SideToolButton;
+import org.fxmisc.flowless.VirtualFlow;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -74,7 +76,16 @@ public class MainViewController implements Controller {
     private ExecutorService executorService;
 
     private void initializeCodeArea() {
+        codeArea.setStyle("-fx-font-size: 48pt");
         executorService = Executors.newSingleThreadExecutor();
+        Platform.runLater(() -> codeArea.requestFocus());
+        codeArea.setOnScroll(e -> {
+            if (e.isControlDown()) {
+                double zoomFactor = e.getDeltaY() > 0 ? 1.1 : 1 / 1.1;
+                codeArea.setStyle("-fx-font-size: " + (14 * zoomFactor) + "pt;");
+            }
+        });
+
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(5))
                 .retainLatestUntilLater(executorService)
