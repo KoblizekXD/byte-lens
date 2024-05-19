@@ -30,11 +30,16 @@ ToolBar, MenuBar, SideToolBar {
     -fx-border-width: 1;
 }
 
+.menu > .right-container {
+    -fx-alignment: bottom-right;
+    -fx-border-color: red;
+}
+
 .context-menu {
+    -fx-effect: null;
     -fx-border-width: 1;
     -fx-border-radius: 4;
-    -fx-padding: 4 0 4 0;
-    -fx-pref-width: 300;
+    -fx-pref-width: 250;
     -fx-background-radius: 4;
     -fx-background-color: #2b2d30;
     -fx-text-fill: #dfe1e5;
@@ -130,6 +135,7 @@ ParagraphText {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
 }
+
 .bracket {
     -fx-fill: darkgreen;
     -fx-font-weight: bold;

@@ -17,7 +17,7 @@
                 <MenuItem mnemonicParsing="false" text="Settings" />
                 <MenuItem mnemonicParsing="false" text="Project Settings" />
                 <SeparatorMenuItem />
-                <Menu mnemonicParsing="false" text="Export">
+                <Menu fx:id="menu1" mnemonicParsing="false" text="Export">
                     <MenuItem mnemonicParsing="false" text="JAR" />
                     <Menu mnemonicParsing="false" text="Patches">
                         <MenuItem mnemonicParsing="false" text="Binary" />
@@ -57,7 +57,7 @@
                     </ToolBar>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0">
-                    <CodeArea AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" fx:id="codeArea" />
+                    <CodeArea editable="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" fx:id="codeArea" />
                 </AnchorPane>
                 <AnchorPane id="left-panel" minHeight="0.0" prefHeight="180.0"
                             prefWidth="76.0" style="-fx-background-color: #2b2d30">
