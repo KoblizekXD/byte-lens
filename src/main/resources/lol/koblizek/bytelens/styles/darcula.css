@@ -156,3 +156,17 @@ ParagraphText {
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #1e1f22;
 }
+
+.jetbrains-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-pref-width: 26;
+    -fx-pref-height: 26;
+}
+
+.jetbrains-button:hover, .jetbrains-button:selected {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}

@@ -3,6 +3,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.*?>
+<?import lol.koblizek.bytelens.api.ui.IconButton?>
+<?import lol.koblizek.bytelens.api.ui.JetBrainsButton?>
 <fx:root xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          styleClass="side-pane"
@@ -11,5 +13,7 @@
          type="javafx.scene.layout.AnchorPane">
     <ToolBar prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label fx:id="titleLabel" text="Undefined" />
+        <Pane HBox.hgrow="ALWAYS" />
+        <JetBrainsButton onMouseClicked="#onHide" icon="AllIcons.Expui.General.Hide" />
     </ToolBar>
 </fx:root>

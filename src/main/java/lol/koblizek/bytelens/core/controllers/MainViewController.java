@@ -51,6 +51,11 @@ public class MainViewController implements Controller {
                 SideToolButton tb;
                 if (placement == ToolWindow.Placement.LEFT) {
                     leftToolbar.addToolButton((tb = new SideToolButton(toolWindow, leftPanel)), 0);
+                    splitPaneInner.addEventHandler(PersistentSplitPane.ON_HIDE, e -> {
+                        if (e.getHiding().equals(leftPanel)) {
+                            tb.setSelected(false);
+                        }
+                    });
                     tb.setOnMouseClicked(e -> {
                         if (tb.isSelected()) {
                             splitPaneInner.showPane(leftPanel);
@@ -60,6 +65,11 @@ public class MainViewController implements Controller {
                     });
                 } else if (placement == ToolWindow.Placement.BOTTOM) {
                     leftToolbar.addToolButton((tb = new SideToolButton(toolWindow, bottomPanel)), 1);
+                    splitPaneOuter.addEventHandler(PersistentSplitPane.ON_HIDE, e -> {
+                        if (e.getHiding().equals(bottomPanel)) {
+                            tb.setSelected(false);
+                        }
+                    });
                     tb.setOnMouseClicked(e -> {
                         if (tb.isSelected()) {
                             splitPaneOuter.showPane(bottomPanel);
@@ -77,7 +87,7 @@ public class MainViewController implements Controller {
 
     private void initializeCodeArea() {
         executorService = Executors.newSingleThreadExecutor();
-        Platform.runLater(() -> codeArea.requestFocus());
+        // Platform.runLater(() -> codeArea.requestFocus());
         codeArea.setOnScroll(e -> {
             if (e.isControlDown()) {
                 double zoomFactor = e.getDeltaY() > 0 ? 1.1 : 1 / 1.1;

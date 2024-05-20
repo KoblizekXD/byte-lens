@@ -1,5 +1,7 @@
 package lol.koblizek.bytelens.api.ui;
 
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.util.Pair;
@@ -16,6 +18,22 @@ public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
 
     private final Map<Position, Pair<Node, Double>> removedNodes;
 
+    public static final EventType<ElementHideEvent> ON_HIDE = new EventType<>("ON_HIDE");
+
+    public static class ElementHideEvent extends Event {
+
+        private final Node hiding;
+
+        public ElementHideEvent(Node hiding) {
+            super(ON_HIDE);
+            this.hiding = hiding;
+        }
+
+        public Node getHiding() {
+            return hiding;
+        }
+    }
+
     public PersistentSplitPane() {
         super();
         removedNodes = new HashMap<>();
@@ -25,10 +43,13 @@ public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
         int index = getItems().indexOf(n);
         double j = getDividerPositions()[index - 1 == -1 ? 0 : index - 1];
         logger().debug("Hiding pane with divider {}", j);
+        Node removed = getItems().remove(index);
+        ElementHideEvent event = new ElementHideEvent(removed);
+        fireEvent(event);
         removedNodes.put(
                 new Position(index, index - 1 == -1 ? 0 : index - 1),
                 new Pair<>(
-                        getItems().remove(index),
+                        removed,
                         j
                 )
         );
@@ -55,6 +76,7 @@ public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
         }
         return null;
     }
+
 
     protected record Position(int index, int dividerIndex) {
 

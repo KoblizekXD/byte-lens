@@ -8,10 +8,11 @@ import lol.koblizek.bytelens.api.util.InstanceAccessor;
 
 public class JetBrainsButton extends Button implements InstanceAccessor {
 
-    private StringProperty icon;
+    private final StringProperty icon;
 
     public JetBrainsButton() {
         super();
+        getStyleClass().add("jetbrains-button");
         ImageView imageView = new ImageView();
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);

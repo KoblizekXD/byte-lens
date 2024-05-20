@@ -26,4 +26,20 @@ public class SidePane extends AnchorPane implements InstanceAccessor {
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
+
+    @FXML
+    protected void onHide() {
+        var splitPane = findSplitPane();
+        if (splitPane != null) {
+            splitPane.hidePane(this);
+        }
+    }
+
+    private PersistentSplitPane findSplitPane() {
+        var parent = getParent();
+        while (parent != null && !(parent instanceof PersistentSplitPane)) {
+            parent = parent.getParent();
+        }
+        return (PersistentSplitPane) parent;
+    }
 }
