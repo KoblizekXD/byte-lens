@@ -8,8 +8,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.PersistentSplitPane;
+import lol.koblizek.bytelens.api.ui.SidePane;
 import lol.koblizek.bytelens.api.ui.SideToolBar;
 import lol.koblizek.bytelens.api.ui.SideToolButton;
 import org.fxmisc.richtext.CodeArea;
@@ -32,9 +34,7 @@ public class MainViewController implements Controller {
 
     public MenuBar menubar;
     public SideToolBar leftToolbar;
-    public ToolBar leftPanelTop;
-    public Label leftPanelTopTitle;
-    public AnchorPane leftPanel;
+    public SidePane leftPanel;
     public PersistentSplitPane splitPaneInner;
     public AnchorPane bottomPanel;
     public PersistentSplitPane splitPaneOuter;
@@ -54,6 +54,7 @@ public class MainViewController implements Controller {
                     tb.setOnMouseClicked(e -> {
                         if (tb.isSelected()) {
                             splitPaneInner.showPane(leftPanel);
+                            leftPanel.setTitle(toolWindow.name());
                         } else {
                             splitPaneInner.hidePane(leftPanel);
                         }

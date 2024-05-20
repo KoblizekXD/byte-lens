@@ -7,17 +7,22 @@ import lol.koblizek.bytelens.api.ToolWindow;
 
 public class SideToolButton extends ToggleButton {
 
+    private final ToolWindow tw;
     private Pane controlledPane;
-    private double dividerPosition;
 
     public SideToolButton(ToolWindow tw, Pane controlledPane) {
         super();
+        this.tw = tw;
         ImageView imageView = new ImageView(tw.icon());
         imageView.setFitWidth(16);
         imageView.setFitHeight(16);
         setGraphic(imageView);
         getStyleClass().add("tool-bar-button");
         this.controlledPane = controlledPane;
+    }
+
+    public ToolWindow getToolWindow() {
+        return tw;
     }
 
     public Pane getControlledPane() {

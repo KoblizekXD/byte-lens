@@ -1,4 +1,5 @@
 # Byte Lens
+JVM bytecode analysis tool.
 
 ### Contributing  
 Before attempting to contribute, please open an issue to discuss the changes you would like to make

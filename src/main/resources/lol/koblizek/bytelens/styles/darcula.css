@@ -30,9 +30,8 @@ ToolBar, MenuBar, SideToolBar {
     -fx-border-width: 1;
 }
 
-.menu > .right-container {
-    -fx-alignment: bottom-right;
-    -fx-border-color: red;
+.mnemonic-underline {
+    -fx-stroke: #dfe1e5;
 }
 
 .context-menu {
@@ -69,11 +68,6 @@ AnchorPane {
 
 #main-toolbar {
     -fx-border-width: 0 0 1 0;
-}
-
-#left-panel ToolBar:hover {
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: #1e1f22;
 }
 
 .tool-bar-button {
@@ -152,4 +146,13 @@ ParagraphText {
 
 .comment {
     -fx-fill: cadetblue;
+}
+
+.side-pane {
+    -fx-background-color: #2b2d30;
+}
+
+.side-pane ToolBar {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #1e1f22;
 }
