@@ -109,6 +109,13 @@ public class MainViewController implements Controller {
                 })
                 .subscribe(this::applyHighlighting);
         instance().getExecutors().add(executorService);
+        codeArea.appendText("""
+                public class Main {
+                    public static void main(String[] args) {
+                        System.out.println("Hello, World!");
+                    }
+                }
+                """);
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
