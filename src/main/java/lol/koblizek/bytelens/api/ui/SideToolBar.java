@@ -32,8 +32,10 @@ public class SideToolBar extends ToolBar implements InstanceAccessor {
         } else
             gp = this.groups.get(group);
         button.setToggleGroup(gp);
-        if (gp.getToggles().size() == 1)
+        if (gp.getToggles().size() == 1) {
             button.setSelected(true);
+            button.getControlledPane().setTitle(button.getToolWindow().name());
+        }
         this.getItems().add(button);
     }
 }

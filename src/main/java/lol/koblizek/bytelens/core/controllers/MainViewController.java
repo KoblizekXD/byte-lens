@@ -36,7 +36,7 @@ public class MainViewController implements Controller {
     public SideToolBar leftToolbar;
     public SidePane leftPanel;
     public PersistentSplitPane splitPaneInner;
-    public AnchorPane bottomPanel;
+    public SidePane bottomPanel;
     public PersistentSplitPane splitPaneOuter;
     public CodeArea codeArea;
     public Menu menu1;
@@ -54,7 +54,6 @@ public class MainViewController implements Controller {
                     tb.setOnMouseClicked(e -> {
                         if (tb.isSelected()) {
                             splitPaneInner.showPane(leftPanel);
-                            leftPanel.setTitle(toolWindow.name());
                         } else {
                             splitPaneInner.hidePane(leftPanel);
                         }

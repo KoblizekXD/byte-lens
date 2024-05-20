@@ -8,9 +8,9 @@ import lol.koblizek.bytelens.api.ToolWindow;
 public class SideToolButton extends ToggleButton {
 
     private final ToolWindow tw;
-    private Pane controlledPane;
+    private SidePane controlledPane;
 
-    public SideToolButton(ToolWindow tw, Pane controlledPane) {
+    public SideToolButton(ToolWindow tw, SidePane controlledPane) {
         super();
         this.tw = tw;
         ImageView imageView = new ImageView(tw.icon());
@@ -25,11 +25,11 @@ public class SideToolButton extends ToggleButton {
         return tw;
     }
 
-    public Pane getControlledPane() {
+    public SidePane getControlledPane() {
         return controlledPane;
     }
 
-    public void setControlledPane(Pane controlledPane) {
+    public void setControlledPane(SidePane controlledPane) {
         this.controlledPane = controlledPane;
     }
 }
