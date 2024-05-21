@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 
 import static lol.koblizek.bytelens.api.util.JavaPatterns.PATTERN;
 
+// This code will have to be eventually rewritten to be more effective and more understandable
+
 public class MainViewController implements Controller {
 
     public MenuBar menubar;

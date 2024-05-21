@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
 public class DefaultProject implements InstanceAccessor {
@@ -30,8 +31,8 @@ public class DefaultProject implements InstanceAccessor {
      * Loads ByteLens project from the given path.
      * @param projectPath the path to the project directory
      */
-    public DefaultProject(Path projectPath) {
-        logger().info("Attempting to load project from path: {}", projectPath.toString());
+    public DefaultProject(@NotNull Path projectPath) {
+        logger().info("Attempting to load project from path: {}", projectPath);
         if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
             logger().debug("Project exists and will be loaded");
             this.projectPath = projectPath;

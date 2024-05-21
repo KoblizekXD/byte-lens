@@ -1,16 +1,22 @@
 package lol.koblizek.bytelens.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
+import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +44,8 @@ public final class ByteLens extends Application {
     private final List<ToolWindow> toolWindows;
     private final Logger logger;
     private final List<ExecutorService> executors;
+    private final ObjectMapper mapper;
+    private final List<DefaultProject> projects;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -50,12 +58,17 @@ public final class ByteLens extends Application {
 
     public ByteLens() {
         logger = LoggerFactory.getLogger(getClass());
+        mapper = new ObjectMapper();
         executors = new ArrayList<>();
+        projects = new ArrayList<>();
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         ResourceManager.init();
         getResourceManager().get("/lol/koblizek/bytelens/fonts/inter-font.ttf")
                 .toFont();
+
+        createAppFiles();
+        loadAppData();
 
         toolWindows = new ArrayList<>();
         toolWindows.add(new ToolWindow("Project", null, getResourceManager()
@@ -97,5 +110,31 @@ public final class ByteLens extends Application {
 
     public List<ExecutorService> getExecutors() {
         return executors;
+    }
+
+    private void createAppFiles() {
+        Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
+        whenNotExists(blPath, (path) ->
+                Files.createDirectories(blPath));
+        whenNotExists(blPath.resolve("projects.json"), (path) -> {
+            mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>());
+        });
+    }
+
+    private void loadAppData() {
+        Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
+        Path projectsPath = blPath.resolve("projects.json");
+        try {
+            mapper.readerForUpdating(projects).readValue(projectsPath.toFile());
+            logger.info("Loaded {} project/s", projects.size());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void whenNotExists(Path path, ThrowingConsumer<Path> action) {
+        if (!Files.exists(path)) {
+            action.run(path);
+        }
     }
 }
