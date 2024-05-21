@@ -35,6 +35,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
     implementation("org.fxmisc.richtext:richtextfx:0.11.2")
     compileOnly("org.jetbrains:annotations:24.1.0")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
