@@ -45,8 +45,18 @@ public class MainViewController implements Controller {
 
     @Override
     public void initialize() {
-        var collected = instance().getToolWindows().stream()
+        if (instance().getCurrentProject().isEmpty())
+            logger().warn("No project is open, this should not happen. Errors might occur.");
+
+        var tws = new ArrayList<>(instance().getToolWindows());
+        tws.add(new ToolWindow("Project",
+                null,
+                jbIcon("AllIcons.Expui.Toolwindow.Project").toSVG(),
+                ToolWindow.Placement.BOTTOM
+        ));
+        var collected = tws.stream()
                 .collect(Collectors.groupingBy(ToolWindow::placement, LinkedHashMap::new, Collectors.toList()));
+
         for (Map.Entry<ToolWindow.Placement, List<ToolWindow>> entry : collected.entrySet()) {
             ToolWindow.Placement placement = entry.getKey();
             for (ToolWindow toolWindow : entry.getValue()) {
@@ -89,7 +99,6 @@ public class MainViewController implements Controller {
 
     private void initializeCodeArea() {
         executorService = Executors.newSingleThreadExecutor();
-        // Platform.runLater(() -> codeArea.requestFocus());
         codeArea.setOnScroll(e -> {
             if (e.isControlDown()) {
                 double zoomFactor = e.getDeltaY() > 0 ? 1.1 : 1 / 1.1;

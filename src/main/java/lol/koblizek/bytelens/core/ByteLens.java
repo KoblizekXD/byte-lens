@@ -74,10 +74,6 @@ public final class ByteLens extends Application {
         loadAppData();
 
         toolWindows = new ArrayList<>();
-        toolWindows.add(new ToolWindow("Project", null, getResourceManager()
-                .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.LEFT));
-        toolWindows.add(new ToolWindow("Project", null, getResourceManager()
-                .getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(), ToolWindow.Placement.BOTTOM));
 
         instance = this;
     }
@@ -94,8 +90,8 @@ public final class ByteLens extends Application {
     }
 
     @Contract(pure = true)
-    public @NotNull @UnmodifiableView List<ToolWindow> getToolWindows() {
-        return Collections.unmodifiableList(toolWindows);
+    public @NotNull List<ToolWindow> getToolWindows() {
+        return toolWindows;
     }
 
     /**
