@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 public final class ByteLens extends Application {
@@ -46,6 +48,7 @@ public final class ByteLens extends Application {
     private final List<ExecutorService> executors;
     private final ObjectMapper mapper;
     private final List<DefaultProject> projects;
+    private DefaultProject currentProject;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -83,6 +86,9 @@ public final class ByteLens extends Application {
         return ResourceManager.getInstance();
     }
 
+    /**
+     * @return The currently running stage
+     */
     public Stage getCurrentStage() {
         return currentStage;
     }
@@ -106,10 +112,27 @@ public final class ByteLens extends Application {
             logger.info("\tStopping executor {}", k.toString());
             k.shutdown();
         }));
+        Platform.exit();
     }
 
     public List<ExecutorService> getExecutors() {
         return executors;
+    }
+
+    /**
+     * Returns a list of all projects successfully loaded by ByteLens
+     * @return List of all read projects
+     */
+    public List<DefaultProject> getProjects() {
+        return projects;
+    }
+
+    /**
+     * Returns a currently opened project as workspace.
+     * @return currently opened project
+     */
+    public Optional<DefaultProject> getCurrentProject() {
+        return Optional.ofNullable(currentProject);
     }
 
     private void createAppFiles() {
