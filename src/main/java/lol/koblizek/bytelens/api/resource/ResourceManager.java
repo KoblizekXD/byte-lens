@@ -3,6 +3,7 @@ package lol.koblizek.bytelens.api.resource;
 import javafx.scene.Scene;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.controllers.Controller;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,21 +11,27 @@ import java.net.URL;
 
 public final class ResourceManager {
 
-    private static ResourceManager instance;
     private final ByteLens byteLens;
+    private String path;
 
-    public static void init(ByteLens inst) {
-        if (instance == null)
-            instance = new ResourceManager(inst);
-        else throw new IllegalStateException("ResourceManager already initialized");
+    public static ResourceManager create(ByteLens inst, String path) {
+        var rm = new ResourceManager(inst);
+        rm.setPath(path);
+        return rm;
+    }
+
+    public static ResourceManager create(ByteLens inst) {
+        var rm = new ResourceManager(inst);
+        rm.setPath("");
+        return rm;
     }
 
     private ResourceManager(ByteLens byteLens) {
         this.byteLens = byteLens;
     }
 
-    public static ResourceManager getInstance() {
-        return instance;
+    public void setPath(@NotNull String path) {
+        this.path = path;
     }
 
     public Resource get(String path) {

@@ -24,14 +24,17 @@ import java.util.concurrent.ExecutorService;
 
 public final class ByteLens extends Application {
 
+    @Deprecated(forRemoval = true)
     private static ByteLens instance;
 
     /**
      * Obtains the currently running instance of the application.
      * It is never null.
      *
+     * @deprecated Use dependency injection instead, singletons suck.
      * @return The singleton instance of the application.
      */
+    @Deprecated(forRemoval = true)
     public static @NotNull ByteLens getInstance() {
         return instance;
     }
@@ -46,6 +49,7 @@ public final class ByteLens extends Application {
     private final List<ExecutorService> executors;
     private final ObjectMapper mapper;
     private final List<DefaultProject> projects;
+    private final ResourceManager resourceManager;
     private DefaultProject currentProject;
 
     @Override
@@ -65,7 +69,7 @@ public final class ByteLens extends Application {
         toolWindows = new ArrayList<>();
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
-        ResourceManager.init();
+        resourceManager = ResourceManager.create(this);
         getResourceManager().get("/lol/koblizek/bytelens/fonts/inter-font.ttf")
                 .toFont();
 

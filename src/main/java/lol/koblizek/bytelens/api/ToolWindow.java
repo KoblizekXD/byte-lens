@@ -29,16 +29,6 @@ public record ToolWindow(String name, Node node, Image icon, Placement placement
             return this;
         }
 
-        public ToolWindowBuilder fxml(String path) {
-            try {
-                this.node = ResourceManager.getInstance().get(path).toLoader()
-                        .load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return this;
-        }
-
         public ToolWindowBuilder icon(Image icon) {
             this.icon = icon;
             return this;
