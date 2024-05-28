@@ -6,16 +6,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-class ExecutionExceptionHandler implements Thread.UncaughtExceptionHandler, InstanceAccessor {
+class ExecutionExceptionHandler implements Thread.UncaughtExceptionHandler {
+
+    private final Logger logger = LoggerFactory.getLogger("Crash Handler");
+
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         Platform.runLater(() -> {
-            instance().getLogger().error("An exception has occurred in the application", e);
+            logger.error("An exception has occurred in the application", e);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ByteLens has crashed");
             alert.setContentText("An exception has occurred in the application. Please report this to the developers.");

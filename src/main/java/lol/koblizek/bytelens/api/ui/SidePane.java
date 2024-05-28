@@ -1,18 +1,18 @@
 package lol.koblizek.bytelens.api.ui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
 
 import java.io.IOException;
 
-public class SidePane extends AnchorPane implements InstanceAccessor {
+public class SidePane extends AnchorPane {
 
     @FXML private Label titleLabel;
 
     public SidePane() {
-        var loader = resource("/lol/koblizek/bytelens/components/side-pane.fxml").toLoader();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/side-pane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 

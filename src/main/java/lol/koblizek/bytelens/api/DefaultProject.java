@@ -2,19 +2,19 @@ package lol.koblizek.bytelens.api;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
 import lol.koblizek.bytelens.api.util.ProjectException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
-public class DefaultProject implements InstanceAccessor {
+public class DefaultProject {
 
     private final Path projectPath;
     private final Path projectFile;
@@ -26,25 +26,27 @@ public class DefaultProject implements InstanceAccessor {
     @JsonAlias({"reference_libraries", "references"})
     private List<Path> referenceLibraries;
     private List<Path> resources;
+    
+    private static Logger logger = LoggerFactory.getLogger(DefaultProject.class);
 
     /**
      * Loads ByteLens project from the given path.
      * @param projectPath the path to the project directory
      */
     public DefaultProject(@NotNull Path projectPath) {
-        logger().info("Attempting to load project from path: {}", projectPath);
+        logger.info("Attempting to load project from path: {}", projectPath);
         if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
-            logger().debug("Project exists and will be loaded");
+            logger.debug("Project exists and will be loaded");
             this.projectPath = projectPath;
             this.projectFile = projectPath.resolve("project.bl.json");
             loadProject();
         } else {
-            logger().warn("Project does not exist, use createProject() method to create a new project");
+            logger.warn("Project does not exist, use createProject() method to create a new project");
             try {
                 this.projectPath = projectPath;
                 this.projectFile = Files.createFile(projectPath.resolve("project.bl.json"));
             } catch (IOException e) {
-                logger().error("Failed to create project file", e);
+                logger.error("Failed to create project file", e);
                 throw new ProjectException();
             }
         }
@@ -110,7 +112,7 @@ public class DefaultProject implements InstanceAccessor {
         try {
             mapper.readerForUpdating(this).readValue(projectFile.toFile());
             if (!nonNulls()) {
-                logger().warn("Not all project fields are set, possible project corruption");
+                logger.warn("Not all project fields are set, possible project corruption");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

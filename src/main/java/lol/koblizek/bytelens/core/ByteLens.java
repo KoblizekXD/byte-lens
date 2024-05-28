@@ -11,7 +11,6 @@ import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -64,6 +62,7 @@ public final class ByteLens extends Application {
         mapper = new ObjectMapper();
         executors = new ArrayList<>();
         projects = new ArrayList<>();
+        toolWindows = new ArrayList<>();
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         ResourceManager.init();
@@ -72,8 +71,6 @@ public final class ByteLens extends Application {
 
         createAppFiles();
         loadAppData();
-
-        toolWindows = new ArrayList<>();
 
         instance = this;
     }

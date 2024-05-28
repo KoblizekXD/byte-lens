@@ -1,9 +1,18 @@
 package lol.koblizek.bytelens.core.controllers;
 
 import javafx.fxml.FXML;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
+import lol.koblizek.bytelens.core.ByteLens;
 
-public interface Controller extends InstanceAccessor {
+public abstract class Controller {
+
+    protected ByteLens byteLens;
+
     @FXML
-    void initialize();
+    public abstract void initialize();
+
+    public void setByteLens(ByteLens byteLens) {
+        if (this.byteLens != null)
+            throw new IllegalStateException("App instance already set");
+        this.byteLens = byteLens;
+    }
 }

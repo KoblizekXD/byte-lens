@@ -5,7 +5,6 @@ import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.util.Pair;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
  * A {@link SplitPane} that persists its divider positions
  * and allows to hide certain panes.
  */
-public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
+public class PersistentSplitPane extends SplitPane {
 
     private final Map<Position, Pair<Node, Double>> removedNodes;
 
@@ -42,7 +41,6 @@ public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
     public int hidePane(Node n) {
         int index = getItems().indexOf(n);
         double j = getDividerPositions()[index - 1 == -1 ? 0 : index - 1];
-        logger().debug("Hiding pane with divider {}", j);
         Node removed = getItems().remove(index);
         ElementHideEvent event = new ElementHideEvent(removed);
         fireEvent(event);
@@ -62,7 +60,6 @@ public class PersistentSplitPane extends SplitPane implements InstanceAccessor {
         Position index = entry.getKey();
         Pair<Node, Double> pair = entry.getValue();
         if (pair != null) {
-            logger().debug("Showing pane at index {} with value {}", index, pair.getValue());
             getItems().add(index.index, pair.getKey());
             setDividerPosition(index.dividerIndex, pair.getValue());
         }

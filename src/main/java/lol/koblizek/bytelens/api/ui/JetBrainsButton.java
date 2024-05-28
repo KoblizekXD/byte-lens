@@ -4,30 +4,32 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
+import lol.koblizek.bytelens.api.resource.ResourceManager;
 
-public class JetBrainsButton extends Button implements InstanceAccessor {
+public class JetBrainsButton extends Button {
 
     private final StringProperty icon;
 
     public JetBrainsButton() {
         super();
+        var res = ResourceManager.getInstance();
         getStyleClass().add("jetbrains-button");
         ImageView imageView = new ImageView();
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         icon = new SimpleStringProperty();
-        imageView.imageProperty().bind(icon.map(x -> jbIcon(x).toSVG()));
+        imageView.imageProperty().bind(icon.map(x -> res.getJBIcon(x, true).toSVG()));
         setGraphic(imageView);
     }
 
     public JetBrainsButton(StringProperty icon) {
         super();
+        var res = ResourceManager.getInstance();
         ImageView imageView = new ImageView();
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         this.icon = icon;
-        imageView.imageProperty().bind(icon.map(x -> jbIcon(x).toSVG()));
+        imageView.imageProperty().bind(icon.map(x -> res.getJBIcon(x, true).toSVG()));
         setGraphic(imageView);
     }
 

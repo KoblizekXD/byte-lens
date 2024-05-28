@@ -1,22 +1,16 @@
 package lol.koblizek.bytelens.core.controllers;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.Event;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import lol.koblizek.bytelens.api.ToolWindow;
+import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.PersistentSplitPane;
 import lol.koblizek.bytelens.api.ui.SidePane;
 import lol.koblizek.bytelens.api.ui.SideToolBar;
 import lol.koblizek.bytelens.api.ui.SideToolButton;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.model.ReadOnlyStyledDocument;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +26,7 @@ import static lol.koblizek.bytelens.api.util.JavaPatterns.PATTERN;
 
 // This code will have to be eventually rewritten to be more effective and more understandable
 
-public class MainViewController implements Controller {
+public class MainViewController extends Controller {
 
     public MenuBar menubar;
     public SideToolBar leftToolbar;
@@ -45,13 +39,15 @@ public class MainViewController implements Controller {
 
     @Override
     public void initialize() {
-        if (instance().getCurrentProject().isEmpty())
-            logger().warn("No project is open, this should not happen. Errors might occur.");
+        ResourceManager rm = byteLens.getResourceManager();
 
-        var tws = new ArrayList<>(instance().getToolWindows());
+        if (byteLens.getCurrentProject().isEmpty())
+            byteLens.getLogger().warn("No project is open, this should not happen. Errors might occur.");
+
+        var tws = new ArrayList<>(byteLens.getToolWindows());
         tws.add(new ToolWindow("Project",
                 null,
-                jbIcon("AllIcons.Expui.Toolwindow.Project").toSVG(),
+                rm.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),
                 ToolWindow.Placement.BOTTOM
         ));
         var collected = tws.stream()
@@ -119,7 +115,7 @@ public class MainViewController implements Controller {
                     }
                 })
                 .subscribe(this::applyHighlighting);
-        instance().getExecutors().add(executorService);
+        byteLens.getExecutors().add(executorService);
         codeArea.appendText("""
                 public class Main {
                     public static void main(String[] args) {

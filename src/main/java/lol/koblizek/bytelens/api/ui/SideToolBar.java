@@ -5,12 +5,11 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import lol.koblizek.bytelens.api.util.InstanceAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SideToolBar extends ToolBar implements InstanceAccessor {
+public class SideToolBar extends ToolBar {
 
     private final List<ToggleGroup> groups;
 
