@@ -27,7 +27,7 @@ public class DefaultProject {
     private List<Path> referenceLibraries;
     private List<Path> resources;
     
-    private static Logger logger = LoggerFactory.getLogger(DefaultProject.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
 
     /**
      * Loads ByteLens project from the given path.

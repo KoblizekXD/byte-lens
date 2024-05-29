@@ -47,7 +47,7 @@ public class MainViewController extends Controller {
         var tws = new ArrayList<>(byteLens.getToolWindows());
         tws.add(new ToolWindow("Project",
                 null,
-                rm.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),
+                ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),
                 ToolWindow.Placement.BOTTOM
         ));
         var collected = tws.stream()

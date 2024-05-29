@@ -34,8 +34,12 @@ public final class ResourceManager {
         this.path = path;
     }
 
+    public @NotNull String getPath() {
+        return path;
+    }
+
     public Resource get(String path) {
-        var resource = getClass().getResource(path);
+        var resource = getClass().getResource(this.path + path);
         if (resource == null)
             throw new IllegalArgumentException("Resource not found: " + path);
         return new Resource(resource);
@@ -52,7 +56,7 @@ public final class ResourceManager {
         }
     }
 
-    public Resource getJBIcon(String path, boolean isDark) {
+    public static Resource getJBIcon(String path, boolean isDark) {
         try {
             return new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
                     + path.toLowerCase().replace(".", "/").replace("allicons", "AllIcons")
