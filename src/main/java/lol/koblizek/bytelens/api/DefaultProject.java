@@ -41,15 +41,18 @@ public class DefaultProject {
             this.projectFile = projectPath.resolve("project.bl.json");
             loadProject();
         } else {
-            logger.warn("Project does not exist, use createProject() method to create a new project");
+            logger.warn("Project does not exist, creating default files...");
             try {
                 this.projectPath = projectPath;
                 this.projectFile = Files.createFile(projectPath.resolve("project.bl.json"));
             } catch (IOException e) {
-                logger.error("Failed to create project file", e);
-                throw new ProjectException();
+                throw new ProjectException("Failed to create project file", e);
             }
         }
+    }
+
+    public static boolean isProject(Path path) {
+        return Files.exists(path.resolve("project.bl.json"));
     }
 
     /**

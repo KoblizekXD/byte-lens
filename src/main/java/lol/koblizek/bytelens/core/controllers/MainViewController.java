@@ -9,6 +9,7 @@ import lol.koblizek.bytelens.api.ui.PersistentSplitPane;
 import lol.koblizek.bytelens.api.ui.SidePane;
 import lol.koblizek.bytelens.api.ui.SideToolBar;
 import lol.koblizek.bytelens.api.ui.SideToolButton;
+import lol.koblizek.bytelens.core.ByteLens;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -37,8 +38,13 @@ public class MainViewController extends Controller {
     public CodeArea codeArea;
     public Menu menu1;
 
+    public MainViewController(ByteLens byteLens) {
+        super(byteLens);
+    }
+
     @Override
     public void initialize() {
+        ByteLens byteLens = getByteLens();
         ResourceManager rm = byteLens.getResourceManager();
 
         if (byteLens.getCurrentProject().isEmpty())
@@ -95,12 +101,6 @@ public class MainViewController extends Controller {
 
     private void initializeCodeArea() {
         executorService = Executors.newSingleThreadExecutor();
-        codeArea.setOnScroll(e -> {
-            if (e.isControlDown()) {
-                double zoomFactor = e.getDeltaY() > 0 ? 1.1 : 1 / 1.1;
-                codeArea.setStyle("-fx-font-size: " + (14 * zoomFactor) + "pt;");
-            }
-        });
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(5))
                 .retainLatestUntilLater(executorService)

@@ -109,7 +109,6 @@ public final class ByteLens extends Application {
             logger.info("\tStopping executor {}", k.toString());
             k.shutdown();
         }));
-        Platform.exit();
     }
 
     public List<ExecutorService> getExecutors() {

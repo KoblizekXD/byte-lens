@@ -6,6 +6,7 @@ import lol.koblizek.bytelens.core.controllers.Controller;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -48,11 +49,22 @@ public final class ResourceManager {
     public Scene getScene(String path) {
         try {
             var loader = get(path).toLoader();
-            if (loader.getController() instanceof Controller controller)
-                controller.setByteLens(byteLens);
+            loader.setControllerFactory(this::injectByteLens);
             return new Scene(loader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private Object injectByteLens(Class<?> type) {
+        for (Constructor<?> ctor : type.getConstructors()) {
+            if (ctor.getParameterCount() == 1 && ctor.getParameterTypes()[0] == ByteLens.class) {
+                try {
+                    return ctor.newInstance(byteLens);
+                } catch (ReflectiveOperationException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
