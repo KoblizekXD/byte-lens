@@ -80,7 +80,7 @@ public final class ByteLens extends Application {
     }
 
     public ResourceManager getResourceManager() {
-        return ResourceManager.getInstance();
+        return resourceManager;
     }
 
     /**

@@ -5,10 +5,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
-import lol.koblizek.bytelens.api.ui.PersistentSplitPane;
-import lol.koblizek.bytelens.api.ui.SidePane;
-import lol.koblizek.bytelens.api.ui.SideToolBar;
-import lol.koblizek.bytelens.api.ui.SideToolButton;
+import lol.koblizek.bytelens.api.ui.*;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -35,7 +32,7 @@ public class MainViewController extends Controller {
     public PersistentSplitPane splitPaneInner;
     public SidePane bottomPanel;
     public PersistentSplitPane splitPaneOuter;
-    public CodeArea codeArea;
+    public ExtendedCodeArea codeArea;
     public Menu menu1;
 
     public MainViewController(ByteLens byteLens) {
@@ -58,6 +55,11 @@ public class MainViewController extends Controller {
         ));
         var collected = tws.stream()
                 .collect(Collectors.groupingBy(ToolWindow::placement, LinkedHashMap::new, Collectors.toList()));
+
+        if (!collected.containsKey(ToolWindow.Placement.LEFT))
+            splitPaneInner.hidePane(leftPanel);
+        if (!collected.containsKey(ToolWindow.Placement.BOTTOM))
+            splitPaneOuter.hidePane(bottomPanel);
 
         for (Map.Entry<ToolWindow.Placement, List<ToolWindow>> entry : collected.entrySet()) {
             ToolWindow.Placement placement = entry.getKey();
@@ -94,79 +96,6 @@ public class MainViewController extends Controller {
                 }
             }
         }
-        initializeCodeArea();
-    }
-
-    private ExecutorService executorService;
-
-    private void initializeCodeArea() {
-        executorService = Executors.newSingleThreadExecutor();
-        codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-        codeArea.multiPlainChanges().successionEnds(Duration.ofMillis(5))
-                .retainLatestUntilLater(executorService)
-                .supplyTask(this::computeHighlightingAsync)
-                .awaitLatest(codeArea.multiPlainChanges())
-                .filterMap(t -> {
-                    if(t.isSuccess()) {
-                        return Optional.of(t.get());
-                    } else {
-                        t.getFailure().printStackTrace();
-                        return Optional.empty();
-                    }
-                })
-                .subscribe(this::applyHighlighting);
-        byteLens.getExecutors().add(executorService);
-        codeArea.appendText("""
-                public class Main {
-                    public static void main(String[] args) {
-                        System.out.println("Hello, World!");
-                    }
-                }
-                """);
-    }
-
-    private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
-        String text = codeArea.getText();
-        Task<StyleSpans<Collection<String>>> task = new Task<>() {
-            @Override
-            protected StyleSpans<Collection<String>> call() {
-                return computeHighlighting(text);
-            }
-        };
-        executorService.execute(task);
-        return task;
-    }
-
-    private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
-        codeArea.setStyleSpans(0, highlighting);
-    }
-
-    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
-        Matcher matcher = PATTERN.matcher(text);
-        int lastKwEnd = 0;
-        StyleSpansBuilder<Collection<String>> spansBuilder
-                = new StyleSpansBuilder<>();
-        while(matcher.find()) {
-            String styleClass = getStyleClass(matcher);
-            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
-            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
-            lastKwEnd = matcher.end();
-        }
-        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
-        return spansBuilder.create();
-    }
-
-    private static @NotNull String getStyleClass(Matcher matcher) {
-        String styleClass =
-                matcher.group("KEYWORD") != null ? "keyword" :
-                        matcher.group("PAREN") != null ? "paren" :
-                                matcher.group("BRACE") != null ? "brace" :
-                                        matcher.group("BRACKET") != null ? "bracket" :
-                                                matcher.group("SEMICOLON") != null ? "semicolon" :
-                                                        matcher.group("STRING") != null ? "string" :
-                                                                matcher.group("COMMENT") != null ? "comment" :
-                                                                        null; /* never happens */
-        assert styleClass != null;
-        return styleClass;
+        codeArea.bridge(byteLens);
     }
 }

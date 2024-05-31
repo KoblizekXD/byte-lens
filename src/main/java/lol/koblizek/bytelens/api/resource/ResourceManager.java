@@ -66,6 +66,7 @@ public final class ResourceManager {
                 }
             }
         }
+        throw new IllegalArgumentException("No constructor found for " + type);
     }
 
     public static Resource getJBIcon(String path, boolean isDark) {
