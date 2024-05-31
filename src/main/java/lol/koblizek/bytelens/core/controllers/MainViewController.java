@@ -48,6 +48,7 @@ public class MainViewController extends Controller {
             byteLens.getLogger().warn("No project is open, this should not happen. Errors might occur.");
 
         var tws = new ArrayList<>(byteLens.getToolWindows());
+        // Example tool window
         tws.add(new ToolWindow("Project",
                 null,
                 ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),

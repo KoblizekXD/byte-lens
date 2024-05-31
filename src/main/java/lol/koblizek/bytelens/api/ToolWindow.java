@@ -1,6 +1,7 @@
 package lol.koblizek.bytelens.api;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 
@@ -12,6 +13,12 @@ public record ToolWindow(String name, Node node, Image icon, Placement placement
         LEFT,
         RIGHT,
         BOTTOM;
+    }
+
+    public ToolWindow {
+        if (node == null) {
+            node = new Label("No content");
+        }
     }
 
     public static final class ToolWindowBuilder {

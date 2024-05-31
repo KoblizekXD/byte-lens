@@ -15,4 +15,5 @@
         <Pane HBox.hgrow="ALWAYS" />
         <JetBrainsButton onMouseClicked="#onHide" icon="AllIcons.Expui.General.Hide" />
     </ToolBar>
+    <Pane AnchorPane.topAnchor="40" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" fx:id="contentHolder" />
 </fx:root>

@@ -34,6 +34,7 @@ public class SideToolBar extends ToolBar {
         if (gp.getToggles().size() == 1) {
             button.setSelected(true);
             button.getControlledPane().setTitle(button.getToolWindow().name());
+            button.getControlledPane().setContents(button.getToolWindow().node());
         }
         this.getItems().add(button);
     }
