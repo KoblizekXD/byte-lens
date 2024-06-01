@@ -3,9 +3,6 @@ package lol.koblizek.bytelens.api;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import lol.koblizek.bytelens.api.resource.ResourceManager;
-
-import java.io.IOException;
 
 public record ToolWindow(String name, Node node, Image icon, Placement placement) {
 

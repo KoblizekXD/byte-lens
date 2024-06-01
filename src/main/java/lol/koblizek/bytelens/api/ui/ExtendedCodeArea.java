@@ -9,6 +9,7 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -79,18 +80,13 @@ public class ExtendedCodeArea extends CodeArea {
         return spansBuilder.create();
     }
 
+    static String[] groups = {"KEYWORD", "PAREN", "BRACE", "BRACKET", "SEMICOLON", "STRING", "COMMENT"};
+
     private static @NotNull String getStyleClass(Matcher matcher) {
-        String styleClass =
-                matcher.group("KEYWORD") != null ? "keyword" :
-                        matcher.group("PAREN") != null ? "paren" :
-                                matcher.group("BRACE") != null ? "brace" :
-                                        matcher.group("BRACKET") != null ? "bracket" :
-                                                matcher.group("SEMICOLON") != null ? "semicolon" :
-                                                        matcher.group("STRING") != null ? "string" :
-                                                                matcher.group("COMMENT") != null ? "comment" :
-                                                                        null; /* never happens */
-        assert styleClass != null;
-        return styleClass;
+        return Arrays.stream(groups)
+                .filter(group -> matcher.group(group) != null)
+                .findFirst()
+                .map(String::toLowerCase).get();
     }
 
     public void bridge(@NotNull ByteLens byteLens) {

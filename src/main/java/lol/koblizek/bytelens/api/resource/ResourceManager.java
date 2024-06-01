@@ -2,7 +2,6 @@ package lol.koblizek.bytelens.api.resource;
 
 import javafx.scene.Scene;
 import lol.koblizek.bytelens.core.ByteLens;
-import lol.koblizek.bytelens.core.controllers.Controller;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

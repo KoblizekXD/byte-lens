@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import lol.koblizek.bytelens.api.ui.*?>
-<?import org.fxmisc.richtext.CodeArea?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.MainViewController">
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
