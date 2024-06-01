@@ -72,6 +72,8 @@ public final class ByteLens extends Application {
         resourceManager = ResourceManager.create(this);
         getResourceManager().get("/lol/koblizek/bytelens/fonts/inter-font.ttf")
                 .toFont();
+        getResourceManager().get("/lol/koblizek/bytelens/fonts/jetbrains-mono-font.ttf")
+                .toFont();
 
         createAppFiles();
         loadAppData();

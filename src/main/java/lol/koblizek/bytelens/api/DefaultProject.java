@@ -51,6 +51,11 @@ public class DefaultProject {
         }
     }
 
+    /**
+     * Checks if the given path contains a project.
+     * @param path the path to the project
+     * @return {@code true} if the given path contains a project, {@code false} otherwise
+     */
     public static boolean isProject(Path path) {
         return Files.exists(path.resolve("project.bl.json"));
     }

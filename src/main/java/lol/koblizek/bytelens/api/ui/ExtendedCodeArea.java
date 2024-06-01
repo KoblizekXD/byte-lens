@@ -93,7 +93,7 @@ public class ExtendedCodeArea extends CodeArea {
         return styleClass;
     }
 
-    public void bridge(ByteLens byteLens) {
+    public void bridge(@NotNull ByteLens byteLens) {
         byteLens.getExecutors().add(highlighter);
     }
 }
