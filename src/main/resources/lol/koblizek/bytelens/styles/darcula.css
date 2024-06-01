@@ -91,8 +91,7 @@ AnchorPane {
 /* Code Area */
 
 .styled-text-area .text {
-
-    -fx-font-family: "JetBrains Mono";
+    -fx-font-family: "JetBrains Mono Medium";
     -fx-fill: #ffffff;
     -fx-font-size: 12pt;
 }
