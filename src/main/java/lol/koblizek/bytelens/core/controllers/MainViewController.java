@@ -64,25 +64,11 @@ public class MainViewController extends Controller {
                             tb.setSelected(false);
                         }
                     });
-                    tb.setOnMouseClicked(e -> {
-                        if (tb.isSelected()) {
-                            splitPaneInner.showPane(leftPanel);
-                        } else {
-                            splitPaneInner.hidePane(leftPanel);
-                        }
-                    });
                 } else if (placement == ToolWindow.Placement.BOTTOM) {
                     leftToolbar.addToolButton((tb = new SideToolButton(toolWindow, bottomPanel)), 1);
                     splitPaneOuter.addEventHandler(PersistentSplitPane.ON_HIDE, e -> {
                         if (e.getHiding().equals(bottomPanel)) {
                             tb.setSelected(false);
-                        }
-                    });
-                    tb.setOnMouseClicked(e -> {
-                        if (tb.isSelected()) {
-                            splitPaneOuter.showPane(bottomPanel);
-                        } else {
-                            splitPaneOuter.hidePane(bottomPanel);
                         }
                     });
                 }

@@ -56,4 +56,8 @@ public record ToolWindow(String name, Node node, Image icon, Placement placement
     public static ToolWindowBuilder builder() {
         return new ToolWindowBuilder();
     }
+
+    public interface ToolWindowNode {
+        Node create(DefaultProject project);
+    }
 }

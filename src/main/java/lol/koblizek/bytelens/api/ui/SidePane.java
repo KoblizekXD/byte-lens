@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
@@ -13,6 +14,7 @@ public class SidePane extends AnchorPane {
 
     @FXML private Label titleLabel;
     @FXML private Pane contentHolder;
+    private PersistentSplitPane cachedSplitPane;
 
     public SidePane() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/side-pane.fxml"));
@@ -35,7 +37,7 @@ public class SidePane extends AnchorPane {
     }
 
     @FXML
-    protected void onHide() {
+    public void onHide() {
         var splitPane = findSplitPane();
         if (splitPane != null) {
             splitPane.hidePane(this);
@@ -47,6 +49,11 @@ public class SidePane extends AnchorPane {
         while (parent != null && !(parent instanceof PersistentSplitPane)) {
             parent = parent.getParent();
         }
-        return (PersistentSplitPane) parent;
+        cachedSplitPane = (PersistentSplitPane) parent;
+        return cachedSplitPane;
+    }
+
+    public PersistentSplitPane getSplitPane() {
+        return cachedSplitPane;
     }
 }
