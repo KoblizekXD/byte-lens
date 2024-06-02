@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// This code will have to be eventually rewritten to be more effective and more understandable
+// This code will have to be "eventually" rewritten to be more effective and more understandable
 
 public class MainViewController extends Controller {
 

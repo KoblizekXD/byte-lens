@@ -5,45 +5,51 @@
 <?import lol.koblizek.bytelens.api.ui.*?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.MainViewController">
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
-            <Menu text="_File">
-                <MenuItem text="New" />
-                <MenuItem text="Open" />
-                <MenuItem text="Recent Projects" />
-                <MenuItem text="Close Project" />
-                <SeparatorMenuItem />
-                <MenuItem text="Settings" />
-                <MenuItem text="Project Settings" />
-                <SeparatorMenuItem />
-                <Menu fx:id="menu1" text="Export">
-                    <MenuItem text="JAR" />
-                    <Menu text="Patches">
-                        <MenuItem text="Binary" />
-                        <MenuItem text="Text" />
+        <HBox>
+            <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
+                <Menu text="_File">
+                    <MenuItem text="New" />
+                    <MenuItem text="Open" />
+                    <MenuItem text="Recent Projects" />
+                    <MenuItem text="Close Project" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Settings" />
+                    <MenuItem text="Project Settings" />
+                    <SeparatorMenuItem />
+                    <Menu fx:id="menu1" text="Export">
+                        <MenuItem text="JAR" />
+                        <Menu text="Patches">
+                            <MenuItem text="Binary" />
+                            <MenuItem text="Text" />
+                        </Menu>
                     </Menu>
+                    <SeparatorMenuItem />
+                    <MenuItem text="Exit" />
                 </Menu>
-                <SeparatorMenuItem />
-                <MenuItem text="Exit" />
-            </Menu>
-            <Menu text="_Edit">
-                <MenuItem text="Delete" />
-            </Menu>
-            <Menu text="_View">
-                <MenuItem text="Close" />
-            </Menu>
-            <Menu text="_Code">
-                <MenuItem text="Close" />
-            </Menu>
-            <Menu text="_Build">
-                <MenuItem text="Close" />
-            </Menu>
-            <Menu text="_Tools">
-                <MenuItem text="Close" />
-            </Menu>
-            <Menu text="_Help">
-                <MenuItem text="About" />
-            </Menu>
-        </MenuBar>
+                <Menu text="_Edit">
+                    <MenuItem text="Delete" />
+                </Menu>
+                <Menu text="_View">
+                    <MenuItem text="Close" />
+                </Menu>
+                <Menu text="_Code">
+                    <MenuItem text="Close" />
+                </Menu>
+                <Menu text="_Build">
+                    <MenuItem text="Close" />
+                </Menu>
+                <Menu text="_Tools">
+                    <MenuItem text="Close" />
+                </Menu>
+                <Menu text="_Help">
+                    <MenuItem text="About" />
+                </Menu>
+            </MenuBar>
+            <Region styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
+            <MenuBar>
+                <Menu text="yep" />
+            </MenuBar>
+        </HBox>
     </VBox>
     <SideToolBar fx:id="leftToolbar" layoutY="40.0" orientation="VERTICAL" prefHeight="360.0" prefWidth="40.0" styleClass="left-toolbar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
     <PersistentSplitPane fx:id="splitPaneOuter" dividerPositions="0.7" layoutX="228.0" layoutY="100.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="372.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
