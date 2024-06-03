@@ -47,7 +47,7 @@
             </MenuBar>
             <Region styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
             <MenuBar>
-                <Menu text="yep" />
+                <IconMenu icon="AllIcons.Expui.General.Settings" />
             </MenuBar>
         </HBox>
     </VBox>

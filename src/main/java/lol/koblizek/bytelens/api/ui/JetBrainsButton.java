@@ -25,6 +25,10 @@ public class JetBrainsButton extends Button {
         setGraphic(imageView);
     }
 
+    public JetBrainsButton(String icon) {
+        this(new SimpleStringProperty(icon));
+    }
+
     public void setIcon(String icon) {
         this.icon.set(icon);
     }
