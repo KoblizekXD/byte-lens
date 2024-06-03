@@ -5,8 +5,10 @@ import javafx.scene.control.MenuBar;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
+import lol.koblizek.bytelens.api.ui.toolwindows.ProjectToolWindow;
 import lol.koblizek.bytelens.core.ByteLens;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,11 +42,15 @@ public class MainViewController extends Controller {
 
         var tws = new ArrayList<>(byteLens.getToolWindows());
         // Example tool window
-        tws.add(new ToolWindow("Project",
-                null,
-                ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),
-                ToolWindow.Placement.BOTTOM
-        ));
+        try {
+            tws.add(new ToolWindow("Project",
+                    new ProjectToolWindow().create(byteLens),
+                    ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),
+                    ToolWindow.Placement.LEFT
+            ));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         var collected = tws.stream()
                 .collect(Collectors.groupingBy(ToolWindow::placement, LinkedHashMap::new, Collectors.toList()));
 

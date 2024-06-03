@@ -3,6 +3,9 @@ package lol.koblizek.bytelens.api;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import lol.koblizek.bytelens.core.ByteLens;
+
+import java.io.IOException;
 
 public record ToolWindow(String name, Node node, Image icon, Placement placement) {
 
@@ -58,6 +61,6 @@ public record ToolWindow(String name, Node node, Image icon, Placement placement
     }
 
     public interface ToolWindowNode {
-        Node create(DefaultProject project);
+        Node create(ByteLens byteLens) throws IOException;
     }
 }
