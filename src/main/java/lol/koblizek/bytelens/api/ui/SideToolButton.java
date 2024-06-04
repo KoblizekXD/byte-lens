@@ -1,6 +1,5 @@
 package lol.koblizek.bytelens.api.ui;
 
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import lol.koblizek.bytelens.api.ToolWindow;
