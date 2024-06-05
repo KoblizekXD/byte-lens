@@ -6,6 +6,15 @@
     -fx-border-width: 0;
 }
 
+.tree-view, .tree-cell {
+    -fx-background-color: #2b2d30;
+    -fx-text-fill: #dfe1e5;
+}
+
+.tree-view:focused .tree-cell:selected, .tree-cell:filled:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
 .menu:hover, .menu-item:hover, .menu:showing, .menu:focused, .context-menu:selected, .menu-item:selected, .menu:pressed, .menu-item:pressed {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 4;

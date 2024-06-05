@@ -70,8 +70,17 @@ public final class ResourceManager {
 
     public static Resource getJBIcon(String path, boolean isDark) {
         try {
+            String[] p2s = path.split("\\.");
+            for (int i = 0; i < p2s.length - 1; i++) {
+                p2s[i] = p2s[i].toLowerCase();
+            }
+            String p2xs = p2s[p2s.length - 1];
+            p2xs = Character.toLowerCase(p2xs.charAt(0)) + p2xs.substring(1);
+            p2s[p2s.length - 1] = p2xs;
+            path = String.join(".", p2s);
+            System.out.println(path);
             return new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
-                    + path.toLowerCase().replace(".", "/").replace("allicons", "AllIcons")
+                    + path.replace(".", "/").replace("allicons", "AllIcons")
                     + (isDark ? "_dark" : "")
                     + ".svg"));
         } catch (MalformedURLException e) {
