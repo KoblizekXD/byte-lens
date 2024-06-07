@@ -21,7 +21,7 @@ public class JetBrainsButton extends Button {
         imageView.setFitHeight(16);
         imageView.setFitWidth(16);
         this.icon = icon;
-        imageView.imageProperty().bind(icon.map(x -> getJBIcon(x, true).toSVG()));
+        imageView.imageProperty().bind(icon.map(x -> getJBIcon(x, true)));
         setGraphic(imageView);
     }
 

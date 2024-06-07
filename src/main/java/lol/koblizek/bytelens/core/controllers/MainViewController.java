@@ -45,7 +45,7 @@ public class MainViewController extends Controller {
         try {
             tws.add(new ToolWindow("Project",
                     new ProjectToolWindow().create(byteLens),
-                    ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true).toSVG(),
+                    ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true),
                     ToolWindow.Placement.LEFT
             ));
         } catch (IOException e) {

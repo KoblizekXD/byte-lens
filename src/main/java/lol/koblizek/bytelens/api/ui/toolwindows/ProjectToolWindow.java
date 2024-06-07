@@ -2,13 +2,13 @@ package lol.koblizek.bytelens.api.ui.toolwindows;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
-import lol.koblizek.bytelens.api.ui.JetBrainsButton;
+import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import lol.koblizek.bytelens.core.ByteLens;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,12 +39,14 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         optionalProject.ifPresentOrElse(project -> {
             root.setValue(project.getName());
             appendTreeItem(root, project.getProjectFile().getFileName().toString());
-            appendTreeItem(root, "Sources");
+            appendTreeItem(root, "Sources", item -> {
+                project.getSources();
+            });
             appendTreeItem(root, "Resources");
             appendTreeItem(root, "External Libraries");
             appendTreeItem(root, "Workspace");
         }, () -> {
-            root.setGraphic(new JetBrainsButton("AllIcons.Expui.Nodes.ErrorIntroduction"));
+            root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ErrorIntroduction"));
             root.setValue("No module/project is open");
         });
     }
@@ -66,13 +68,36 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         return paths.stream().map(path -> {
             var item = new TreeItem<>(path.getFileName().toString());
             if (Files.isDirectory(path)) {
-                item.setGraphic(new JetBrainsButton("AllIcons.Expui.Nodes.Module"));
-                item.getChildren().add(new TreeItem<>("Loading..."));
+                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
                 item.setExpanded(true);
+                try (var stream = Files.list(path)) {
+                    stream.forEach(p -> {
+                        var child = new TreeItem<>(p.getFileName().toString());
+                        if (Files.isDirectory(p)) {
+                            child.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
+                            child.setExpanded(true);
+                        } else {
+                            modifyFileNode(p, child);
+                        }
+                        item.getChildren().add(child);
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
-                item.setGraphic(new JetBrainsButton("AllIcons.Expui.Nodes.Module"));
+                modifyFileNode(path, item);
             }
             return item;
         }).toList();
+    }
+
+    private void modifyFileNode(Path p, TreeItem<String> child) {
+        String ext = FilenameUtils.getExtension(p.toString());
+        switch (ext) {
+            case "java" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Java"));
+            case "class" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Class"));
+            case "jar" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Archive"));
+            default -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Text"));
+        }
     }
 }

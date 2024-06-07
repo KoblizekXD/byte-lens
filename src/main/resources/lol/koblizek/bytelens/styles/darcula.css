@@ -11,6 +11,11 @@
     -fx-text-fill: #dfe1e5;
 }
 
+.tree-cell {
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+}
+
 .tree-view:focused .tree-cell:selected, .tree-cell:filled:hover {
     -fx-background-color: rgba(255, 255, 255, 0.1);
 }

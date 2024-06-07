@@ -1,6 +1,7 @@
 package lol.koblizek.bytelens.api.resource;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ResourceManager {
 
@@ -68,7 +71,11 @@ public final class ResourceManager {
         throw new IllegalArgumentException("No constructor found for " + type);
     }
 
-    public static Resource getJBIcon(String path, boolean isDark) {
+    private static final Map<String, Image> cache = new HashMap<>();
+
+    public static Image getJBIcon(String path, boolean isDark) {
+        if (cache.containsKey(path))
+            return cache.get(path);
         try {
             String[] p2s = path.split("\\.");
             for (int i = 0; i < p2s.length - 1; i++) {
@@ -79,10 +86,12 @@ public final class ResourceManager {
             p2s[p2s.length - 1] = p2xs;
             path = String.join(".", p2s);
             System.out.println(path);
-            return new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
+            Image svg = new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
                     + path.replace(".", "/").replace("allicons", "AllIcons")
                     + (isDark ? "_dark" : "")
-                    + ".svg"));
+                    + ".svg")).toSVG();
+            cache.put(path, svg);
+            return svg;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

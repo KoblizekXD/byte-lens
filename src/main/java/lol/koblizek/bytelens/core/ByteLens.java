@@ -23,21 +23,6 @@ import java.util.concurrent.ExecutorService;
 
 public final class ByteLens extends Application {
 
-    @Deprecated(forRemoval = true)
-    private static ByteLens instance;
-
-    /**
-     * Obtains the currently running instance of the application.
-     * It is never null.
-     *
-     * @deprecated Use dependency injection instead, singletons suck.
-     * @return The singleton instance of the application.
-     */
-    @Deprecated(forRemoval = true)
-    public static @NotNull ByteLens getInstance() {
-        return instance;
-    }
-
     public static void main(String[] args) {
         launch();
     }
@@ -52,7 +37,7 @@ public final class ByteLens extends Application {
     private DefaultProject currentProject;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         currentStage = stage;
         Scene scene = getResourceManager().getScene("/lol/koblizek/bytelens/views/main-view.fxml");
         stage.setTitle("ByteLens");
@@ -76,8 +61,6 @@ public final class ByteLens extends Application {
 
         createAppFiles();
         loadAppData();
-
-        instance = this;
     }
 
     public ResourceManager getResourceManager() {
@@ -136,9 +119,8 @@ public final class ByteLens extends Application {
         Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
         whenNotExists(blPath, (path) ->
                 Files.createDirectories(blPath));
-        whenNotExists(blPath.resolve("projects.json"), (path) -> {
-            mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>());
-        });
+        whenNotExists(blPath.resolve("projects.json"),
+                (path) -> mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>()));
     }
 
     private void loadAppData() {
