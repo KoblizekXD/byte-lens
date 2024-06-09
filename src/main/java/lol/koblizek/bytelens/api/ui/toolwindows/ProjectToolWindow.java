@@ -11,8 +11,12 @@ import lol.koblizek.bytelens.core.ByteLens;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -65,33 +69,14 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
     }
 
     private List<TreeItem<String>> getModule(List<Path> paths) {
-        return paths.stream().map(path -> {
-            var item = new TreeItem<>(path.getFileName().toString());
-            if (Files.isDirectory(path)) {
-                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
-                item.setExpanded(true);
-                try (var stream = Files.list(path)) {
-                    stream.forEach(p -> {
-                        var child = new TreeItem<>(p.getFileName().toString());
-                        if (Files.isDirectory(p)) {
-                            child.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
-                            child.setExpanded(true);
-                        } else {
-                            modifyFileNode(p, child);
-                        }
-                        item.getChildren().add(child);
-                    });
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                modifyFileNode(path, item);
-            }
-            return item;
-        }).toList();
+        return paths.stream().map(this::buildFileTree).toList();
     }
 
     private void modifyFileNode(Path p, TreeItem<String> child) {
+        if (Files.isDirectory(p)) {
+            child.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
+            return;
+        }
         String ext = FilenameUtils.getExtension(p.toString());
         switch (ext) {
             case "java" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Java"));
@@ -99,5 +84,24 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
             case "jar" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Archive"));
             default -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Text"));
         }
+    }
+
+    private TreeItem<String> buildFileTree(Path rootPath) {
+        TreeItem<String> rootItem = new TreeItem<>(rootPath.getFileName().toString());
+        modifyFileNode(rootPath, rootItem);
+        try {
+            Files.list(rootPath)
+                    .sorted(Comparator.comparing(Path::toString))
+                    .forEach(path -> {
+                        if (Files.isDirectory(path)) {
+                            rootItem.getChildren().add(buildFileTree(path));
+                        } else {
+                            rootItem.getChildren().add(new TreeItem<>(path.getFileName().toString()));
+                        }
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return rootItem;
     }
 }
