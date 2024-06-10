@@ -44,7 +44,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
             root.setValue(project.getName());
             appendTreeItem(root, project.getProjectFile().getFileName().toString());
             appendTreeItem(root, "Sources", item -> {
-                project.getSources();
+                getModule(project.getSources()).forEach(item.getChildren()::add);
             });
             appendTreeItem(root, "Resources");
             appendTreeItem(root, "External Libraries");
