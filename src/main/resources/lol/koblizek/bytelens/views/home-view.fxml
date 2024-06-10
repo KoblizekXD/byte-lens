@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../styles/darcula.css"
+            fx:controller="lol.koblizek.bytelens.core.controllers.HomeViewController"
+            prefHeight="400.0" prefWidth="600.0">
+    <SplitPane styleClass="home-split-pane" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" style="-fx-background-color: transparent">
+        <AnchorPane maxWidth="200" style="-fx-background-color: #2B2D30" fx:id="projectListing">
+            <VBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" prefHeight="80" AnchorPane.topAnchor="0" alignment="CENTER">
+                <Label alignment="CENTER">ByteLens 0.0.1b</Label>
+                <Label style="-fx-text-fill: #656970" alignment="CENTER">pre-release testing version</Label>
+            </VBox>
+            <ListView VBox.vgrow="ALWAYS" style="-fx-background-color: inherit" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0"/>
+        </AnchorPane>
+        <VBox alignment="CENTER">
+            <HBox alignment="CENTER">
+                <Button>Create New Project</Button>
+                <Button>Open Existing Project</Button>
+                <Button>Options</Button>
+            </HBox>
+        </VBox>
+    </SplitPane>
+</AnchorPane>

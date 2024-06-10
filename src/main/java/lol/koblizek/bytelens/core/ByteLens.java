@@ -39,7 +39,7 @@ public final class ByteLens extends Application {
     @Override
     public void start(Stage stage) {
         currentStage = stage;
-        Scene scene = getResourceManager().getScene("/lol/koblizek/bytelens/views/main-view.fxml");
+        Scene scene = getResourceManager().getScene("/lol/koblizek/bytelens/views/home-view.fxml");
         stage.setTitle("ByteLens");
         stage.setScene(scene);
         stage.show();
