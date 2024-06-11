@@ -189,3 +189,7 @@ ParagraphText {
 .home-split-pane {
     -fx-background-color: #1E1F22;
 }
+
+.welcome-button {
+    -fx-background-color: #2B2D30;
+}
