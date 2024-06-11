@@ -5,11 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
-import lol.koblizek.bytelens.core.svg.SVGTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -81,14 +85,33 @@ public class Resource {
     }
 
     /**
-     * Attempts to convert the resource to an SVG image.
+     * Attempts to convert the resource to an SVG image with default width & height
+     * (16).
      * @return The resource as a read SVG image.
      */
     public Image toSVG() {
-        SVGTranscoder transcoder = new SVGTranscoder();
-        try (InputStream stream = url.openStream()) {
-            transcoder.transcode(new TranscoderInput(stream), null);
-            return SwingFXUtils.toFXImage(transcoder.getImg(), null);
+        return toSVG(16, 16);
+    }
+
+    /**
+     * Attempts to convert the resource to an SVG image.
+     * @param width The width of the image.
+     * @param height The height of the image.
+     * @return The resource as a read SVG image.
+     */
+    public Image toSVG(int width, int height) {
+        PNGTranscoder transcoder = new PNGTranscoder();
+        String svg = new String(bytes, StandardCharsets.UTF_8);
+        svg = svg.replaceFirst("width=\"[0-9]+\"", "width=\"" + width + "\"")
+                .replaceFirst("height=\"[0-9]+\"", "height=\"" + height + "\"");
+        System.out.println(svg);
+        try (InputStream stream = new ByteArrayInputStream(svg.getBytes(StandardCharsets.UTF_8))) {
+            transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
+            transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            TranscoderOutput output = new TranscoderOutput(outputStream);
+            transcoder.transcode(new TranscoderInput(stream), output);
+            return SwingFXUtils.toFXImage(ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray())), null);
         } catch (IOException | TranscoderException e) {
             throw new RuntimeException(e);
         }

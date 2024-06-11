@@ -74,6 +74,10 @@ public final class ResourceManager {
     private static final Map<String, Image> cache = new HashMap<>();
 
     public static Image getJBIcon(String path, boolean isDark) {
+        return getJBIcon(path, isDark, 16, 16);
+    }
+
+    public static Image getJBIcon(String path, boolean isDark, int width, int height) {
         if (cache.containsKey(path))
             return cache.get(path);
         try {
@@ -89,7 +93,7 @@ public final class ResourceManager {
             Image svg = new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
                     + path.replace(".", "/").replace("allicons", "AllIcons")
                     + (isDark ? "_dark" : "")
-                    + ".svg")).toSVG();
+                    + ".svg")).toSVG(width, height);
             cache.put(path, svg);
             return svg;
         } catch (MalformedURLException e) {

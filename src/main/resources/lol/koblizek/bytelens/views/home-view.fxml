@@ -21,17 +21,17 @@
             <ListView VBox.vgrow="ALWAYS" style="-fx-background-color: inherit" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0"/>
         </AnchorPane>
         <VBox HBox.hgrow="ALWAYS" alignment="CENTER">
-            <HBox alignment="CENTER" spacing="10">
-                <VBox alignment="CENTER">
-                    <JetBrainsButton styleClass="welcome-button" icon="AllIcons.Expui.Welcome.CreateNewProjectTab"/>
+            <HBox alignment="CENTER" spacing="32">
+                <VBox spacing="8" alignment="CENTER">
+                    <JetBrainsButton iconSize="32" styleClass="welcome-button" icon="AllIcons.Expui.Welcome.CreateNewProjectTab"/>
                     <Label>Create New Project</Label>
                 </VBox>
-                <VBox alignment="CENTER">
-                    <JetBrainsButton styleClass="welcome-button" icon="AllIcons.Expui.Welcome.Open"/>
+                <VBox spacing="8" alignment="CENTER">
+                    <JetBrainsButton iconSize="32" styleClass="welcome-button" icon="AllIcons.Expui.Welcome.Open"/>
                     <Label>Open</Label>
                 </VBox>
-                <VBox alignment="CENTER">
-                    <JetBrainsButton styleClass="welcome-button" icon="AllIcons.Expui.Welcome.FromVCSTab"/>
+                <VBox spacing="8" alignment="CENTER">
+                    <JetBrainsButton iconSize="32" styleClass="welcome-button" icon="AllIcons.Expui.Welcome.FromVCSTab"/>
                     <Label>Get From VCS</Label>
                 </VBox>
             </HBox>
