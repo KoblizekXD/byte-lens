@@ -191,6 +191,6 @@ ParagraphText {
 }
 
 .welcome-button {
-    -fx-padding: 8;
+    -fx-padding: 12;
     -fx-background-color: #2B2D30;
 }
