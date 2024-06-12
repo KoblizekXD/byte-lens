@@ -102,6 +102,26 @@ AnchorPane {
     -fx-alignment: top-center;
 }
 
+.search-area {
+    -fx-background-color: #2B2D30;
+    -fx-border-color: #4E5157;
+    -fx-border-width: 1 1 1 0;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-text-fill: #dfe1e5;
+}
+
+.search-area-bottom {
+    -fx-background-color: #2B2D30;
+    -fx-border-color: #4E5157;
+    -fx-border-radius: 2;
+}
+
+.search-area-bottom:focused {
+    -fx-border-width: 2;
+    -fx-border-color: #3574F0;
+}
+
 /* Code Area */
 
 .styled-text-area .text {
@@ -186,11 +206,17 @@ ParagraphText {
 
 /* Styles exclusive to home view */
 
-.home-split-pane {
-    -fx-background-color: #1E1F22;
-}
-
 .welcome-button {
     -fx-padding: 12;
     -fx-background-color: #2B2D30;
+}
+
+.darken {
+    -fx-text-fill: #414851;
+}
+
+.project-listing {
+    -fx-background-color: #2B2D30;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
 }

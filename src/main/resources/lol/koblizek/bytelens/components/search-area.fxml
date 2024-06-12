@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import lol.koblizek.bytelens.api.ui.JetBrainsImage?>
+<fx:root xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         stylesheets="@../styles/darcula.css"
+         type="javafx.scene.layout.StackPane">
+    <AnchorPane styleClass="search-area-bottom">
+        <JetBrainsImage AnchorPane.topAnchor="4" AnchorPane.leftAnchor="4" AnchorPane.bottomAnchor="4" icon="AllIcons.Expui.General.Search" />
+    </AnchorPane>
+    <AnchorPane style="-fx-background-color: transparent">
+        <TextField styleClass="search-area" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="0" />
+    </AnchorPane>
+</fx:root>
