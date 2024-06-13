@@ -1,7 +1,6 @@
 package lol.koblizek.bytelens.api.ui;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
