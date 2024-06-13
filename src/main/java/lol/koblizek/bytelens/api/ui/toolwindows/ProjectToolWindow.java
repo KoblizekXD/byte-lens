@@ -30,7 +30,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
     @Override
     public Node create(ByteLens byteLens) throws IOException {
         this.byteLens = byteLens;
-        var loader = byteLens.getResourceManager().get("/lol/koblizek/bytelens/components/project-tw.fxml")
+        var loader = byteLens.getResourceManager().get("components/project-tw.fxml")
                 .toLoader();
         loader.setRoot(this);
         loader.setController(this);

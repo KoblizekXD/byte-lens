@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import lol.koblizek.bytelens.api.ui.JetBrainsButton?>
-<?import javafx.scene.text.Text?>
 <?import lol.koblizek.bytelens.api.ui.SearchArea?>
-<?import lol.koblizek.bytelens.api.ui.JetBrainsImage?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../styles/darcula.css"
@@ -19,7 +13,7 @@
         <Label>ByteLens</Label>
         <Label styleClass="darken" text="pre-release in-dev version" />
         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <JetBrainsButton icon="AllIcons.Expui.Welcome.CreateNewProjectTab">
+            <JetBrainsButton onMouseClicked="#buttonNewProjectClicked" icon="AllIcons.Expui.Welcome.CreateNewProjectTab">
                 <tooltip><Tooltip text="Create New Project" /></tooltip>
             </JetBrainsButton>
             <JetBrainsButton icon="AllIcons.Expui.Welcome.Open">

@@ -215,8 +215,16 @@ ParagraphText {
     -fx-text-fill: #414851;
 }
 
-.project-listing {
+.list-view, .list-cell {
+    -fx-text-fill: #dfe1e5;
     -fx-background-color: #2B2D30;
+}
+
+.project-listing {
     -fx-border-radius: 2;
     -fx-background-radius: 2;
+}
+
+.list-cell:selected {
+    -fx-background-color: #3574F0;
 }

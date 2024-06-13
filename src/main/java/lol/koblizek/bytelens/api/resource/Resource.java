@@ -104,7 +104,6 @@ public class Resource {
         String svg = new String(bytes, StandardCharsets.UTF_8);
         svg = svg.replaceFirst("width=\"[0-9]+\"", "width=\"" + width + "\"")
                 .replaceFirst("height=\"[0-9]+\"", "height=\"" + height + "\"");
-        System.out.println(svg);
         try (InputStream stream = new ByteArrayInputStream(svg.getBytes(StandardCharsets.UTF_8))) {
             transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
             transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);

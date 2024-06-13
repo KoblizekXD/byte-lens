@@ -3,10 +3,12 @@ package lol.koblizek.bytelens.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
+import lol.koblizek.bytelens.api.ui.ProjectCreationMenu;
 import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,7 @@ public final class ByteLens extends Application {
 
     private Stage currentStage;
     private final List<ToolWindow> toolWindows;
+    private final List<ProjectCreationMenu> projectTypes;
     private final Logger logger;
     private final List<ExecutorService> executors;
     private final ObjectMapper mapper;
@@ -39,7 +42,7 @@ public final class ByteLens extends Application {
     @Override
     public void start(Stage stage) {
         currentStage = stage;
-        Scene scene = getResourceManager().getScene("/lol/koblizek/bytelens/views/home-view.fxml");
+        Scene scene = getResourceManager().getScene("home-view");
         stage.setTitle("ByteLens");
         stage.setScene(scene);
         stage.show();
@@ -51,12 +54,13 @@ public final class ByteLens extends Application {
         executors = new ArrayList<>();
         projects = new ArrayList<>();
         toolWindows = new ArrayList<>();
+        projectTypes = new ArrayList<>();
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
-        resourceManager = ResourceManager.create(this);
-        getResourceManager().get("/lol/koblizek/bytelens/fonts/inter-font.ttf")
+        resourceManager = ResourceManager.create(this, "/lol/koblizek/bytelens/");
+        getResourceManager().get("fonts/inter-font.ttf")
                 .toFont();
-        getResourceManager().get("/lol/koblizek/bytelens/fonts/jetbrains-mono-font.ttf")
+        getResourceManager().get("fonts/jetbrains-mono-font.ttf")
                 .toFont();
 
         createAppFiles();
@@ -77,6 +81,13 @@ public final class ByteLens extends Application {
     @Contract(pure = true)
     public @NotNull List<ToolWindow> getToolWindows() {
         return toolWindows;
+    }
+
+    /**
+     * @return List of all project types used in "New Project" dialog
+     */
+    public List<ProjectCreationMenu> getProjectTypes() {
+        return projectTypes;
     }
 
     /**
@@ -138,5 +149,9 @@ public final class ByteLens extends Application {
         if (!Files.exists(path)) {
             action.run(path);
         }
+    }
+
+    public Scene getScene(String scene) {
+        return getResourceManager().getScene(scene);
     }
 }

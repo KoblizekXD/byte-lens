@@ -50,7 +50,7 @@ public final class ResourceManager {
 
     public Scene getScene(String path) {
         try {
-            var loader = get(path).toLoader();
+            var loader = get("views/" + path + ".fxml").toLoader();
             loader.setControllerFactory(this::injectByteLens);
             return new Scene(loader.load());
         } catch (IOException e) {
@@ -89,7 +89,6 @@ public final class ResourceManager {
             p2xs = Character.toLowerCase(p2xs.charAt(0)) + p2xs.substring(1);
             p2s[p2s.length - 1] = p2xs;
             path = String.join(".", p2s);
-            System.out.println(path);
             Image svg = new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
                     + path.replace(".", "/").replace("allicons", "AllIcons")
                     + (isDark ? "_dark" : "")
