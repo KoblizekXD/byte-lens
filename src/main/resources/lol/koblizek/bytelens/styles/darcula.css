@@ -146,7 +146,7 @@ ParagraphText {
     -fx-background-color: transparent;
 }
 
- .styled-text-area .lineno .text {
+.styled-text-area .lineno .text {
      -fx-fill: #697086;
  }
 
@@ -227,4 +227,12 @@ ParagraphText {
 
 .list-cell:selected {
     -fx-background-color: #3574F0;
+}
+
+.new-project-text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #4E5157;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-text-fill: #dfe1e5;
 }

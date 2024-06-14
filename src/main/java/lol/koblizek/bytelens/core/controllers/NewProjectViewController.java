@@ -1,8 +1,17 @@
 package lol.koblizek.bytelens.core.controllers;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
 
@@ -23,12 +32,39 @@ public class NewProjectViewController extends Controller {
         projectTypeListing.getSelectionModel().select(0);
         projectTypeListing.getSelectionModel().selectedItemProperty().subscribe(menu -> {
             if (menu == null) return;
-            HBox.setHgrow(menu, ALWAYS);
+            HBox.setHgrow(generateNode(menu), ALWAYS);
             if (hbox.getChildren().size() == 2) {
-                hbox.getChildren().set(1, menu);
+                hbox.getChildren().set(1, generateNode(menu));
             } else {
-                hbox.getChildren().add(menu);
+                hbox.getChildren().add(generateNode(menu));
             }
         });
+    }
+
+    private Node generateNode(ProjectCreator creator) {
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10, 0, 0, 10));
+        gridPane.setHgap(20);
+        gridPane.setVgap(5);
+        creator.getFields().forEach((name, type) -> {
+            Node node = generateNode(type);
+            gridPane.addRow(gridPane.getChildren().size(), new Label(name), node);
+        });
+        return gridPane;
+    }
+
+    private Node generateNode(Class<?> type) {
+        Region r;
+        if (type == String.class || type == int.class) {
+            r = new TextField();
+            r.getStyleClass().add("new-project-text-field");
+        } else if (type == Boolean.class) {
+            r = new CheckBox();
+        } else {
+            r = new Label("Unsupported type: " + type);
+            r.setStyle("-fx-border-color: red");
+        }
+        r.prefWidth(200);
+        return r;
     }
 }

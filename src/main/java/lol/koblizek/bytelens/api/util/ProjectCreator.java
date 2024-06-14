@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+/**
+ * Represents a project type that can be created by the user in "New Project" dialog
+ */
 public abstract class ProjectCreator {
     /**
      * @return The name of the project type
@@ -33,4 +36,9 @@ public abstract class ProjectCreator {
      * @return The created project
      */
     public abstract @NotNull DefaultProject createProject(Map<String, Object> data);
+
+    @Override
+    public final String toString() {
+        return getName();
+    }
 }
