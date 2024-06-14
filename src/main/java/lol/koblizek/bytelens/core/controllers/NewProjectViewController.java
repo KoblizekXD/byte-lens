@@ -3,14 +3,14 @@ package lol.koblizek.bytelens.core.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
-import lol.koblizek.bytelens.api.ui.ProjectCreationMenu;
+import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
 
 import static javafx.scene.layout.Priority.ALWAYS;
 
 public class NewProjectViewController extends Controller {
 
-    @FXML public ListView<ProjectCreationMenu> projectTypeListing;
+    @FXML public ListView<ProjectCreator> projectTypeListing;
     @FXML public HBox hbox;
 
     public NewProjectViewController(ByteLens byteLens) {

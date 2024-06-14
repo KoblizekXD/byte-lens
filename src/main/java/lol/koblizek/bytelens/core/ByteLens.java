@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
-import lol.koblizek.bytelens.api.ui.ProjectCreationMenu;
+import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public final class ByteLens extends Application {
 
     private Stage currentStage;
     private final List<ToolWindow> toolWindows;
-    private final List<ProjectCreationMenu> projectTypes;
+    private final List<ProjectCreator> projectTypes;
     private final Logger logger;
     private final List<ExecutorService> executors;
     private final ObjectMapper mapper;
@@ -85,7 +85,7 @@ public final class ByteLens extends Application {
     /**
      * @return List of all project types used in "New Project" dialog
      */
-    public List<ProjectCreationMenu> getProjectTypes() {
+    public List<ProjectCreator> getProjectTypes() {
         return projectTypes;
     }
 
