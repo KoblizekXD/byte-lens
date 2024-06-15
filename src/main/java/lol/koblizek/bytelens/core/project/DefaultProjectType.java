@@ -4,6 +4,8 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DefaultProjectType extends ProjectCreator {
@@ -14,10 +16,10 @@ public class DefaultProjectType extends ProjectCreator {
 
     @Override
     public Map<String, Class<?>> getFields() {
-        return Map.of(
-                "Project Name", String.class,
-                "Project Location", String.class
-        );
+        return new LinkedHashMap<>() {{
+            put("Project Name", String.class);
+            put("Project Location", Path.class);
+        }};
     }
 
     @Override

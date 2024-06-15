@@ -2,25 +2,24 @@ package lol.koblizek.bytelens.core.controllers;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import lol.koblizek.bytelens.api.ui.PathField;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
+
+import java.nio.file.Path;
 
 import static javafx.scene.layout.Priority.ALWAYS;
 
 public class NewProjectViewController extends Controller {
 
     @FXML public ListView<ProjectCreator> projectTypeListing;
-    @FXML public HBox hbox;
+    @FXML public AnchorPane userdata;
 
     public NewProjectViewController(ByteLens byteLens) {
         super(byteLens);
@@ -32,11 +31,11 @@ public class NewProjectViewController extends Controller {
         projectTypeListing.getSelectionModel().select(0);
         projectTypeListing.getSelectionModel().selectedItemProperty().subscribe(menu -> {
             if (menu == null) return;
-            HBox.setHgrow(generateNode(menu), ALWAYS);
-            if (hbox.getChildren().size() == 2) {
-                hbox.getChildren().set(1, generateNode(menu));
+            VBox.setVgrow(generateNode(menu), ALWAYS);
+            if (userdata.getChildren().size() == 2) {
+                userdata.getChildren().set(0, generateNode(menu));
             } else {
-                hbox.getChildren().add(generateNode(menu));
+                userdata.getChildren().addFirst(generateNode(menu));
             }
         });
     }
@@ -58,6 +57,8 @@ public class NewProjectViewController extends Controller {
         if (type == String.class || type == int.class) {
             r = new TextField();
             r.getStyleClass().add("new-project-text-field");
+        } else if (type == Path.class) {
+            r = new PathField();
         } else if (type == Boolean.class) {
             r = new CheckBox();
         } else {

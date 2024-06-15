@@ -122,6 +122,23 @@ AnchorPane {
     -fx-border-color: #3574F0;
 }
 
+.path-area-bottom {
+    -fx-background-color: transparent;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-text-fill: #dfe1e5;
+    -fx-border-color: #4E5157;
+}
+
+.path-area {
+    -fx-background-color: transparent;
+    -fx-border-color: #4E5157;
+    -fx-border-width: 1 0 1 1;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-text-fill: #dfe1e5;
+}
+
 /* Code Area */
 
 .styled-text-area .text {

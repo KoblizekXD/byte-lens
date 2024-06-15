@@ -2,12 +2,18 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../styles/darcula.css"
             fx:controller="lol.koblizek.bytelens.core.controllers.NewProjectViewController"
             prefHeight="400.0" prefWidth="600.0">
-    <HBox fx:id="hbox" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <HBox AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         <ListView prefWidth="270.0" fx:id="projectTypeListing" />
+        <AnchorPane fx:id="userdata" HBox.hgrow="ALWAYS">
+            <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+                <Button AnchorPane.rightAnchor="0" text="Create" alignment="CENTER" />
+            </AnchorPane>
+        </AnchorPane>
     </HBox>
 </AnchorPane>

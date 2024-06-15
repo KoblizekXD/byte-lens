@@ -24,6 +24,7 @@ public abstract class ProjectCreator {
     /**
      * Returns the fields that the project type requires and are later retrieved
      * by {@link #createProject(Map)}
+     * @implNote It is recommended to return a {@link java.util.LinkedHashMap} to keep the order of the fields
      * @return Fields that the project type requires
      */
     public Map<String, Class<?>> getFields() {
