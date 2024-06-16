@@ -59,6 +59,7 @@ public class NewProjectViewController extends Controller {
             r.getStyleClass().add("new-project-text-field");
         } else if (type == Path.class) {
             r = new PathField();
+            ((PathField) r).directoryOnlyProperty().set(true);
         } else if (type == Boolean.class) {
             r = new CheckBox();
         } else {

@@ -7,10 +7,9 @@
          xmlns:fx="http://javafx.com/fxml"
          stylesheets="@../styles/darcula.css"
          type="StackPane">
-    <AnchorPane styleClass="path-area-bottom">
-        <Pane onMouseClicked="#selectPath" style="-fx-border-color: red" AnchorPane.topAnchor="4" AnchorPane.rightAnchor="4" AnchorPane.bottomAnchor="4"><JetBrainsImage pickOnBounds="true" icon="AllIcons.Expui.General.Open" /></Pane>
-    </AnchorPane>
+    <AnchorPane styleClass="path-area-bottom" />
     <AnchorPane style="-fx-background-color: transparent">
-        <TextField styleClass="path-area" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />
+        <TextField fx:id="textField" styleClass="path-area" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" />
+        <JetBrainsImage AnchorPane.topAnchor="4" AnchorPane.rightAnchor="4" AnchorPane.bottomAnchor="4" onMouseClicked="#selectPath" icon="AllIcons.Expui.General.Open" />
     </AnchorPane>
 </fx:root>
