@@ -67,4 +67,8 @@ public class PathField extends StackPane {
     public void setDirectoryOnly(boolean directoryOnly) {
         this.directoryOnly.set(directoryOnly);
     }
+
+    public String getText() {
+        return textField.getText();
+    }
 }

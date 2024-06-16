@@ -26,7 +26,7 @@ public class HomeViewController extends Controller {
     public void buttonNewProjectClicked() {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(getByteLens().getCurrentStage());
+        stage.initOwner(getByteLens().getPrimaryStage());
         stage.setTitle("New Project");
         stage.setScene(getByteLens().getScene("new-project-view"));
         stage.show();

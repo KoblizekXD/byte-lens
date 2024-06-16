@@ -29,7 +29,7 @@ public final class ByteLens extends Application {
         launch();
     }
 
-    private Stage currentStage;
+    private Stage primaryStage;
     private final List<ToolWindow> toolWindows;
     private final List<ProjectCreator> projectTypes;
     private final Logger logger;
@@ -41,7 +41,7 @@ public final class ByteLens extends Application {
 
     @Override
     public void start(Stage stage) {
-        currentStage = stage;
+        primaryStage = stage;
         Scene scene = getResourceManager().getScene("home-view");
         stage.setTitle("ByteLens");
         stage.setScene(scene);
@@ -74,10 +74,10 @@ public final class ByteLens extends Application {
     }
 
     /**
-     * @return The currently running stage
+     * @return The currently primary running stage
      */
-    public Stage getCurrentStage() {
-        return currentStage;
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     @Contract(pure = true)
