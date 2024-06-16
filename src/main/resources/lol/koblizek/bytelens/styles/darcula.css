@@ -253,3 +253,20 @@ ParagraphText {
     -fx-background-radius: 2;
     -fx-text-fill: #dfe1e5;
 }
+
+.confirm-blue {
+    -fx-background-color: #3674F0;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-text-fill: #dfe1e5;
+    -fx-font-weight: bold;
+}
+
+.regular-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-border-color: #4E5157;
+    -fx-text-fill: #dfe1e5;
+    -fx-font-weight: bold;
+}

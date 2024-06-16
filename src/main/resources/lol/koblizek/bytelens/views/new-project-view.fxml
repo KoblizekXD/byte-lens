@@ -8,12 +8,13 @@
             stylesheets="@../styles/darcula.css"
             fx:controller="lol.koblizek.bytelens.core.controllers.NewProjectViewController"
             prefHeight="400.0" prefWidth="600.0">
-    <HBox AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <HBox fx:id="userdata" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         <ListView prefWidth="270.0" fx:id="projectTypeListing" />
-        <AnchorPane fx:id="userdata" HBox.hgrow="ALWAYS">
-            <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
-                <Button AnchorPane.rightAnchor="0" text="Create" alignment="CENTER" />
-            </AnchorPane>
-        </AnchorPane>
     </HBox>
+    <AnchorPane style="-fx-border-width: 1 0 0 0; -fx-border-color: #515151" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <HBox spacing="4" AnchorPane.rightAnchor="4" AnchorPane.bottomAnchor="5" AnchorPane.topAnchor="4">
+            <Button styleClass="confirm-blue" text="Create" />
+            <Button styleClass="regular-button" text="Cancel" />
+        </HBox>
+    </AnchorPane>
 </AnchorPane>

@@ -19,7 +19,7 @@ import static javafx.scene.layout.Priority.ALWAYS;
 public class NewProjectViewController extends Controller {
 
     @FXML public ListView<ProjectCreator> projectTypeListing;
-    @FXML public AnchorPane userdata;
+    @FXML public HBox userdata;
 
     public NewProjectViewController(ByteLens byteLens) {
         super(byteLens);
@@ -33,9 +33,9 @@ public class NewProjectViewController extends Controller {
             if (menu == null) return;
             VBox.setVgrow(generateNode(menu), ALWAYS);
             if (userdata.getChildren().size() == 2) {
-                userdata.getChildren().set(0, generateNode(menu));
+                userdata.getChildren().set(1, generateNode(menu));
             } else {
-                userdata.getChildren().addFirst(generateNode(menu));
+                userdata.getChildren().add(generateNode(menu));
             }
         });
     }
