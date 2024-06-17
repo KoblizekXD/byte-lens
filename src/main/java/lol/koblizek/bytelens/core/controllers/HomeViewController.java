@@ -5,6 +5,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
+import lol.koblizek.bytelens.api.util.xui.MessageBox;
 import lol.koblizek.bytelens.core.ByteLens;
 
 public class HomeViewController extends Controller {

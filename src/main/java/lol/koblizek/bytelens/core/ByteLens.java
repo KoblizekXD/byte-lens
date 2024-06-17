@@ -8,6 +8,7 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
+import lol.koblizek.bytelens.api.util.xui.MessageBox;
 import lol.koblizek.bytelens.core.project.DefaultProjectType;
 import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
@@ -55,6 +56,8 @@ public final class ByteLens extends Application {
         projects = new ArrayList<>();
         toolWindows = new ArrayList<>();
         projectTypes = new ArrayList<>();
+
+        MessageBox.init(this);
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         resourceManager = ResourceManager.create(this, "/lol/koblizek/bytelens/");
