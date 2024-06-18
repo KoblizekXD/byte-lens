@@ -3,6 +3,7 @@ package lol.koblizek.bytelens.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
@@ -148,6 +149,20 @@ public final class ByteLens extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void openLast() {
+        logger.trace("Attempting to open last project");
+        if (projects.isEmpty()) {
+            logger.error("No projects to open");
+            return;
+        }
+        currentProject = projects.getLast();
+        Stage stage = new Stage();
+        stage.setTitle("ByteLens -" + currentProject.getName());
+        stage.setScene(getScene("new-project-view"));
+        stage.show();
+        logger.info("Opened project {}", currentProject.getName());
     }
 
     private void whenNotExists(Path path, ThrowingConsumer<Path> action) {

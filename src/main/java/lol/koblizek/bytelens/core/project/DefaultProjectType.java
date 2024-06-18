@@ -1,5 +1,6 @@
 package lol.koblizek.bytelens.core.project;
 
+import javafx.scene.control.Label;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ public class DefaultProjectType extends ProjectCreator {
         return new LinkedHashMap<>() {{
             put("Project Name", String.class);
             put("Project Location", Path.class);
+            put("Created@Project Location@Project Name", Label.class);
         }};
     }
 
@@ -29,6 +31,8 @@ public class DefaultProjectType extends ProjectCreator {
 
     @Override
     public @NotNull DefaultProject createProject(Map<String, Object> data) {
-        return null;
+        Path projectPath = ((Path) data.get("Project Location"))
+                .resolve((String) data.get("Project Name"));
+        return new DefaultProject(projectPath);
     }
 }

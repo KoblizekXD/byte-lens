@@ -43,11 +43,13 @@ public class DefaultProject {
         } else {
             logger.warn("Project does not exist, creating default files...");
             try {
+                Files.createDirectories(projectPath);
                 this.projectPath = projectPath;
                 this.projectFile = Files.createFile(projectPath.resolve("project.bl.json"));
             } catch (IOException e) {
                 throw new ProjectException("Failed to create project file", e);
             }
+            logger.info("Project created successfully");
         }
     }
 
