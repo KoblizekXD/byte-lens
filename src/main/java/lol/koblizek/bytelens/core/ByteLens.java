@@ -54,9 +54,15 @@ public final class ByteLens extends Application {
         logger = LoggerFactory.getLogger(getClass());
         mapper = new ObjectMapper();
         executors = new ArrayList<>();
-        projects = new ArrayList<>() {
+        projects = new ArrayList<DefaultProject>() {
             @Override
             public boolean add(DefaultProject project) {
+                return super.add(project);
+            }
+
+            // PLEASE CALL ADD LAST ONLY WHEN NEW PROJECT IS CREATED, NOT WHENEVER IT IS BEING LOADED. IT MAY BREAK THINGS!
+            @Override
+            public void addLast(DefaultProject project) {
                 Path projects = Path.of(System.getProperty("user.home"), ".bytelens", "projects.json");
                 whenNotExists(projects, Files::createFile);
                 try {
@@ -66,7 +72,7 @@ public final class ByteLens extends Application {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                return super.add(project);
+                super.add(project);
             }
         };
         toolWindows = new ArrayList<>();

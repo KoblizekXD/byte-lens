@@ -110,7 +110,7 @@ public class NewProjectViewController extends Controller {
             alert.setContentText("Please fill in all required fields.");
         } else {
             getByteLens().getProjects()
-                            .add(creator.createProject(getProjectData(data)));
+                            .addLast(creator.createProject(getProjectData(data)));
             getByteLens().openLast();
             closeWindow();
         }
