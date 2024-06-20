@@ -13,6 +13,8 @@ import lol.koblizek.bytelens.core.ByteLens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.channels.FileLock;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -108,9 +110,9 @@ public class NewProjectViewController extends Controller {
             alert.setContentText("Please fill in all required fields.");
         } else {
             getByteLens().getProjects()
-                            .addLast(creator.createProject(getProjectData(data)));
+                            .add(creator.createProject(getProjectData(data)));
+            getByteLens().openLast();
             closeWindow();
-
         }
     }
 

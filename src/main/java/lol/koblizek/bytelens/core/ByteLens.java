@@ -54,7 +54,21 @@ public final class ByteLens extends Application {
         logger = LoggerFactory.getLogger(getClass());
         mapper = new ObjectMapper();
         executors = new ArrayList<>();
-        projects = new ArrayList<>();
+        projects = new ArrayList<>() {
+            @Override
+            public boolean add(DefaultProject project) {
+                Path projects = Path.of(System.getProperty("user.home"), ".bytelens", "projects.json");
+                whenNotExists(projects, Files::createFile);
+                try {
+                    List<String> arr = mapper.readValue(projects.toFile(), ArrayList.class);
+                    arr.add(project.getProjectPath().toString());
+                    mapper.writeValue(projects.toFile(), arr);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return super.add(project);
+            }
+        };
         toolWindows = new ArrayList<>();
         projectTypes = new ArrayList<>();
 
@@ -160,8 +174,11 @@ public final class ByteLens extends Application {
         currentProject = projects.getLast();
         Stage stage = new Stage();
         stage.setTitle("ByteLens -" + currentProject.getName());
-        stage.setScene(getScene("new-project-view"));
+        stage.setScene(getScene("main-view"));
         stage.show();
+        if (primaryStage != null)
+            primaryStage.close();
+        primaryStage = stage;
         logger.info("Opened project {}", currentProject.getName());
     }
 

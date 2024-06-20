@@ -46,11 +46,22 @@ public class DefaultProject {
                 Files.createDirectories(projectPath);
                 this.projectPath = projectPath;
                 this.projectFile = Files.createFile(projectPath.resolve("project.bl.json"));
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.writeValue(projectFile.toFile(), this);
             } catch (IOException e) {
                 throw new ProjectException("Failed to create project file", e);
             }
             logger.info("Project created successfully");
         }
+    }
+
+    /**
+     * Loads ByteLens project from the given path. It is identical to {@link #DefaultProject(Path)}.
+     * @param path the path to the project directory
+     * @see #DefaultProject(Path)
+     */
+    public DefaultProject(@NotNull String path) {
+        this(Path.of(path));
     }
 
     /**
