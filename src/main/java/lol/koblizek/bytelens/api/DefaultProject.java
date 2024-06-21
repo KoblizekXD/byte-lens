@@ -170,6 +170,10 @@ public class DefaultProject {
         Files.copy(resource, sources.resolve(resource.getFileName()));
     }
 
+    /**
+     * Synchronizes the project file with the current project state.
+     * (Technically speaking, it just serializes the {@link DefaultProject} instance to the project file)
+     */
     private void syncProjectFile() {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toFile(), this);

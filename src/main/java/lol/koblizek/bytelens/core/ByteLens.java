@@ -1,5 +1,6 @@
 package lol.koblizek.bytelens.core;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -164,7 +165,15 @@ public final class ByteLens extends Application {
         Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
         Path projectsPath = blPath.resolve("projects.json");
         try {
-            mapper.readerForUpdating(projects).readValue(projectsPath.toFile());
+            mapper.readValue(projectsPath.toFile(), new TypeReference<ArrayList<Path>>() {})
+                    .stream().filter(p -> {
+                        if (!DefaultProject.isProject(p)) {
+                            logger.warn("Invalid project \"{}\", ignoring", p);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }).map(DefaultProject::new).forEach(projects::add);
             logger.info("Loaded {} project/s", projects.size());
         } catch (IOException e) {
             throw new RuntimeException(e);
