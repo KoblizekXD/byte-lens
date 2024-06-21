@@ -41,7 +41,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
             root.setValue(project.getName());
             appendTreeItem(root, project.getProjectFile().getFileName().toString());
             appendTreeItem(root, "Sources", item -> {
-                getModule(project.getSources()).forEach(item.getChildren()::add);
+                item.getChildren().add(getModule(project.getSources()));
             });
             appendTreeItem(root, "Resources");
             appendTreeItem(root, "External Libraries");
@@ -65,8 +65,8 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         return item;
     }
 
-    private List<TreeItem<String>> getModule(List<Path> paths) {
-        return paths.stream().map(this::buildFileTree).toList();
+    private TreeItem<String> getModule(Path path) {
+        return buildFileTree(path);
     }
 
     private void modifyFileNode(Path p, TreeItem<String> child) {

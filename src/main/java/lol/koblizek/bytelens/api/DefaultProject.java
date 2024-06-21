@@ -1,6 +1,7 @@
 package lol.koblizek.bytelens.api;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lol.koblizek.bytelens.api.util.ProjectException;
 import org.jetbrains.annotations.NotNull;
@@ -12,10 +13,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Represents a ByteLens project with default behaviour.
+ */
 public class DefaultProject {
+
+    @JsonIgnore
+    private final ObjectMapper mapper;
 
     private final Path projectPath;
     private final Path projectFile;
@@ -23,10 +28,10 @@ public class DefaultProject {
     @JsonAlias({"project_name", "name"})
     private String name;
     @JsonAlias({"jar_sources", "sources", "source_jars"})
-    private List<Path> sources;
+    private Path sources;
     @JsonAlias({"reference_libraries", "references"})
-    private List<Path> referenceLibraries;
-    private List<Path> resources;
+    private Path referenceLibraries;
+    private Path resources;
     
     private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
 
@@ -36,6 +41,7 @@ public class DefaultProject {
      */
     public DefaultProject(@NotNull Path projectPath) {
         logger.info("Attempting to load project from path: {}", projectPath);
+        this.mapper = new ObjectMapper();
         if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
             logger.debug("Project exists and will be loaded");
             this.projectPath = projectPath;
@@ -48,10 +54,9 @@ public class DefaultProject {
                 this.projectPath = projectPath;
                 this.projectFile = Files.createFile(projectPath.resolve("project.bl.json"));
                 this.name = projectPath.getFileName().toString();
-                this.sources = new ArrayList<>();
-                this.resources = new ArrayList<>();
-                this.referenceLibraries = new ArrayList<>();
-                ObjectMapper mapper = new ObjectMapper();
+                this.sources = Files.createDirectories(projectPath.resolve("sources"));
+                this.resources = Files.createDirectories(projectPath.resolve("resources"));
+                this.referenceLibraries = Files.createDirectories(projectPath.resolve("libraries"));
                 mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toFile(), this);
             } catch (IOException e) {
                 throw new ProjectException("Failed to create project file", e);
@@ -105,36 +110,78 @@ public class DefaultProject {
     }
 
     /**
-     * Returns the list of directories containing source files.
+     * Returns the directory containing the source files.
      * Sources will be searched recursively.
      * @implNote The source files are expected to be in the form of .jar or .class files, different formats may be ignored.
      * @return the list of source directories
      */
-    public @NotNull List<Path> getSources() {
+    public @NotNull Path getSources() {
         return sources;
     }
 
     /**
-     * Returns the list of reference libraries or directories containing reference libraries.
+     * Returns the directory containing the reference libraries.
      * @return the list of reference libraries or directories containing reference libraries
      */
-    public @NotNull List<Path> getReferenceLibraries() {
+    public @NotNull Path getReferenceLibraries() {
         return referenceLibraries;
     }
 
     /**
-     * Returns the list of directories containing resources.
+     * Returns the directory containing the resources.
      * @return the list of directories containing resources
      */
-    public @NotNull List<Path> getResources() {
+    public @NotNull Path getResources() {
         return resources;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        syncProjectFile();
+    }
+
+    /**
+     * Adds a source file(By copying it) to the project.
+     * @implNote The source files are expected to be in the form of .jar or .class files, different formats may be ignored.
+     * @throws IOException if an I/O error occurs during copy
+     * @param source the path to the source file
+     */
+    public void addSource(Path source) throws IOException {
+        if (source.getFileName().endsWith(".jar") || source.getFileName().endsWith(".class")) {
+            Files.copy(source, sources.resolve(source.getFileName()));
+        }
+    }
+
+    /**
+     * Adds a reference library to the project. It is expected to be a .jar file.
+     * @throws IOException if an I/O error occurs during copy
+     * @param referenceLibrary the path to the reference library
+     */
+    public void addReferenceLibrary(Path referenceLibrary) throws IOException {
+        Files.copy(referenceLibrary, sources.resolve(referenceLibrary.getFileName()));
+    }
+
+    /**
+     * Adds a resource to the project. Can be any form of file or directory.
+     * @param resource the path to the resource
+     * @throws IOException if an I/O error occurs during copy
+     */
+    public void addResource(Path resource) throws IOException {
+        Files.copy(resource, sources.resolve(resource.getFileName()));
+    }
+
+    private void syncProjectFile() {
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toFile(), this);
+        } catch (IOException e) {
+            logger.error("Failed to update project file", e);
+        }
     }
 
     /**
      * Loads the project from the project file.
      */
     private void loadProject() {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.readerForUpdating(this).readValue(projectFile.toFile());
             if (!nonNulls()) {

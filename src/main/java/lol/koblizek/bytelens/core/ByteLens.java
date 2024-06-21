@@ -54,7 +54,7 @@ public final class ByteLens extends Application {
         logger = LoggerFactory.getLogger(getClass());
         mapper = new ObjectMapper();
         executors = new ArrayList<>();
-        projects = new ArrayList<DefaultProject>() {
+        projects = new ArrayList<>() {
             @Override
             public boolean add(DefaultProject project) {
                 return super.add(project);
