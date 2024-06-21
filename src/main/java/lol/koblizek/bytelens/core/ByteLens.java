@@ -173,7 +173,7 @@ public final class ByteLens extends Application {
                         } else {
                             return true;
                         }
-                    }).map(DefaultProject::new).forEach(projects::add);
+                    }).distinct().map(DefaultProject::new).forEach(projects::add);
             logger.info("Loaded {} project/s", projects.size());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -187,14 +187,24 @@ public final class ByteLens extends Application {
             return;
         }
         currentProject = projects.getLast();
+        openProject(currentProject);
+    }
+
+    public void openProject(DefaultProject project) {
+        logger.trace("Attempting to open project {}", project.getName());
+        currentProject = project;
         Stage stage = new Stage();
-        stage.setTitle("ByteLens -" + currentProject.getName());
+        stage.setTitle("ByteLens -" + project.getName());
         stage.setScene(getScene("main-view"));
         stage.show();
         if (primaryStage != null)
             primaryStage.close();
         primaryStage = stage;
-        logger.info("Opened project {}", currentProject.getName());
+        logger.info("Opened project {}", project.getName());
+    }
+
+    public Optional<DefaultProject> getProjectByName(String name) {
+        return projects.stream().filter(p -> p.getName().equals(name)).findFirst();
     }
 
     private void whenNotExists(Path path, ThrowingConsumer<Path> action) {
