@@ -166,14 +166,14 @@ public final class ByteLens extends Application {
         Path projectsPath = blPath.resolve("projects.json");
         try {
             mapper.readValue(projectsPath.toFile(), new TypeReference<ArrayList<Path>>() {})
-                    .stream().filter(p -> {
+                    .stream().distinct().filter(p -> {
                         if (!DefaultProject.isProject(p)) {
                             logger.warn("Invalid project \"{}\", ignoring", p);
                             return false;
                         } else {
                             return true;
                         }
-                    }).distinct().map(DefaultProject::new).forEach(projects::add);
+                    }).map(DefaultProject::new).forEach(projects::add);
             logger.info("Loaded {} project/s", projects.size());
         } catch (IOException e) {
             throw new RuntimeException(e);

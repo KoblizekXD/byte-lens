@@ -1,7 +1,6 @@
 package lol.koblizek.bytelens.core.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.IndexedCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,9 +19,9 @@ public class HomeViewController extends Controller {
     public void initialize() {
         projectListing.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                getByteLens().openProject(getByteLens().getProjectByName(
-                        projectListing.getSelectionModel().getSelectedItem()
-                ).get());
+                var selectedItem = projectListing.getSelectionModel().getSelectedItem();
+                if (selectedItem == null || selectedItem.isBlank()) return;
+                getByteLens().openProject(getByteLens().getProjectByName(selectedItem).get());
             }
         });
         for (DefaultProject project : getByteLens().getProjects()) {

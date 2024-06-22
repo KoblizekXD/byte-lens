@@ -39,13 +39,15 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         Optional<DefaultProject> optionalProject = byteLens.getCurrentProject();
         optionalProject.ifPresentOrElse(project -> {
             root.setValue(project.getName());
+            root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
             appendTreeItem(root, project.getProjectFile().getFileName().toString());
             appendTreeItem(root, "Sources", item -> {
+                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
                 item.getChildren().add(getModule(project.getSources()));
             });
-            appendTreeItem(root, "Resources");
-            appendTreeItem(root, "External Libraries");
-            appendTreeItem(root, "Workspace");
+            appendTreeItem(root, "Resources", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
+            appendTreeItem(root, "External Libraries", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
+            appendTreeItem(root, "Workspace", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
         }, () -> {
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ErrorIntroduction"));
             root.setValue("No module/project is open");
@@ -76,10 +78,10 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         }
         String ext = FilenameUtils.getExtension(p.toString());
         switch (ext) {
-            case "java" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Java"));
-            case "class" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Class"));
-            case "jar" -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Archive"));
-            default -> child.setGraphic(new JetBrainsImage("AllIcons.FileTypes.Text"));
+            case "java" -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Java"));
+            case "class" -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Class"));
+            case "jar" -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Archive"));
+            default -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Text"));
         }
     }
 

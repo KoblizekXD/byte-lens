@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.api;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lol.koblizek.bytelens.api.util.ProjectException;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -42,6 +44,7 @@ public class DefaultProject {
     public DefaultProject(@NotNull Path projectPath) {
         logger.info("Attempting to load project from path: {}", projectPath);
         this.mapper = new ObjectMapper();
+        mapper.setDefaultMergeable(true);
         if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
             logger.debug("Project exists and will be loaded");
             this.projectPath = projectPath;
@@ -187,7 +190,13 @@ public class DefaultProject {
      */
     private void loadProject() {
         try {
-            mapper.readerForUpdating(this).readValue(projectFile.toFile());
+            // 2024-06-22 Implementation note: Temporary solution, this fucker removed fields before for some reason?
+            // It isn't dynamic!!
+            var node = mapper.readValue(projectFile.toFile(), JsonNode.class);
+            this.name = node.get("name").asText();
+            this.sources = Path.of(new URI(node.get("sources").asText()));
+            this.resources = Path.of(new URI(node.get("resources").asText()));
+            this.referenceLibraries = Path.of(new URI(node.get("referenceLibraries").asText()));
             if (!nonNulls()) {
                 logger.warn("Not all project fields are set, possible project corruption");
             }

@@ -3,11 +3,14 @@ package lol.koblizek.bytelens.api.resource;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import lol.koblizek.bytelens.core.ByteLens;
+import lol.koblizek.bytelens.core.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,21 +84,10 @@ public final class ResourceManager {
         if (cache.containsKey(path))
             return cache.get(path);
         try {
-            String[] p2s = path.split("\\.");
-            for (int i = 0; i < p2s.length - 1; i++) {
-                p2s[i] = p2s[i].toLowerCase();
-            }
-            String p2xs = p2s[p2s.length - 1];
-            p2xs = Character.toLowerCase(p2xs.charAt(0)) + p2xs.substring(1);
-            p2s[p2s.length - 1] = p2xs;
-            path = String.join(".", p2s);
-            Image svg = new Resource(new URL("https://intellij-icons.jetbrains.design/icons/"
-                    + path.replace(".", "/").replace("allicons", "AllIcons")
-                    + (isDark ? "_dark" : "")
-                    + ".svg")).toSVG(width, height);
+            Image svg = new Resource(new URI(StringUtils.getCompliantIconURL(path, isDark)).toURL()).toSVG(width, height);
             cache.put(path, svg);
             return svg;
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
