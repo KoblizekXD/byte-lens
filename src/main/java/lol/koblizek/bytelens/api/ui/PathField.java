@@ -9,7 +9,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
 

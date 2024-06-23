@@ -11,11 +11,13 @@ import lol.koblizek.bytelens.core.ByteLens;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class ProjectToolWindow extends TreeView<String> implements ToolWindow.ToolWindowNode {
@@ -40,13 +42,21 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         optionalProject.ifPresentOrElse(project -> {
             root.setValue(project.getName());
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
-            appendTreeItem(root, project.getProjectFile().getFileName().toString());
+            appendTreeItem(root, project.getProjectFile().getFileName().toString(), item -> {
+                item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json"));
+            });
             appendTreeItem(root, "Sources", item -> {
                 item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
                 item.getChildren().add(getModule(project.getSources()));
             });
-            appendTreeItem(root, "Resources", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
-            appendTreeItem(root, "External Libraries", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
+            appendTreeItem(root, "Resources", item -> {
+                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
+                item.getChildren().add(getModule(project.getResources()));
+            });
+            appendTreeItem(root, "External Libraries", item -> {
+                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
+                item.getChildren().add(getModule(project.getReferenceLibraries()));
+            });
             appendTreeItem(root, "Workspace", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
         }, () -> {
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ErrorIntroduction"));
@@ -67,10 +77,6 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         return item;
     }
 
-    private TreeItem<String> getModule(Path path) {
-        return buildFileTree(path);
-    }
-
     private void modifyFileNode(Path p, TreeItem<String> child) {
         if (Files.isDirectory(p)) {
             child.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
@@ -85,7 +91,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         }
     }
 
-    private TreeItem<String> buildFileTree(Path rootPath) {
+    private TreeItem<String> getModule(Path rootPath) {
         TreeItem<String> rootItem = new TreeItem<>(rootPath.getFileName().toString());
         modifyFileNode(rootPath, rootItem);
         try {
@@ -93,7 +99,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
                     .sorted(Comparator.comparing(Path::toString))
                     .forEach(path -> {
                         if (Files.isDirectory(path)) {
-                            rootItem.getChildren().add(buildFileTree(path));
+                            rootItem.getChildren().add(getModule(path));
                         } else {
                             rootItem.getChildren().add(new TreeItem<>(path.getFileName().toString()));
                         }
