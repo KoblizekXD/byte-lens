@@ -21,7 +21,9 @@ public class MainViewController extends Controller {
 
     public MenuBar menubar;
     public SideToolBar leftToolbar;
+    public SideToolBar rightToolbar;
     public SidePane leftPanel;
+    public SidePane rightPanel;
     public PersistentSplitPane splitPaneInner;
     public SidePane bottomPanel;
     public PersistentSplitPane splitPaneOuter;
@@ -58,6 +60,8 @@ public class MainViewController extends Controller {
             splitPaneInner.hidePane(leftPanel);
         if (!collected.containsKey(ToolWindow.Placement.BOTTOM))
             splitPaneOuter.hidePane(bottomPanel);
+        if (!collected.containsKey(ToolWindow.Placement.BOTTOM))
+            splitPaneInner.hidePane(rightPanel);
 
         for (Map.Entry<ToolWindow.Placement, List<ToolWindow>> entry : collected.entrySet()) {
             ToolWindow.Placement placement = entry.getKey();
@@ -74,6 +78,13 @@ public class MainViewController extends Controller {
                     leftToolbar.addToolButton((tb = new SideToolButton(toolWindow, bottomPanel)), 1);
                     splitPaneOuter.addEventHandler(PersistentSplitPane.ON_HIDE, e -> {
                         if (e.getHiding().equals(bottomPanel)) {
+                            tb.setSelected(false);
+                        }
+                    });
+                } else if (placement == ToolWindow.Placement.RIGHT) {
+                    rightToolbar.addToolButton((tb = new SideToolButton(toolWindow, rightPanel)), 0);
+                    splitPaneInner.addEventHandler(PersistentSplitPane.ON_HIDE, e -> {
+                        if (e.getHiding().equals(rightPanel)) {
                             tb.setSelected(false);
                         }
                     });
