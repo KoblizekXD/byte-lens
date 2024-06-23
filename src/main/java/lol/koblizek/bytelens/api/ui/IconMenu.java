@@ -5,9 +5,9 @@ import javafx.scene.control.Menu;
 
 public class IconMenu extends Menu {
     public IconMenu(@NamedArg("icon") String icon) {
-        getStyleClass().add("icon-menu");
-        var jb = new JetBrainsButton(icon);
-        jb.getStyleClass().clear();
-        setGraphic(jb);
+        super();
+        var x = new JetBrainsImage(icon);
+        x.setStyle("-fx-border-color: red");
+        setGraphic(x);
     }
 }

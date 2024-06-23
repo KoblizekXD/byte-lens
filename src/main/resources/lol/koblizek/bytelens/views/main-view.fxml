@@ -5,7 +5,7 @@
 <?import lol.koblizek.bytelens.api.ui.*?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.MainViewController">
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <HBox>
+        <HBox style="-fx-background-color: #2b2d30">
             <MenuBar id="main-toolbar" fx:id="menubar" prefHeight="40.0" prefWidth="572.0">
                 <Menu text="_File">
                     <MenuItem text="New" />
@@ -46,9 +46,11 @@
                 </Menu>
             </MenuBar>
             <Region styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
-            <MenuBar>
-                <IconMenu icon="AllIcons.Expui.General.Settings" />
-            </MenuBar>
+            <VBox alignment="CENTER" prefHeight="40" prefWidth="40">
+                <HBox alignment="CENTER">
+                    <JetBrainsButton alignment="CENTER" icon="AllIcons.Expui.General.Settings" />
+                </HBox>
+            </VBox>
         </HBox>
     </VBox>
     <SideToolBar fx:id="leftToolbar" layoutY="40.0" orientation="VERTICAL" prefHeight="360.0" prefWidth="40.0" styleClass="left-toolbar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
