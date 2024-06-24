@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ext.NioPathSerializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lol.koblizek.bytelens.api.util.ProjectException;
+import lol.koblizek.bytelens.core.ByteLens;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,8 @@ public class DefaultProject {
     @JsonIgnore
     private final ObjectMapper mapper;
 
+    private final String projectFormat = getClass().getName() + "::v1.0";
+    @JsonIgnore
     private final Path projectPath;
     private final Path projectFile;
 
@@ -38,13 +43,12 @@ public class DefaultProject {
     private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
 
     /**
-     * Loads ByteLens project from the given path.
+     * Loads or creates ByteLens project from the given path.
      * @param projectPath the path to the project directory
      */
     public DefaultProject(@NotNull Path projectPath) {
         logger.info("Attempting to load project from path: {}", projectPath);
-        this.mapper = new ObjectMapper();
-        mapper.setDefaultMergeable(true);
+        this.mapper = ByteLens.getModifiedMapper();
         if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
             logger.debug("Project exists and will be loaded");
             this.projectPath = projectPath;
@@ -55,12 +59,12 @@ public class DefaultProject {
             try {
                 Files.createDirectories(projectPath);
                 this.projectPath = projectPath;
-                this.projectFile = Files.createFile(projectPath.resolve("project.bl.json"));
+                this.projectFile = projectPath.relativize(Files.createFile(projectPath.resolve("project.bl.json")));
                 this.name = projectPath.getFileName().toString();
-                this.sources = Files.createDirectories(projectPath.resolve("sources"));
-                this.resources = Files.createDirectories(projectPath.resolve("resources"));
-                this.referenceLibraries = Files.createDirectories(projectPath.resolve("libraries"));
-                mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toFile(), this);
+                this.sources = projectPath.relativize(Files.createDirectories(projectPath.resolve("sources")));
+                this.resources = projectPath.relativize(Files.createDirectories(projectPath.resolve("resources")));
+                this.referenceLibraries = projectPath.relativize(Files.createDirectories(projectPath.resolve("libraries")));
+                mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toAbsolutePath().toFile(), this);
             } catch (IOException e) {
                 throw new ProjectException("Failed to create project file", e);
             }
@@ -82,8 +86,17 @@ public class DefaultProject {
      * @param path the path to the project
      * @return {@code true} if the given path contains a project, {@code false} otherwise
      */
-    public static boolean isProject(Path path) {
+    public static boolean isProject(@NotNull Path path) {
         return Files.exists(path.resolve("project.bl.json"));
+    }
+
+    /**
+     * Returns the project format identifier, default project uses following format:
+     * <code>fully-qualified class name</code> + "::" + <code>actual version</code>
+     * @return the project format as {@link String}
+     */
+    public @NotNull String getProjectFormat() {
+        return projectFormat;
     }
 
     /**
@@ -138,7 +151,11 @@ public class DefaultProject {
         return resources;
     }
 
-    public void setName(String name) {
+    /**
+     * Sets a new name to the project
+     * @param name new name of the project
+     */
+    public void setName(@NotNull String name) {
         this.name = name;
         syncProjectFile();
     }

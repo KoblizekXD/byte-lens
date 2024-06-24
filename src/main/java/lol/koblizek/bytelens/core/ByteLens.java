@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.core;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -11,6 +12,8 @@ import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.api.util.xui.MessageBox;
 import lol.koblizek.bytelens.core.project.DefaultProjectType;
+import lol.koblizek.bytelens.core.utils.CustomNioPathDeserializer;
+import lol.koblizek.bytelens.core.utils.CustomNioPathSerializer;
 import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +39,7 @@ public final class ByteLens extends Application {
     private final List<ProjectCreator> projectTypes;
     private final Logger logger;
     private final List<ExecutorService> executors;
-    private final ObjectMapper mapper;
+    private static ObjectMapper mapper;
     private final List<DefaultProject> projects;
     private final ResourceManager resourceManager;
     private DefaultProject currentProject;
@@ -53,6 +56,10 @@ public final class ByteLens extends Application {
     public ByteLens() {
         logger = LoggerFactory.getLogger(getClass());
         mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(new CustomNioPathSerializer());
+        module.addDeserializer(Path.class, new CustomNioPathDeserializer());
+        mapper.registerModule(module);
         executors = new ArrayList<>();
         projects = new ArrayList<>() {
             @Override
@@ -214,5 +221,11 @@ public final class ByteLens extends Application {
 
     public Scene getScene(String scene) {
         return getResourceManager().getScene(scene);
+    }
+
+    public static ObjectMapper getModifiedMapper() {
+        if (mapper == null)
+            System.err.println("WARN: getModifiedMapper called before app init!");
+        return mapper;
     }
 }
