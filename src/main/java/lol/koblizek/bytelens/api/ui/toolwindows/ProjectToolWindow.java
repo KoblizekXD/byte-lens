@@ -11,13 +11,10 @@ import lol.koblizek.bytelens.core.ByteLens;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class ProjectToolWindow extends TreeView<String> implements ToolWindow.ToolWindowNode {

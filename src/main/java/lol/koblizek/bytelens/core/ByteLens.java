@@ -1,5 +1,7 @@
 package lol.koblizek.bytelens.core;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -56,6 +58,7 @@ public final class ByteLens extends Application {
     public ByteLens() {
         logger = LoggerFactory.getLogger(getClass());
         mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         SimpleModule module = new SimpleModule();
         module.addSerializer(new CustomNioPathSerializer());
         module.addDeserializer(Path.class, new CustomNioPathDeserializer());

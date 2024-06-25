@@ -2,10 +2,10 @@ package lol.koblizek.bytelens.api;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ext.NioPathSerializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import lol.koblizek.bytelens.api.util.ProjectException;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.jetbrains.annotations.NotNull;
@@ -15,12 +15,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
  * Represents a ByteLens project with default behaviour.
+ * <b>Under any circumstances <u>do not get access to the {@link Path} fields by default</u>,
+ * they are relative, use getters to get their absolute form.</b>
  */
 public class DefaultProject {
 
@@ -30,14 +31,18 @@ public class DefaultProject {
     private final String projectFormat = getClass().getName() + "::v1.0";
     @JsonIgnore
     private final Path projectPath;
+    @JsonProperty
     private final Path projectFile;
 
     @JsonAlias({"project_name", "name"})
     private String name;
     @JsonAlias({"jar_sources", "sources", "source_jars"})
+    @JsonProperty
     private Path sources;
     @JsonAlias({"reference_libraries", "references"})
+    @JsonProperty
     private Path referenceLibraries;
+    @JsonProperty
     private Path resources;
     
     private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
@@ -64,7 +69,7 @@ public class DefaultProject {
                 this.sources = projectPath.relativize(Files.createDirectories(projectPath.resolve("sources")));
                 this.resources = projectPath.relativize(Files.createDirectories(projectPath.resolve("resources")));
                 this.referenceLibraries = projectPath.relativize(Files.createDirectories(projectPath.resolve("libraries")));
-                mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toAbsolutePath().toFile(), this);
+                mapper.writerWithDefaultPrettyPrinter().writeValue(getProjectFile().toFile(), this);
             } catch (IOException e) {
                 throw new ProjectException("Failed to create project file", e);
             }
@@ -113,8 +118,9 @@ public class DefaultProject {
      * </p>
      * @return the path to the project file
      */
+    @JsonIgnore
     public Path getProjectFile() {
-        return projectFile;
+        return projectPath.resolve(projectFile);
     }
 
     /**
@@ -131,24 +137,27 @@ public class DefaultProject {
      * @implNote The source files are expected to be in the form of .jar or .class files, different formats may be ignored.
      * @return the list of source directories
      */
+    @JsonIgnore
     public @NotNull Path getSources() {
-        return sources;
+        return projectPath.resolve(sources);
     }
 
     /**
      * Returns the directory containing the reference libraries.
      * @return the list of reference libraries or directories containing reference libraries
      */
+    @JsonIgnore
     public @NotNull Path getReferenceLibraries() {
-        return referenceLibraries;
+        return projectPath.resolve(referenceLibraries);
     }
 
     /**
      * Returns the directory containing the resources.
      * @return the list of directories containing resources
      */
+    @JsonIgnore
     public @NotNull Path getResources() {
-        return resources;
+        return projectPath.resolve(resources);
     }
 
     /**
@@ -168,7 +177,7 @@ public class DefaultProject {
      */
     public void addSource(Path source) throws IOException {
         if (source.getFileName().endsWith(".jar") || source.getFileName().endsWith(".class")) {
-            Files.copy(source, sources.resolve(source.getFileName()));
+            Files.copy(source, getSources().resolve(source.getFileName()));
         }
     }
 
@@ -178,7 +187,7 @@ public class DefaultProject {
      * @param referenceLibrary the path to the reference library
      */
     public void addReferenceLibrary(Path referenceLibrary) throws IOException {
-        Files.copy(referenceLibrary, sources.resolve(referenceLibrary.getFileName()));
+        Files.copy(referenceLibrary, getSources().resolve(referenceLibrary.getFileName()));
     }
 
     /**
@@ -187,7 +196,7 @@ public class DefaultProject {
      * @throws IOException if an I/O error occurs during copy
      */
     public void addResource(Path resource) throws IOException {
-        Files.copy(resource, sources.resolve(resource.getFileName()));
+        Files.copy(resource, getSources().resolve(resource.getFileName()));
     }
 
     /**
@@ -196,7 +205,7 @@ public class DefaultProject {
      */
     private void syncProjectFile() {
         try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(projectFile.toFile(), this);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(getProjectFile().toFile(), this);
         } catch (IOException e) {
             logger.error("Failed to update project file", e);
         }
@@ -209,11 +218,11 @@ public class DefaultProject {
         try {
             // 2024-06-22 Implementation note: Temporary solution, this fucker removed fields before for some reason?
             // It isn't dynamic!!
-            var node = mapper.readValue(projectFile.toFile(), JsonNode.class);
+            var node = mapper.readValue(getProjectFile().toFile(), JsonNode.class);
             this.name = node.get("name").asText();
-            this.sources = Path.of(new URI(node.get("sources").asText()));
-            this.resources = Path.of(new URI(node.get("resources").asText()));
-            this.referenceLibraries = Path.of(new URI(node.get("referenceLibraries").asText()));
+            this.sources = Path.of(node.get("sources").asText());
+            this.resources = Path.of(node.get("resources").asText());
+            this.referenceLibraries = Path.of(node.get("referenceLibraries").asText());
             if (!nonNulls()) {
                 logger.warn("Not all project fields are set, possible project corruption");
             }
