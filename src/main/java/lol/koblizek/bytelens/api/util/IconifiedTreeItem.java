@@ -1,7 +1,5 @@
 package lol.koblizek.bytelens.api.util;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import org.apache.commons.io.FilenameUtils;
@@ -19,9 +17,7 @@ public class IconifiedTreeItem extends TreeItem<String> {
     public IconifiedTreeItem(Path value) {
         super();
         this.path = value;
-        valueProperty().addListener((observable, oldValue, newValue) -> {
-            updateGraphics(path);
-        });
+        valueProperty().addListener((observable, oldValue, newValue) -> updateGraphics(path));
         setValue(value.getFileName().toString());
     }
 

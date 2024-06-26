@@ -1,14 +1,12 @@
 package lol.koblizek.bytelens.core.utils;
 
-import com.sun.nio.file.ExtendedWatchEventModifier;
-import javafx.scene.control.TreeItem;
+import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,10 +19,10 @@ public class StandardDirectoryWatcher {
     private final WatchService watcher;
     private final Path dir;
     private final ExecutorService executor;
-    private final TreeItem<String> root;
+    private final IconifiedTreeItem root;
     private final Map<WatchKey, Path> keys;
 
-    public StandardDirectoryWatcher(Path dir, TreeItem<String> root) throws IOException {
+    public StandardDirectoryWatcher(Path dir, IconifiedTreeItem root) throws IOException {
         this.root = root;
         this.watcher = FileSystems.getDefault().newWatchService();
         this.dir = dir;
@@ -75,7 +73,7 @@ public class StandardDirectoryWatcher {
                     if (Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)) {
                         registerDir(child);
                     }
-                    addTreeItem(root, dir.relativize(child));
+                    addTreeItem(root, dir.relativize(child), child);
                 } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
 
                 } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
@@ -90,14 +88,14 @@ public class StandardDirectoryWatcher {
         }
     }
 
-    private void addTreeItem(TreeItem<String> parentItem, Path fullPath) {
-        for (Path path : fullPath) {
+    private void addTreeItem(IconifiedTreeItem parentItem, Path relative, Path full) {
+        for (Path path : relative) {
             var opt = parentItem.getChildren().stream()
                     .filter(it -> it.getValue().equals(path.toString())).findFirst();
             if (opt.isPresent())
-                parentItem = opt.get();
+                parentItem = (IconifiedTreeItem) opt.get();
             else {
-                var nP = new TreeItem<>(path.getFileName().toString());
+                var nP = new IconifiedTreeItem(full);
                 parentItem.getChildren().add(nP);
                 parentItem = nP;
             }
