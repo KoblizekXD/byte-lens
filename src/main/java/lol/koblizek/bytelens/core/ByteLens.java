@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public final class ByteLens extends Application {
 
@@ -41,7 +42,7 @@ public final class ByteLens extends Application {
     private final List<ProjectCreator> projectTypes;
     private final Logger logger;
     private final List<ExecutorService> executors;
-    private static ObjectMapper mapper;
+    private static final ObjectMapper mapper = new ObjectMapper();
     private final List<DefaultProject> projects;
     private final ResourceManager resourceManager;
     private DefaultProject currentProject;
@@ -57,7 +58,6 @@ public final class ByteLens extends Application {
 
     public ByteLens() {
         logger = LoggerFactory.getLogger(getClass());
-        mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         SimpleModule module = new SimpleModule();
         module.addSerializer(new CustomNioPathSerializer());
@@ -65,11 +65,6 @@ public final class ByteLens extends Application {
         mapper.registerModule(module);
         executors = new ArrayList<>();
         projects = new ArrayList<>() {
-            @Override
-            public boolean add(DefaultProject project) {
-                return super.add(project);
-            }
-
             // PLEASE CALL ADD LAST ONLY WHEN NEW PROJECT IS CREATED, NOT WHENEVER IT IS BEING LOADED. IT MAY BREAK THINGS!
             @Override
             public void addLast(DefaultProject project) {
@@ -80,7 +75,7 @@ public final class ByteLens extends Application {
                     arr.add(project.getProjectPath().toString());
                     mapper.writeValue(projects.toFile(), arr);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    logger.error("IO Error:", e);
                 }
                 super.add(project);
             }
@@ -137,8 +132,16 @@ public final class ByteLens extends Application {
     public void stop() {
         logger.warn("Stopping...");
         executors.forEach((k -> {
-            logger.info("\tStopping executor {}", k.toString());
+            logger.info("\tStopping executor {}", k);
             k.shutdown();
+            try {
+                if (!k.awaitTermination(1, TimeUnit.SECONDS)) {
+                    k.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                k.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
         }));
     }
 
@@ -164,10 +167,10 @@ public final class ByteLens extends Application {
 
     private void createAppFiles() {
         Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
-        whenNotExists(blPath, (path) ->
+        whenNotExists(blPath, path ->
                 Files.createDirectories(blPath));
         whenNotExists(blPath.resolve("projects.json"),
-                (path) -> mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>()));
+                path -> mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>()));
     }
 
     private void loadAppData() {
@@ -185,7 +188,7 @@ public final class ByteLens extends Application {
                     }).map(DefaultProject::new).forEach(projects::add);
             logger.info("Loaded {} project/s", projects.size());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error("IO Error:", e);
         }
     }
 
@@ -227,8 +230,6 @@ public final class ByteLens extends Application {
     }
 
     public static ObjectMapper getModifiedMapper() {
-        if (mapper == null)
-            System.err.println("WARN: getModifiedMapper called before app init!");
         return mapper;
     }
 }
