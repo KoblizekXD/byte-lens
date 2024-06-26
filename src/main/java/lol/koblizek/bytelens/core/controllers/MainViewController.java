@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 // This code will have to be "eventually" rewritten to be more effective and more understandable
+// ^^ PS: I got no time for this
 
 public class MainViewController extends Controller {
 
@@ -50,7 +51,7 @@ public class MainViewController extends Controller {
                     ToolWindow.Placement.LEFT
             ));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            getLogger().error("Error occurred on tool window creation:", e);
         }
         var collected = tws.stream()
                 .collect(Collectors.groupingBy(ToolWindow::placement, LinkedHashMap::new, Collectors.toList()));
