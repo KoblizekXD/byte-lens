@@ -135,7 +135,7 @@ public final class ByteLens extends Application {
             logger.info("\tStopping executor {}", k);
             k.shutdown();
             try {
-                if (!k.awaitTermination(1, TimeUnit.SECONDS)) {
+                if (!k.awaitTermination(500, TimeUnit.MILLISECONDS)) {
                     k.shutdownNow();
                 }
             } catch (InterruptedException e) {

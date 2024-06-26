@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Utility message box class for displaying messages to the user.
  * Works as replacement for JavaFX's Alert class.
+ * <h1><b>Work In Progress, do not touch or hate lol</b></h1>
  *
  * @see Status
  * @see Button

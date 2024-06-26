@@ -33,8 +33,7 @@ public class StandardDirectoryWatcher {
     private void registerDir(Path dir) {
         try {
             keys.put(dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE,
-                    StandardWatchEventKinds.ENTRY_DELETE,
-                    StandardWatchEventKinds.ENTRY_MODIFY), dir);
+                    StandardWatchEventKinds.ENTRY_DELETE), dir);
         } catch (IOException e) {
             LOGGER.error("Exception occurred while registering directory to watcher", e);
         }
@@ -74,9 +73,7 @@ public class StandardDirectoryWatcher {
                     }
                     addTreeItem(root, dir.relativize(child), child);
                 } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-
-                } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
-                    // Handle modify event if needed
+                    removeTreeItem(root, dir.relativize(child));
                 }
             }
 
@@ -99,6 +96,15 @@ public class StandardDirectoryWatcher {
                 parentItem = nP;
             }
         }
+    }
+
+    private void removeTreeItem(IconifiedTreeItem parentItem, Path relative) {
+        for (Path path : relative) {
+            parentItem = (IconifiedTreeItem) parentItem.getChildren().stream().filter(it -> it.getValue().equals(path.toString()))
+                    .findFirst().orElse(null);
+            assert parentItem != null;
+        }
+        parentItem.getParent().getChildren().remove(parentItem);
     }
 
     public ExecutorService getExecutor() {
