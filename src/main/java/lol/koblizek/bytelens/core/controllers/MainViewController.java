@@ -37,7 +37,6 @@ public class MainViewController extends Controller {
     @Override
     public void initialize() {
         ByteLens byteLens = getByteLens();
-        ResourceManager rm = byteLens.getResourceManager();
 
         if (byteLens.getCurrentProject().isEmpty())
             byteLens.getLogger().warn("No project is open, this should not happen. Errors might occur.");

@@ -3,6 +3,7 @@
 <?import javafx.scene.control.TreeItem?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import lol.koblizek.bytelens.api.ui.DefaultContextMenu?>
 <fx:root xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          styleClass="tree-view"
@@ -16,4 +17,7 @@
     <TreeItem fx:id="root" value="Undefined project">
 
     </TreeItem>
+    <contextMenu>
+        <DefaultContextMenu />
+    </contextMenu>
 </fx:root>

@@ -8,6 +8,7 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import lol.koblizek.bytelens.core.ByteLens;
+import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
@@ -39,9 +40,8 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         optionalProject.ifPresentOrElse(project -> {
             root.setValue(project.getName());
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
-            appendTreeItem(root, project.getProjectFile().getFileName().toString(), item -> {
-                item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json"));
-            });
+            appendTreeItem(root, project.getProjectFile().getFileName().toString(), item ->
+                    item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
             appendTreeItem(root, "Sources", item -> {
                 item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
                 item.getChildren().add(getModule(project.getSources()));
@@ -61,17 +61,15 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         });
     }
 
-    private TreeItem<String> appendTreeItem(TreeItem<String> parent, String value) {
+    private void appendTreeItem(TreeItem<String> parent, String value) {
         var item = new TreeItem<>(value);
         parent.getChildren().add(item);
-        return item;
     }
 
-    private TreeItem<String> appendTreeItem(TreeItem<String> parent, String value, Consumer<TreeItem<String>> configurator) {
+    private void appendTreeItem(TreeItem<String> parent, String value, Consumer<TreeItem<String>> configurator) {
         var item = new TreeItem<>(value);
         configurator.accept(item);
         parent.getChildren().add(item);
-        return item;
     }
 
     private void modifyFileNode(Path p, TreeItem<String> child) {
@@ -101,6 +99,9 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
                             rootItem.getChildren().add(new TreeItem<>(path.getFileName().toString()));
                         }
                     });
+            var watcher = new StandardDirectoryWatcher(rootPath, rootItem);
+            watcher.start();
+            byteLens.getExecutors().add(watcher.getExecutor());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
