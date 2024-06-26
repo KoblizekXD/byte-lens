@@ -1,11 +1,13 @@
 package lol.koblizek.bytelens.api.ui.toolwindows;
 
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
+import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
@@ -38,6 +40,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
     public void initialize() {
         Optional<DefaultProject> optionalProject = byteLens.getCurrentProject();
         optionalProject.ifPresentOrElse(project -> {
+            this.getSelectionModel().selectedItemProperty().addListener(this::itemSelectionEvent);
             root.setValue(project.getName());
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
             appendTreeItem(root, project.getProjectFile().getFileName().toString(), item ->
@@ -86,5 +89,18 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
             throw new RuntimeException(e);
         }
         return rootItem;
+    }
+
+    private void itemSelectionEvent(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> oldV, TreeItem<String> newV) {
+        if (newV == null) return;
+        var codeArea = (ExtendedCodeArea) getScene().lookup("#codeArea");
+        if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory()) { // This means it's actual file/dir
+            codeArea.clear();
+            try {
+                codeArea.appendText(Files.readString(iti.getPath()));
+            } catch (IOException e) {
+                byteLens.getLogger().error("Error ocurred on file read!", e);
+            }
+        }
     }
 }

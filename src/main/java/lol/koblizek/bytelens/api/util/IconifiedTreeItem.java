@@ -44,4 +44,12 @@ public class IconifiedTreeItem extends TreeItem<String> {
         path = p;
         setGraphic(new JetBrainsImage(targetIcon));
     }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public boolean isDirectory() {
+        return Files.isDirectory(path);
+    }
 }

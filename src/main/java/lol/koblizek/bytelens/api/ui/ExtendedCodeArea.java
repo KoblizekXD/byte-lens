@@ -86,7 +86,7 @@ public class ExtendedCodeArea extends CodeArea {
         return Arrays.stream(groups)
                 .filter(group -> matcher.group(group) != null)
                 .findFirst()
-                .map(String::toLowerCase).get();
+                .map(String::toLowerCase).orElseThrow();
     }
 
     public void bridge(@NotNull ByteLens byteLens) {

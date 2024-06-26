@@ -59,7 +59,7 @@
             <PersistentSplitPane fx:id="splitPaneInner" dividerPositions="0.1" layoutX="-1.0" layoutY="10.0" prefHeight="160.0" prefWidth="411.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <SidePane fx:id="leftPanel" />
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0">
-                    <ExtendedCodeArea editable="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" fx:id="codeArea" />
+                    <ExtendedCodeArea id="codeArea" editable="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" fx:id="codeArea" />
                 </AnchorPane>
                 <SidePane fx:id="rightPanel" />
             </PersistentSplitPane>
