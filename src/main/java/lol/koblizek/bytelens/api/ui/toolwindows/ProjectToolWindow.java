@@ -7,9 +7,9 @@ import javafx.scene.control.TreeView;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
+import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,34 +61,14 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         });
     }
 
-    private void appendTreeItem(TreeItem<String> parent, String value) {
-        var item = new TreeItem<>(value);
-        parent.getChildren().add(item);
-    }
-
     private void appendTreeItem(TreeItem<String> parent, String value, Consumer<TreeItem<String>> configurator) {
         var item = new TreeItem<>(value);
         configurator.accept(item);
         parent.getChildren().add(item);
     }
 
-    private void modifyFileNode(Path p, TreeItem<String> child) {
-        if (Files.isDirectory(p)) {
-            child.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
-            return;
-        }
-        String ext = FilenameUtils.getExtension(p.toString());
-        switch (ext) {
-            case "java" -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Java"));
-            case "class" -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Class"));
-            case "jar" -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Archive"));
-            default -> child.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Text"));
-        }
-    }
-
-    private TreeItem<String> getModule(Path rootPath) {
-        TreeItem<String> rootItem = new TreeItem<>(rootPath.getFileName().toString());
-        modifyFileNode(rootPath, rootItem);
+    private IconifiedTreeItem getModule(Path rootPath) {
+        IconifiedTreeItem rootItem = new IconifiedTreeItem(rootPath);
         try {
             Files.list(rootPath)
                     .sorted(Comparator.comparing(Path::toString))
@@ -96,7 +76,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
                         if (Files.isDirectory(path)) {
                             rootItem.getChildren().add(getModule(path));
                         } else {
-                            rootItem.getChildren().add(new TreeItem<>(path.getFileName().toString()));
+                            rootItem.getChildren().add(new IconifiedTreeItem(path));
                         }
                     });
             var watcher = new StandardDirectoryWatcher(rootPath, rootItem);
