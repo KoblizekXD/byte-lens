@@ -18,7 +18,6 @@ repositories {
 }
 
 application {
-    // mainModule = "lol.koblizek.bytelens"
     mainClass = "lol.koblizek.bytelens.core.ByteLens"
 }
 

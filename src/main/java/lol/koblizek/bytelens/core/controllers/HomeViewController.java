@@ -21,7 +21,7 @@ public class HomeViewController extends Controller {
             if (e.getClickCount() == 2) {
                 var selectedItem = projectListing.getSelectionModel().getSelectedItem();
                 if (selectedItem == null || selectedItem.isBlank()) return;
-                getByteLens().openProject(getByteLens().getProjectByName(selectedItem).get());
+                getByteLens().openProject(getByteLens().findProjectByName(selectedItem).get());
             }
         });
         for (DefaultProject project : getByteLens().getProjects()) {

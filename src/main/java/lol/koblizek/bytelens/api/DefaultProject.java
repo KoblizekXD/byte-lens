@@ -24,6 +24,8 @@ import java.nio.file.Path;
  */
 public class DefaultProject {
 
+    private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
+
     @JsonIgnore
     private final ObjectMapper mapper;
 
@@ -43,8 +45,6 @@ public class DefaultProject {
     private Path referenceLibraries;
     @JsonProperty
     private Path resources;
-    
-    private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
 
     /**
      * Loads or creates ByteLens project from the given path.
@@ -52,7 +52,7 @@ public class DefaultProject {
      */
     public DefaultProject(@NotNull Path projectPath) {
         logger.info("Attempting to load project from path: {}", projectPath);
-        this.mapper = ByteLens.getModifiedMapper();
+        this.mapper = ByteLens.getMapper();
         if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
             logger.debug("Project exists and will be loaded");
             this.projectPath = projectPath;
@@ -223,10 +223,10 @@ public class DefaultProject {
             this.resources = Path.of(node.get("resources").asText());
             this.referenceLibraries = Path.of(node.get("referenceLibraries").asText());
             if (!nonNulls()) {
-                logger.warn("Not all project fields are set, possible project corruption");
+                logger.error("Not all project fields are set, possible project corruption");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("Exception occurred during loading of project from " + getProjectFile(), e);
         }
     }
 

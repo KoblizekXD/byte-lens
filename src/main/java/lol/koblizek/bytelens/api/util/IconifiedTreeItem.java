@@ -26,9 +26,6 @@ public class IconifiedTreeItem extends TreeItem<String> {
     }
 
     public void updateGraphics(Path p) {
-        // Do the caching trickery here as well, so we save some resources
-        // if (FilenameUtils.getExtension(p.getFileName().toString()).equals(FilenameUtils.getExtension(path.getFileName().toString())))
-        //            return;
         if (Files.isDirectory(p)) {
             setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
             return;

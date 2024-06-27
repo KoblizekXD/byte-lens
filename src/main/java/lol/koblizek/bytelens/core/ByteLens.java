@@ -69,9 +69,9 @@ public final class ByteLens extends Application {
             @Override
             public void addLast(DefaultProject project) {
                 Path projects = Path.of(System.getProperty("user.home"), ".bytelens", "projects.json");
-                whenNotExists(projects, Files::createFile);
+                whenPathNotExists(projects, Files::createFile);
                 try {
-                    List<String> arr = mapper.readValue(projects.toFile(), ArrayList.class);
+                    List<String> arr = mapper.readValue(projects.toFile(), new TypeReference<>() {});
                     arr.add(project.getProjectPath().toString());
                     mapper.writeValue(projects.toFile(), arr);
                 } catch (IOException e) {
@@ -130,7 +130,7 @@ public final class ByteLens extends Application {
 
     @Override
     public void stop() {
-        logger.warn("Stopping...");
+        logger.info("Stopping...");
         executors.forEach((k -> {
             logger.info("\tStopping executor {}", k);
             k.shutdown();
@@ -167,9 +167,9 @@ public final class ByteLens extends Application {
 
     private void createAppFiles() {
         Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
-        whenNotExists(blPath, path ->
+        whenPathNotExists(blPath, path ->
                 Files.createDirectories(blPath));
-        whenNotExists(blPath.resolve("projects.json"),
+        whenPathNotExists(blPath.resolve("projects.json"),
                 path -> mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>()));
     }
 
@@ -215,11 +215,11 @@ public final class ByteLens extends Application {
         logger.info("Opened project {}", project.getName());
     }
 
-    public Optional<DefaultProject> getProjectByName(String name) {
+    public Optional<DefaultProject> findProjectByName(String name) {
         return projects.stream().filter(p -> p.getName().equals(name)).findFirst();
     }
 
-    private void whenNotExists(Path path, ThrowingConsumer<Path> action) {
+    private void whenPathNotExists(Path path, ThrowingConsumer<Path> action) {
         if (!Files.exists(path)) {
             action.run(path);
         }
@@ -229,7 +229,7 @@ public final class ByteLens extends Application {
         return getResourceManager().getScene(scene);
     }
 
-    public static ObjectMapper getModifiedMapper() {
+    public static ObjectMapper getMapper() {
         return mapper;
     }
 }

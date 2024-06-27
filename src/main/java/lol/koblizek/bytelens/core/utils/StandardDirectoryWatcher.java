@@ -1,5 +1,6 @@
 package lol.koblizek.bytelens.core.utils;
 
+import javafx.scene.control.TreeItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,7 @@ public class StandardDirectoryWatcher {
                 LOGGER.trace("New file event");
                 WatchEvent.Kind<?> kind = event.kind();
 
-                if (kind == StandardWatchEventKinds.OVERFLOW) {
+                if (kind == StandardWatchEventKinds.OVERFLOW || event.context() instanceof Path) {
                     continue;
                 }
 
@@ -88,8 +89,8 @@ public class StandardDirectoryWatcher {
         for (Path path : relative) {
             var opt = parentItem.getChildren().stream()
                     .filter(it -> it.getValue().equals(path.toString())).findFirst();
-            if (opt.isPresent())
-                parentItem = (IconifiedTreeItem) opt.get();
+            if (opt.isPresent() && opt.get() instanceof IconifiedTreeItem treeItem)
+                parentItem = treeItem;
             else {
                 var nP = new IconifiedTreeItem(full);
                 parentItem.getChildren().add(nP);
@@ -98,11 +99,10 @@ public class StandardDirectoryWatcher {
         }
     }
 
-    private void removeTreeItem(IconifiedTreeItem parentItem, Path relative) {
+    private void removeTreeItem(TreeItem<String> parentItem, Path relative) {
         for (Path path : relative) {
-            parentItem = (IconifiedTreeItem) parentItem.getChildren().stream().filter(it -> it.getValue().equals(path.toString()))
-                    .findFirst().orElse(null);
-            assert parentItem != null;
+            parentItem = parentItem.getChildren().stream().filter(it -> it.getValue().equals(path.toString()))
+                    .findFirst().orElseThrow();
         }
         parentItem.getParent().getChildren().remove(parentItem);
     }
