@@ -12,7 +12,6 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
-import lol.koblizek.bytelens.api.util.xui.MessageBox;
 import lol.koblizek.bytelens.core.project.DefaultProjectType;
 import lol.koblizek.bytelens.core.utils.CustomNioPathDeserializer;
 import lol.koblizek.bytelens.core.utils.CustomNioPathSerializer;
@@ -83,8 +82,6 @@ public final class ByteLens extends Application {
         toolWindows = new ArrayList<>();
         projectTypes = new ArrayList<>();
 
-        MessageBox.init(this);
-
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         resourceManager = ResourceManager.create(this, "/lol/koblizek/bytelens/");
         getResourceManager().get("fonts/inter-font.ttf")
@@ -147,6 +144,10 @@ public final class ByteLens extends Application {
 
     public List<ExecutorService> getExecutors() {
         return executors;
+    }
+
+    public void submitTask(Runnable runnable) {
+        executors.getFirst().submit(runnable);
     }
 
     /**

@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -15,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ResourceManager {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
 
     private final ByteLens byteLens;
     private String path;
@@ -31,12 +35,12 @@ public final class ResourceManager {
         return rm;
     }
 
-    private ResourceManager(ByteLens byteLens) {
-        this.byteLens = byteLens;
+    private void setPath(@NotNull String path) {
+        this.path = path;
     }
 
-    public void setPath(@NotNull String path) {
-        this.path = path;
+    private ResourceManager(ByteLens byteLens) {
+        this.byteLens = byteLens;
     }
 
     public @NotNull String getPath() {
@@ -56,7 +60,8 @@ public final class ResourceManager {
             loader.setControllerFactory(this::injectByteLens);
             return new Scene(loader.load());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Failed to load scene: {}", path, e);
+            return null;
         }
     }
 
@@ -66,7 +71,7 @@ public final class ResourceManager {
                 try {
                     return ctor.newInstance(byteLens);
                 } catch (ReflectiveOperationException e) {
-                    throw new RuntimeException(e);
+                    LOGGER.error("Failed to inject ByteLens into controller", e);
                 }
             }
         }
@@ -87,7 +92,8 @@ public final class ResourceManager {
             cache.put(path, svg);
             return svg;
         } catch (MalformedURLException | URISyntaxException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("Failed to load icon: {}", path, e);
+            return null;
         }
     }
 }

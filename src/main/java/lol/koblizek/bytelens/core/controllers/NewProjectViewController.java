@@ -18,20 +18,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class NewProjectViewController extends Controller {
-
-    private final Logger logger;
 
     @FXML public ListView<ProjectCreator> projectTypeListing;
     @FXML public AnchorPane userdata;
 
     public NewProjectViewController(ByteLens byteLens) {
         super(byteLens);
-        logger = LoggerFactory.getLogger(getClass());
     }
 
     @Override
@@ -51,18 +47,20 @@ public class NewProjectViewController extends Controller {
 
     private List<Node> generateNode(ProjectCreator creator) {
         List<Node> nodes = new ArrayList<>();
-        AtomicInteger i = new AtomicInteger(10);
-        creator.getFields().forEach((name, type) -> {
+        int i = 10;
+        for (Map.Entry<String, Class<?>> entry : creator.getFields().entrySet()) {
+            String name = entry.getKey();
+            Class<?> type = entry.getValue();
             Node node = generateNode(nodes, name, type);
             Label label = new Label(name);
-            AnchorPane.setTopAnchor(label, (double) i.get());
-            AnchorPane.setTopAnchor(node, (double) i.get());
+            AnchorPane.setTopAnchor(label, (double) i);
+            AnchorPane.setTopAnchor(node, (double) i);
             AnchorPane.setLeftAnchor(label, 20.0);
             label.setLabelFor(node);
             nodes.add(label);
             nodes.add(node);
-            i.addAndGet(30);
-        });
+            i += 30;
+        }
         return nodes;
     }
 
@@ -101,7 +99,7 @@ public class NewProjectViewController extends Controller {
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         if (!validate(data)) {
-            logger.warn("Data required to create project are not valid.");
+            getLogger().warn("Data required to create project are not valid.");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Invalid data");
@@ -115,14 +113,10 @@ public class NewProjectViewController extends Controller {
     }
 
     private boolean validate(Map<String, Node> data) {
-        return data.values().stream().allMatch(node -> {
-            if (node instanceof TextField) {
-                System.out.println(((TextField) node).getText());
-                return !((TextField) node).getText().isBlank();
-            } else if (node instanceof PathField) {
-                System.out.println(((PathField) node).getText());
-                return !((PathField) node).getText().isBlank();
-            } else return true;
+        return data.values().stream().allMatch(node -> switch (node) {
+            case TextField nodeV -> !(nodeV).getText().isBlank();
+            case PathField nodeV -> !(nodeV).getText().isBlank();
+            default -> true;
         });
     }
 

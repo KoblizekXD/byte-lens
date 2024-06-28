@@ -99,7 +99,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
             try {
                 codeArea.appendText(Files.readString(iti.getPath()));
             } catch (IOException e) {
-                byteLens.getLogger().error("Error ocurred on file read!", e);
+                byteLens.getLogger().error("Error occurred on file read!", e);
             }
         }
     }

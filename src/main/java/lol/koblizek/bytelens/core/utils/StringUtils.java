@@ -22,20 +22,24 @@ public class StringUtils {
         return word.substring(0, 1).toLowerCase() + word.substring(1);
     }
 
+    private static final String ICON_DOMAIN = "https://intellij-icons.jetbrains.design/icons/";
+
     /**
      * Converts the given icon name into a valid svg URL.
+     * <p>
+     *     Example: <br>
+     *     Input: {@code AllIcons.Expui.Breakpoints.BreakpointFieldValid} <br>
+     *     Output: <a href="https://intellij-icons.jetbrains.design/icons/AllIcons/expui/breakpoints/breakpointFieldValid.svg">https://intellij-icons.jetbrains.design/icons/AllIcons/expui/breakpoints/breakpointFieldValid.svg</a>
+     * </p>
      * @param prettyName the "pretty" name of the icon
      * @param dark whether the icon should be in dark mode
      * @return the compliant icon URL
      */
     public static @NotNull String getCompliantIconURL(@NotNull String prettyName, boolean dark) {
-        // AllIcons.Expui.Breakpoints.BreakpointFieldValid
-        // Example: https://intellij-icons.jetbrains.design/icons/AllIcons/expui/breakpoints/breakpointFieldValid_dark.svg
-        String constDomain = "https://intellij-icons.jetbrains.design/icons/";
         String[] parts = prettyName.split("\\.");
         for (int i = 1; i < parts.length; i++) {
             parts[i] = toCamelCase(parts[i]);
         }
-        return constDomain + String.join("/", parts) + (dark ? "_dark" : "") + ".svg";
+        return ICON_DOMAIN + String.join("/", parts) + (dark ? "_dark" : "") + ".svg";
     }
 }

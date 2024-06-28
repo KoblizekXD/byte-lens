@@ -5,17 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -23,15 +22,9 @@ import java.util.Properties;
 public class Resource {
 
     private final URL url;
-    private final byte[] bytes;
 
     Resource(@NotNull URL url) {
         this.url = url;
-        try {
-            bytes = url.openStream().readAllBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public URL getUrl() {
@@ -44,14 +37,7 @@ public class Resource {
 
     @Override
     public String toString() {
-        return new String(bytes, StandardCharsets.UTF_8);
-    }
-
-    /**
-     * @return A copy of the resource as a byte array.
-     */
-    public byte[] toBytes() {
-        return bytes.clone();
+        return url.toString();
     }
 
     /**
@@ -101,18 +87,24 @@ public class Resource {
      */
     public Image toSVG(int width, int height) {
         PNGTranscoder transcoder = new PNGTranscoder();
-        String svg = new String(bytes, StandardCharsets.UTF_8);
-        svg = svg.replaceFirst("width=\"[0-9]+\"", "width=\"" + width + "\"")
-                .replaceFirst("height=\"[0-9]+\"", "height=\"" + height + "\"");
+        String svg;
+        try (var stream = new BufferedInputStream(url.openStream())) {
+            svg = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        svg = svg.replaceFirst("width=\"\\d+\"", "width=\"" + width + "\"")
+                .replaceFirst("height=\"\\d+\"", "height=\"" + height + "\"");
         try (InputStream stream = new ByteArrayInputStream(svg.getBytes(StandardCharsets.UTF_8))) {
-            transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
-            transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
+            transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
+            transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             TranscoderOutput output = new TranscoderOutput(outputStream);
             transcoder.transcode(new TranscoderInput(stream), output);
             return SwingFXUtils.toFXImage(ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray())), null);
         } catch (IOException | TranscoderException e) {
-            throw new RuntimeException(e);
+            LoggerFactory.getLogger("Transcoder").error("Failed to transcode SVG", e);
+            return null;
         }
     }
 

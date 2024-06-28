@@ -19,7 +19,6 @@ public class SidePane extends AnchorPane {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/side-pane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-
         try {
             loader.load();
         } catch (IOException e) {
@@ -45,7 +44,7 @@ public class SidePane extends AnchorPane {
 
     private PersistentSplitPane findSplitPane() {
         var parent = getParent();
-        while (parent != null && !(parent instanceof PersistentSplitPane)) {
+        while (!(parent instanceof PersistentSplitPane)) {
             parent = parent.getParent();
         }
         cachedSplitPane = (PersistentSplitPane) parent;
