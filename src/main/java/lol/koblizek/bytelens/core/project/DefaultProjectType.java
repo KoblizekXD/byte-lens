@@ -17,11 +17,11 @@ public class DefaultProjectType extends ProjectCreator {
 
     @Override
     public Map<String, Class<?>> getFields() {
-        return new LinkedHashMap<>() {{
-            put("Project Name", String.class);
-            put("Project Location", Path.class);
-            put("Created@Project Location@Project Name", Label.class);
-        }};
+        Map<String, Class<?>> fields = new LinkedHashMap<>();
+        fields.put("Project Name", String.class);
+        fields.put("Project Location", Path.class);
+        fields.put("Created@Project Location@Project Name", Label.class);
+        return fields;
     }
 
     @Override

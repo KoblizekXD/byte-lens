@@ -3,6 +3,7 @@ package lol.koblizek.bytelens.api.ui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -17,7 +18,7 @@ public class DefaultContextMenu extends ContextMenu {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LoggerFactory.getLogger(getClass()).error("Failed to load", e);
         }
     }
 

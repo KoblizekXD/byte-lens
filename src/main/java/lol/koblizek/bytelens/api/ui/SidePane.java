@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class SidePane extends AnchorPane {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LoggerFactory.getLogger(getClass()).error("Failed to load", e);
         }
     }
 

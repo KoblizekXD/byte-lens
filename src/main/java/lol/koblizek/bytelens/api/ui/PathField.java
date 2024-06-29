@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,7 +27,7 @@ public class PathField extends StackPane {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LoggerFactory.getLogger(getClass()).error("Failed to load", e);
         }
     }
 

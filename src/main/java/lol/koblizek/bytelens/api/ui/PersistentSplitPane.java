@@ -4,10 +4,10 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
-import javafx.util.Pair;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A {@link SplitPane} that persists its divider positions
@@ -15,13 +15,13 @@ import java.util.Map;
  */
 public class PersistentSplitPane extends SplitPane {
 
-    private final Map<Position, Pair<Node, Double>> removedNodes;
+    private final List<RemovedNode> removedNodes;
 
     public static final EventType<ElementHideEvent> ON_HIDE = new EventType<>("ON_HIDE");
 
     public static class ElementHideEvent extends Event {
 
-        private final Node hiding;
+        private final transient Node hiding;
 
         public ElementHideEvent(Node hiding) {
             super(ON_HIDE);
@@ -35,7 +35,7 @@ public class PersistentSplitPane extends SplitPane {
 
     public PersistentSplitPane() {
         super();
-        removedNodes = new HashMap<>();
+        removedNodes = new ArrayList<>();
     }
 
     public int hidePane(Node n) {
@@ -44,38 +44,33 @@ public class PersistentSplitPane extends SplitPane {
         Node removed = getItems().remove(index);
         ElementHideEvent event = new ElementHideEvent(removed);
         fireEvent(event);
-        removedNodes.put(
-                new Position(index, index - 1 == -1 ? 0 : index - 1),
-                new Pair<>(
-                        removed,
-                        j
-                )
-        );
+        removedNodes.add(new RemovedNode(
+                index, index - 1 == -1 ? 0 : index - 1,
+                removed,
+                j
+        ));
         return index;
     }
 
     public void showPane(Node n) {
         var entry = findEntry(n);
-        removedNodes.remove(entry.getKey());
-        Position index = entry.getKey();
-        Pair<Node, Double> pair = entry.getValue();
-        if (pair != null) {
-            getItems().add(index.index, pair.getKey());
-            setDividerPosition(index.dividerIndex, pair.getValue());
+        if (entry == null) {
+            LoggerFactory.getLogger(PersistentSplitPane.class).error("Node not found in removed nodes, cannot show it.");
+            return;
         }
+        removedNodes.remove(entry);
+        getItems().add(entry.index, entry.node);
+        setDividerPosition(entry.dividerIndex, entry.d);
     }
 
-    private Map.Entry<Position, Pair<Node, Double>> findEntry(Node n) {
-        for (Map.Entry<Position, Pair<Node, Double>> entry : removedNodes.entrySet()) {
-            if (entry.getValue().getKey().equals(n)) {
+    private RemovedNode findEntry(Node n) {
+        for (RemovedNode entry : removedNodes) {
+            if (entry.node.equals(n)) {
                 return entry;
             }
         }
         return null;
     }
 
-
-    protected record Position(int index, int dividerIndex) {
-
-    }
+    protected record RemovedNode(int index, int dividerIndex, Node node, double d) { }
 }
