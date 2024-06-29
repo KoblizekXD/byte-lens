@@ -67,12 +67,12 @@ public final class ByteLens extends Application {
             // PLEASE CALL ADD LAST ONLY WHEN NEW PROJECT IS CREATED, NOT WHENEVER IT IS BEING LOADED. IT MAY BREAK THINGS!
             @Override
             public void addLast(DefaultProject project) {
-                Path projects = Path.of(System.getProperty("user.home"), ".bytelens", "projects.json");
-                whenPathNotExists(projects, Files::createFile);
+                Path projectsFile = getUserDataPath().resolve("projects.json");
+                whenPathNotExists(projectsFile, Files::createFile);
                 try {
-                    List<String> arr = mapper.readValue(projects.toFile(), new TypeReference<>() {});
+                    List<String> arr = mapper.readValue(projectsFile.toFile(), new TypeReference<>() {});
                     arr.add(project.getProjectPath().toString());
-                    mapper.writeValue(projects.toFile(), arr);
+                    mapper.writeValue(projectsFile.toFile(), arr);
                 } catch (IOException e) {
                     logger.error("IO Error:", e);
                 }
@@ -167,7 +167,7 @@ public final class ByteLens extends Application {
     }
 
     private void createAppFiles() {
-        Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
+        Path blPath = getUserDataPath();
         whenPathNotExists(blPath, path ->
                 Files.createDirectories(blPath));
         whenPathNotExists(blPath.resolve("projects.json"),
@@ -175,8 +175,7 @@ public final class ByteLens extends Application {
     }
 
     private void loadAppData() {
-        Path blPath = Path.of(System.getProperty("user.home"), ".bytelens");
-        Path projectsPath = blPath.resolve("projects.json");
+        Path projectsPath = getUserDataPath().resolve("projects.json");
         try {
             mapper.readValue(projectsPath.toFile(), new TypeReference<ArrayList<Path>>() {})
                     .stream().distinct().filter(p -> {
@@ -193,6 +192,9 @@ public final class ByteLens extends Application {
         }
     }
 
+    /**
+     * Opens the last project opened in ByteLens
+     */
     public void openLast() {
         logger.trace("Attempting to open last project");
         if (projects.isEmpty()) {
@@ -203,6 +205,10 @@ public final class ByteLens extends Application {
         openProject(currentProject);
     }
 
+    /**
+     * Opens a project in a new window
+     * @param project Project to open
+     */
     public void openProject(DefaultProject project) {
         logger.trace("Attempting to open project {}", project.getName());
         currentProject = project;
@@ -216,6 +222,11 @@ public final class ByteLens extends Application {
         logger.info("Opened project {}", project.getName());
     }
 
+    /**
+     * Finds a project by its name in loaded projects
+     * @param name Name of the project to find
+     * @return Project with the given name or empty if not found
+     */
     public Optional<DefaultProject> findProjectByName(String name) {
         return projects.stream().filter(p -> p.getName().equals(name)).findFirst();
     }
@@ -226,11 +237,23 @@ public final class ByteLens extends Application {
         }
     }
 
+    /**
+     * Returns a scene by its name
+     * @param scene Scene name to get
+     * @return Scene with the given name
+     */
     public Scene getScene(String scene) {
         return getResourceManager().getScene(scene);
     }
 
+    /**
+     * @return The main ObjectMapper used in ByteLens
+     */
     public static ObjectMapper getMapper() {
         return mapper;
+    }
+
+    public static Path getUserDataPath() {
+        return Path.of(System.getProperty("user.home"), ".bytelens/");
     }
 }

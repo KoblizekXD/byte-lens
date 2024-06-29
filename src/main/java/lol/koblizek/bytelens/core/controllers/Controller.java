@@ -3,6 +3,7 @@ package lol.koblizek.bytelens.core.controllers;
 import javafx.fxml.FXML;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Controller {
 
@@ -12,8 +13,9 @@ public abstract class Controller {
     @FXML
     public abstract void initialize();
 
-    public Controller(ByteLens byteLens) {
+    protected Controller(ByteLens byteLens) {
         this.byteLens = byteLens;
+        this.logger = LoggerFactory.getLogger(getClass());
     }
 
     ByteLens getByteLens() {

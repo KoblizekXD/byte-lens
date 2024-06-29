@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.ui.PathField;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,8 +21,8 @@ import java.util.stream.IntStream;
 
 public class NewProjectViewController extends Controller {
 
-    @FXML public ListView<ProjectCreator> projectTypeListing;
-    @FXML public AnchorPane userdata;
+    @FXML private ListView<ProjectCreator> projectTypeListing;
+    @FXML private AnchorPane userdata;
 
     public NewProjectViewController(ByteLens byteLens) {
         super(byteLens);

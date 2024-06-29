@@ -1,5 +1,6 @@
 package lol.koblizek.bytelens.core.controllers;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import lol.koblizek.bytelens.api.ToolWindow;
@@ -20,16 +21,16 @@ import java.util.stream.Collectors;
 
 public class MainViewController extends Controller {
 
-    public MenuBar menubar;
-    public SideToolBar leftToolbar;
-    public SideToolBar rightToolbar;
-    public SidePane leftPanel;
-    public SidePane rightPanel;
-    public PersistentSplitPane splitPaneInner;
-    public SidePane bottomPanel;
-    public PersistentSplitPane splitPaneOuter;
-    public ExtendedCodeArea codeArea;
-    public Menu menu1;
+    @FXML private MenuBar menubar;
+    @FXML private SideToolBar leftToolbar;
+    @FXML private SideToolBar rightToolbar;
+    @FXML private SidePane leftPanel;
+    @FXML private SidePane rightPanel;
+    @FXML private PersistentSplitPane splitPaneInner;
+    @FXML private SidePane bottomPanel;
+    @FXML private PersistentSplitPane splitPaneOuter;
+    @FXML private ExtendedCodeArea codeArea;
+    @FXML private Menu menu1;
 
     public MainViewController(ByteLens byteLens) {
         super(byteLens);

@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,18 +35,13 @@ class ExecutionExceptionHandler implements Thread.UncaughtExceptionHandler {
 
             TextArea textArea = new TextArea(exceptionText);
             textArea.setEditable(false);
-            textArea.setWrapText(true);
 
-            textArea.setMaxWidth(Double.MAX_VALUE);
-            textArea.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setVgrow(textArea, Priority.ALWAYS);
-            GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-            GridPane expContent = new GridPane();
-            expContent.setMaxWidth(Double.MAX_VALUE);
-            expContent.add(label, 0, 0);
-            expContent.add(textArea, 0, 1);
+            VBox expContent = new VBox();
+            expContent.getChildren().add(label);
+            expContent.getChildren().add(textArea);
+            VBox.setVgrow(textArea, Priority.ALWAYS);
             alert.getDialogPane().setExpandableContent(expContent);
+            alert.getDialogPane().setExpanded(true);
 
             alert.showAndWait();
         });

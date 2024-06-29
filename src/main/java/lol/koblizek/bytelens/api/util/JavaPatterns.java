@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public final class JavaPatterns {
     private JavaPatterns() {}
 
-    public static final String[] KEYWORDS = new String[] {
+    private static final String[] KEYWORDS = new String[] {
             "abstract", "assert", "boolean", "break", "byte",
             "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else",
@@ -18,13 +18,13 @@ public final class JavaPatterns {
             "transient", "try", "void", "volatile", "while"
     };
 
-    public static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
-    public static final String PAREN_PATTERN = "[()]";
-    public static final String BRACE_PATTERN = "[{}]";
-    public static final String BRACKET_PATTERN = "[\\[\\]]";
-    public static final String SEMICOLON_PATTERN = ";";
-    public static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-    public static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+    private static final String PAREN_PATTERN = "[()]";
+    private static final String BRACE_PATTERN = "[{}]";
+    private static final String BRACKET_PATTERN = "[\\[\\]]";
+    private static final String SEMICOLON_PATTERN = ";";
+    private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+    private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
 
     public static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"

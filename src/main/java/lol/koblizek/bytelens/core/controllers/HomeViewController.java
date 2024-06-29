@@ -9,7 +9,7 @@ import lol.koblizek.bytelens.core.ByteLens;
 
 public class HomeViewController extends Controller {
 
-    public ListView<String> projectListing;
+    @FXML private ListView<String> projectListing;
 
     public HomeViewController(ByteLens byteLens) {
         super(byteLens);
