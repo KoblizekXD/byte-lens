@@ -126,7 +126,9 @@ public final class ResourceManager {
     public static Image getJBIcon(String id, boolean isDark, int width, int height) {
         return tryGetFromCache(id).orElseGet(() -> {
             var url = StringUtils.toRemoteURL(StringUtils.getCompliantIconURL(id, isDark));
-            if (url == null) return null;
+            if (url == null) {
+                return null;
+            }
             return saveInCache(id, convertSVGToImage(url, width, height));
         });
     }
@@ -169,11 +171,14 @@ public final class ResourceManager {
     }
 
     private static Optional<Image> tryGetFromCache(@NotNull String id) {
-        if (!Preconditions.isNonNull(id))
+        if (Preconditions.isAnyNull(id)) {
             return Optional.empty();
+        }
 
         var target = ByteLens.getUserDataPath().resolve("cache/img").resolve(id + ".png");
-        if (!Files.exists(target)) return Optional.empty();
+        if (!Files.exists(target)) {
+            return Optional.empty();
+        }
 
         try {
             return Optional.of(SwingFXUtils.toFXImage(ImageIO.read(target.toFile()), null));
@@ -184,8 +189,9 @@ public final class ResourceManager {
     }
 
     private static @Nullable Image saveInCache(@NotNull String id, @NotNull Image image) {
-        if (!Preconditions.isNonNull(id, image))
+        if (Preconditions.isAnyNull(id, image)) {
             return null;
+        }
 
         var target = ByteLens.getUserDataPath().resolve("cache/img").resolve(id + ".png");
         try {

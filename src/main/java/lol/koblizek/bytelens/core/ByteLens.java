@@ -214,8 +214,9 @@ public final class ByteLens extends Application {
         stage.setTitle("ByteLens -" + project.getName());
         stage.setScene(getScene("main-view"));
         stage.show();
-        if (primaryStage != null)
+        if (primaryStage != null) {
             primaryStage.close();
+        }
         primaryStage = stage;
         logger.info("Opened project {}", project.getName());
     }
@@ -251,6 +252,9 @@ public final class ByteLens extends Application {
         return mapper;
     }
 
+    /**
+     * @return Path to the ByteLens user data directory
+     */
     public static Path getUserDataPath() {
         return Path.of(System.getProperty("user.home"), ".bytelens/");
     }

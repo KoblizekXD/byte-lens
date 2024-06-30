@@ -13,9 +13,11 @@ public class JetBrainsImage extends ImageView {
     private IntegerProperty iconSize;
 
     public JetBrainsImage(String icon, int width, int height) {
-        if (!icon.isBlank())
+        if (!icon.isBlank()) {
             this.icon = new SimpleStringProperty(icon);
-        else this.icon = new SimpleStringProperty();
+        } else {
+            this.icon = new SimpleStringProperty();
+        }
         this.iconSize = new SimpleIntegerProperty(16);
 
         fitWidthProperty().bindBidirectional(iconSize);

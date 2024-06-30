@@ -17,7 +17,7 @@ public class PathField extends StackPane {
 
     private BooleanProperty directoryOnly;
 
-    @FXML public TextField textField;
+    @FXML private TextField textField;
 
     public PathField() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/path-field.fxml"));
@@ -43,17 +43,20 @@ public class PathField extends StackPane {
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Open Directory");
             var f = chooser.showDialog(getScene().getWindow());
-            if (f != null)
+            if (f != null) {
                 p = f.toPath();
+            }
         } else {
             FileChooser chooser = new FileChooser();
             chooser.setTitle("Open File");
             var f = chooser.showOpenDialog(getScene().getWindow());
-            if (f != null)
+            if (f != null) {
                 p = f.toPath();
+            }
         }
-        if (p != null)
+        if (p != null) {
             textField.setText(p.toString());
+        }
     }
 
     public BooleanProperty directoryOnlyProperty() {

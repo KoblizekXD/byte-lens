@@ -28,8 +28,9 @@ public class SideToolBar extends ToolBar {
                 VBox.setVgrow(pane, Priority.ALWAYS);
                 this.getItems().add(pane);
             }
-        } else
+        } else {
             gp = this.groups.get(group);
+        }
         button.setToggleGroup(gp);
         if (gp.getToggles().size() == 1) {
             button.setSelected(true);

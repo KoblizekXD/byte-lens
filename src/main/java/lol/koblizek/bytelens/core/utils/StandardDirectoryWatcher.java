@@ -89,9 +89,9 @@ public class StandardDirectoryWatcher {
         for (Path path : relative) {
             var opt = parentItem.getChildren().stream()
                     .filter(it -> it.getValue().equals(path.toString())).findFirst();
-            if (opt.isPresent() && opt.get() instanceof IconifiedTreeItem treeItem)
+            if (opt.isPresent() && opt.get() instanceof IconifiedTreeItem treeItem) {
                 parentItem = treeItem;
-            else {
+            } else {
                 var nP = new IconifiedTreeItem(full);
                 parentItem.getChildren().add(nP);
                 parentItem = nP;

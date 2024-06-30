@@ -234,8 +234,9 @@ public class DefaultProject {
         for (Field field : getClass().getDeclaredFields()) {
             try {
                 if (!field.trySetAccessible() && field.get(this) == null
-                    && !Modifier.isFinal(field.getModifiers()))
+                    && !Modifier.isFinal(field.getModifiers())) {
                     return false;
+                }
             } catch (IllegalAccessException e) {
                 return false;
             }

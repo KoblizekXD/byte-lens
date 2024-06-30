@@ -91,7 +91,9 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
     }
 
     private void itemSelectionEvent(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> oldV, TreeItem<String> newV) {
-        if (newV == null) return;
+        if (newV == null) {
+            return;
+        }
         var codeArea = (ExtendedCodeArea) getScene().lookup("#codeArea");
         if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory()) { // This means it's actual file/dir
             codeArea.clear();

@@ -40,8 +40,9 @@ public class MainViewController extends Controller {
     public void initialize() {
         ByteLens byteLens = getByteLens();
 
-        if (byteLens.getCurrentProject().isEmpty())
+        if (byteLens.getCurrentProject().isEmpty()) {
             byteLens.getLogger().warn("No project is open, this should not happen. Errors might occur.");
+        }
 
         var tws = new ArrayList<>(byteLens.getToolWindows());
         // Example tool window
@@ -57,12 +58,15 @@ public class MainViewController extends Controller {
         var collected = tws.stream()
                 .collect(Collectors.groupingBy(ToolWindow::placement, LinkedHashMap::new, Collectors.toList()));
 
-        if (!collected.containsKey(ToolWindow.Placement.LEFT))
+        if (!collected.containsKey(ToolWindow.Placement.LEFT)) {
             splitPaneInner.hidePane(leftPanel);
-        if (!collected.containsKey(ToolWindow.Placement.BOTTOM))
+        }
+        if (!collected.containsKey(ToolWindow.Placement.BOTTOM)) {
             splitPaneOuter.hidePane(bottomPanel);
-        if (!collected.containsKey(ToolWindow.Placement.BOTTOM))
+        }
+        if (!collected.containsKey(ToolWindow.Placement.BOTTOM)) {
             splitPaneInner.hidePane(rightPanel);
+        }
 
         for (Map.Entry<ToolWindow.Placement, List<ToolWindow>> entry : collected.entrySet()) {
             ToolWindow.Placement placement = entry.getKey();

@@ -33,7 +33,9 @@ public class NewProjectViewController extends Controller {
         getByteLens().getProjectTypes().forEach(projectTypeListing.getItems()::add);
         projectTypeListing.getSelectionModel().select(0);
         projectTypeListing.getSelectionModel().selectedItemProperty().subscribe(menu -> {
-            if (menu == null) return;
+            if (menu == null) {
+                return;
+            }
             if (userdata.getChildren().size() > 1) {
                 userdata.getChildren().remove(1, userdata.getChildren().size());
                 userdata.getChildren().addAll(generateNode(menu));
