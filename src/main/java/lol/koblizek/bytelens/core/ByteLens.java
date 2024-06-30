@@ -84,10 +84,8 @@ public final class ByteLens extends Application {
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         resourceManager = ResourceManager.create(this, "/lol/koblizek/bytelens/");
-        getResourceManager().get("fonts/inter-font.ttf")
-                .toFont();
-        getResourceManager().get("fonts/jetbrains-mono-font.ttf")
-                .toFont();
+        getResourceManager().loadFont("fonts/inter-font.ttf");
+        getResourceManager().loadFont("fonts/jetbrains-mono-font.ttf");
 
         createAppFiles();
         loadAppData();

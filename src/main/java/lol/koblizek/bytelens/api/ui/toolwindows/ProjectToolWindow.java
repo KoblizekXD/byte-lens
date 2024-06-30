@@ -22,15 +22,14 @@ import java.util.function.Consumer;
 
 public class ProjectToolWindow extends TreeView<String> implements ToolWindow.ToolWindowNode {
 
-    @FXML public TreeItem<String> root;
+    @FXML private TreeItem<String> root;
 
     private ByteLens byteLens;
 
     @Override
     public Node create(ByteLens byteLens) throws IOException {
         this.byteLens = byteLens;
-        var loader = byteLens.getResourceManager().get("components/project-tw.fxml")
-                .toLoader();
+        var loader = byteLens.getResourceManager().getFXML("components/project-tw.fxml");
         loader.setRoot(this);
         loader.setController(this);
         return loader.load();

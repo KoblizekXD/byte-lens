@@ -12,13 +12,11 @@ public record ToolWindow(String name, Node node, Image icon, Placement placement
     public enum Placement {
         LEFT,
         RIGHT,
-        BOTTOM;
+        BOTTOM
     }
 
-    public ToolWindow {
-        if (node == null) {
-            node = new Label("No content");
-        }
+    public ToolWindow(String name, Image icon, Placement placement) {
+        this(name, new Label("No content"), icon, placement);
     }
 
     public static final class ToolWindowBuilder {

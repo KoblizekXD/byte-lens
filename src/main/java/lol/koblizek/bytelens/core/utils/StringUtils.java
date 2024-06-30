@@ -1,8 +1,23 @@
 package lol.koblizek.bytelens.core.utils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class StringUtils {
+
+    private StringUtils() {
+        throw new UnsupportedOperationException("StringUtils is a utility class and cannot be instantiated");
+    }
 
     /**
      * Capitalizes the first letter of the given word.
@@ -41,5 +56,25 @@ public class StringUtils {
             parts[i] = toCamelCase(parts[i]);
         }
         return ICON_DOMAIN + String.join("/", parts) + (dark ? "_dark" : "") + ".svg";
+    }
+
+    /**
+     * Returns an input stream of bytes of the given string.
+     * @param string the string to convert
+     * @return an input stream of the given string
+     */
+    public static @NotNull InputStream stream(@NotNull String string) {
+        Objects.requireNonNull(string);
+        return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static @Nullable URL toRemoteURL(@NotNull String path) {
+        Objects.requireNonNull(path);
+        try {
+            return new URI(path).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
+            LoggerFactory.getLogger(StringUtils.class).error("Failed to convert path to URL: {}", path, e);
+            return null;
+        }
     }
 }

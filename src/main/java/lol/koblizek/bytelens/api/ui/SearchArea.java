@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.api.ui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class SearchArea extends StackPane {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            LoggerFactory.getLogger(getClass()).error("Failed to load", e);
         }
     }
 }
