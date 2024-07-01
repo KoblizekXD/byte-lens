@@ -275,9 +275,35 @@ ParagraphText {
     -fx-background-color: transparent;
 }
 
+.tab-pane {
+    -fx-border-color: red;
+}
+
 .tab-label {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-padding: 0;
+}
+
+.tab {
+    -fx-background-color: #2B2D30;
+    -fx-pref-height: 40;
+    -fx-padding: 0 10;
+    -fx-tab-min-width: 200;
+}
+
+.tab:selected {
+    -fx-border-width: 0 0 4 0;
+    -fx-border-radius: 2;
+    -fx-background-radius: 0;
+    -fx-border-color: #3574F0;
+}
+
+.tab .tab-close-button {
+    -fx-effect: null;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #dfe1e5;
 }

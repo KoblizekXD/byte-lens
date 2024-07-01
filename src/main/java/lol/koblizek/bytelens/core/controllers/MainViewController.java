@@ -3,6 +3,7 @@ package lol.koblizek.bytelens.core.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TabPane;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class MainViewController extends Controller {
 
+    @FXML private TabPane tabPane;
     @FXML private MenuBar menubar;
     @FXML private SideToolBar leftToolbar;
     @FXML private SideToolBar rightToolbar;
@@ -29,7 +31,6 @@ public class MainViewController extends Controller {
     @FXML private PersistentSplitPane splitPaneInner;
     @FXML private SidePane bottomPanel;
     @FXML private PersistentSplitPane splitPaneOuter;
-    @FXML private ExtendedCodeArea codeArea;
     @FXML private Menu menu1;
 
     public MainViewController(ByteLens byteLens) {
@@ -96,6 +97,11 @@ public class MainViewController extends Controller {
                 }
             }
         }
-        // codeArea.bridge(byteLens);
+
+        tabPane.getSelectionModel().selectedItemProperty().subscribe(tab -> {
+            if (tab.getContent() instanceof ExtendedCodeArea codeArea) {
+                codeArea.bridge(byteLens);
+            }
+        });
     }
 }
