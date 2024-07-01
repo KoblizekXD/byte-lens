@@ -11,6 +11,7 @@ import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
+import lol.koblizek.bytelens.core.controllers.MainViewController;
 import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
 
 import java.io.IOException;
@@ -25,6 +26,9 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
     @FXML private TreeItem<String> root;
 
     private ByteLens byteLens;
+
+    public ProjectToolWindow(MainViewController controller) {
+    }
 
     @Override
     public Node create(ByteLens byteLens) throws IOException {

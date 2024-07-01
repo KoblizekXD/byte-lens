@@ -124,7 +124,7 @@ public final class ResourceManager {
     }
 
     public static Image getJBIcon(String id, boolean isDark, int width, int height) {
-        return tryGetFromCache(id).orElseGet(() -> {
+        return tryGetFromCache(id + "@" + width + "x" + height).orElseGet(() -> {
             var url = StringUtils.toRemoteURL(StringUtils.getCompliantIconURL(id, isDark));
             if (url == null) {
                 return null;
@@ -193,7 +193,9 @@ public final class ResourceManager {
             return null;
         }
 
-        var target = ByteLens.getUserDataPath().resolve("cache/img").resolve(id + ".png");
+        var target = ByteLens.getUserDataPath().resolve("cache/img").resolve(id + "@"
+                + (int) image.getWidth() + "x" + (int) image.getHeight()
+                + ".png");
         try {
             Files.createDirectories(target.getParent());
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", target.toFile());

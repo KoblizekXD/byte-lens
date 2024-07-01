@@ -48,7 +48,7 @@ public class MainViewController extends Controller {
         // Example tool window
         try {
             tws.add(new ToolWindow("Project",
-                    new ProjectToolWindow().create(byteLens),
+                    new ProjectToolWindow(this).create(byteLens),
                     ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true),
                     ToolWindow.Placement.LEFT
             ));
@@ -96,6 +96,6 @@ public class MainViewController extends Controller {
                 }
             }
         }
-        codeArea.bridge(byteLens);
+        // codeArea.bridge(byteLens);
     }
 }

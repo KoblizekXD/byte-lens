@@ -270,3 +270,14 @@ ParagraphText {
     -fx-text-fill: #dfe1e5;
     -fx-font-weight: bold;
 }
+
+.tab-pane *.tab-header-area *.tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-label {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-padding: 0;
+}

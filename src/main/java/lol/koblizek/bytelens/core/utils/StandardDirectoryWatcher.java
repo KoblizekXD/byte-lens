@@ -64,7 +64,8 @@ public class StandardDirectoryWatcher {
                     continue;
                 }
 
-                WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                /* Suppressed because of above statement */
+                @SuppressWarnings("unchecked") WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path fileName = ev.context();
                 Path child = path.resolve(fileName);
 

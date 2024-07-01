@@ -1,6 +1,5 @@
 package lol.koblizek.bytelens.api.ui;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.fxmisc.richtext.CodeArea;
@@ -29,7 +28,7 @@ public class ExtendedCodeArea extends CodeArea {
         highlighter = Executors.newSingleThreadExecutor();
         setParagraphGraphicFactory(LineNumberFactory.get(this));
         multiPlainChanges().successionEnds(Duration.ofMillis(5))
-                .retainLatestUntilLater()
+                .retainLatestUntilLater(highlighter)
                 .supplyTask(this::computeHighlightingAsync)
                 .awaitLatest(multiPlainChanges())
                 .filterMap(t -> {
@@ -91,6 +90,6 @@ public class ExtendedCodeArea extends CodeArea {
     }
 
     public void bridge(@NotNull ByteLens byteLens) {
-        byteLens.submitTask((Runnable) highlighter);
+        byteLens.getExecutors().add(highlighter);
     }
 }
