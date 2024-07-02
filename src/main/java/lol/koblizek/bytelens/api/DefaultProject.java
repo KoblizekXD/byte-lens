@@ -25,6 +25,7 @@ import java.nio.file.Path;
 public class DefaultProject {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultProject.class);
+    public static final String PROJECT_FILE_NAME = "project.bl.json";
 
     @JsonIgnore
     private final ObjectMapper mapper;
@@ -53,17 +54,17 @@ public class DefaultProject {
     public DefaultProject(@NotNull Path projectPath) {
         logger.info("Attempting to load project from path: {}", projectPath);
         this.mapper = ByteLens.getMapper();
-        if (Files.exists(projectPath) && Files.exists(projectPath.resolve("project.bl.json"))) {
+        if (Files.exists(projectPath) && Files.exists(projectPath.resolve(PROJECT_FILE_NAME))) {
             logger.debug("Project exists and will be loaded");
             this.projectPath = projectPath;
-            this.projectFile = projectPath.resolve("project.bl.json");
+            this.projectFile = projectPath.resolve(PROJECT_FILE_NAME);
             loadProject();
         } else {
             logger.warn("Project does not exist, creating default files...");
             try {
                 Files.createDirectories(projectPath);
                 this.projectPath = projectPath;
-                this.projectFile = projectPath.relativize(Files.createFile(projectPath.resolve("project.bl.json")));
+                this.projectFile = projectPath.relativize(Files.createFile(projectPath.resolve(PROJECT_FILE_NAME)));
                 this.name = projectPath.getFileName().toString();
                 this.sources = projectPath.relativize(Files.createDirectories(projectPath.resolve("sources")));
                 this.resources = projectPath.relativize(Files.createDirectories(projectPath.resolve("resources")));
@@ -91,7 +92,7 @@ public class DefaultProject {
      * @return {@code true} if the given path contains a project, {@code false} otherwise
      */
     public static boolean isProject(@NotNull Path path) {
-        return Files.exists(path.resolve("project.bl.json"));
+        return Files.exists(path.resolve(PROJECT_FILE_NAME));
     }
 
     /**
@@ -226,7 +227,7 @@ public class DefaultProject {
                 logger.error("Not all project fields are set, possible project corruption");
             }
         } catch (Exception e) {
-            logger.error("Exception occurred during loading of project from " + getProjectFile(), e);
+            logger.error("Exception occurred during loading of project from {}", getProjectFile(), e);
         }
     }
 
