@@ -1,14 +1,17 @@
 package lol.koblizek.bytelens.core.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
-import lol.koblizek.bytelens.api.ui.toolwindows.ProjectToolWindow;
+import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
 import lol.koblizek.bytelens.core.ByteLens;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 // This code will have to be "eventually" rewritten to be more effective and more understandable
 // ^^ PS: I got no time for this
 
-public class MainViewController extends Controller {
+public class MainViewController extends Controller implements Opener {
 
     @FXML private TabPane tabPane;
     @FXML private MenuBar menubar;
@@ -49,7 +52,7 @@ public class MainViewController extends Controller {
         // Example tool window
         try {
             tws.add(new ToolWindow("Project",
-                    new ProjectToolWindow(this).create(byteLens),
+                    new ProjectTreeToolWindow(this).create(byteLens),
                     ResourceManager.getJBIcon("AllIcons.Expui.Toolwindow.Project", true),
                     ToolWindow.Placement.LEFT
             ));
@@ -97,11 +100,13 @@ public class MainViewController extends Controller {
                 }
             }
         }
+    }
 
-        tabPane.getSelectionModel().selectedItemProperty().subscribe(tab -> {
-            if (tab.getContent() instanceof ExtendedCodeArea codeArea) {
-                codeArea.bridge(byteLens);
-            }
-        });
+    @Override
+    public void open(Node node, @Nullable String name) {
+        Tab tab = new Tab(name);
+        tab.setContent(node);
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().select(tab);
     }
 }

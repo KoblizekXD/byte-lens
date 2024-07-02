@@ -138,10 +138,20 @@ public final class ByteLens extends Application {
         }
     }
 
-    public ExecutorService getExecutor() {
+    /**
+     * Returns the executor capable of running background tasks in parallel
+     * @return The main cached executor used in ByteLens
+     */
+    public ExecutorService getCachedExecutor() {
         return cachedExecutor;
     }
 
+    /**
+     * Submits task to the cached executor
+     * @see ExecutorService#submit(Runnable)
+     * @see this#getCachedExecutor()
+     * @param runnable Task to submit to the executor
+     */
     public void submitTask(Runnable runnable) {
         cachedExecutor.submit(runnable);
     }

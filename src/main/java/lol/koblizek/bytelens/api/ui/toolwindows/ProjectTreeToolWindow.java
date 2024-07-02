@@ -9,9 +9,9 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
+import lol.koblizek.bytelens.api.ui.Opener;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
-import lol.koblizek.bytelens.core.controllers.MainViewController;
 import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
 
 import java.io.IOException;
@@ -21,13 +21,15 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ProjectToolWindow extends TreeView<String> implements ToolWindow.ToolWindowNode {
+public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindow.ToolWindowNode {
 
+    private final Opener opener;
     @FXML private TreeItem<String> root;
 
     private ByteLens byteLens;
 
-    public ProjectToolWindow(MainViewController controller) {
+    public ProjectTreeToolWindow(Opener opener) {
+        this.opener = opener;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
                         }
                     });
             var watcher = new StandardDirectoryWatcher(rootPath, rootItem);
-            watcher.start(byteLens.getExecutor());
+            watcher.start(byteLens.getCachedExecutor());
         } catch (IOException e) {
             byteLens.getLogger().error("An error occurred in initial file lookup:", e);
         }
@@ -97,14 +99,16 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
         if (newV == null) {
             return;
         }
-        var codeArea = (ExtendedCodeArea) getScene().lookup("#codeArea");
+        ExtendedCodeArea codeArea = new ExtendedCodeArea();
+        codeArea.bridge(byteLens);
         if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory()) { // This means it's actual file/dir
-            codeArea.clear();
             try {
+                codeArea.clear();
                 codeArea.appendText(Files.readString(iti.getPath()));
             } catch (IOException e) {
                 byteLens.getLogger().error("Error occurred on file read!", e);
             }
+            opener.open(codeArea, iti.getPath().getFileName().toString());
         }
     }
 }

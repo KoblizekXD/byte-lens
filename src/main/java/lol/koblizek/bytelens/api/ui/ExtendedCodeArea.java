@@ -74,7 +74,7 @@ public class ExtendedCodeArea extends CodeArea {
     public void bridge(@NotNull ByteLens byteLens) {
         multiPlainChanges().successionEnds(Duration.ofMillis(5))
                 .retainLatestUntilLater()
-                .supplyTask(() -> computeHighlightingAsync(byteLens.getExecutor()))
+                .supplyTask(() -> computeHighlightingAsync(byteLens.getCachedExecutor()))
                 .awaitLatest(multiPlainChanges())
                 .filterMap(t -> {
                     if(t.isSuccess()) {

@@ -275,10 +275,6 @@ ParagraphText {
     -fx-background-color: transparent;
 }
 
-.tab-pane {
-    -fx-border-color: red;
-}
-
 .tab-label {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
