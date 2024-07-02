@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public final class ByteLens extends Application {
@@ -40,7 +41,7 @@ public final class ByteLens extends Application {
     private final List<ToolWindow> toolWindows;
     private final List<ProjectCreator> projectTypes;
     private final Logger logger;
-    private final List<ExecutorService> executors;
+    private final ExecutorService cachedExecutor;
     private static final ObjectMapper mapper = new ObjectMapper();
     private final List<DefaultProject> projects;
     private final ResourceManager resourceManager;
@@ -62,7 +63,7 @@ public final class ByteLens extends Application {
         module.addSerializer(new CustomNioPathSerializer());
         module.addDeserializer(Path.class, new CustomNioPathDeserializer());
         mapper.registerModule(module);
-        executors = new ArrayList<>();
+        cachedExecutor = Executors.newCachedThreadPool();
         projects = new ArrayList<>() {
             // PLEASE CALL ADD LAST ONLY WHEN NEW PROJECT IS CREATED, NOT WHENEVER IT IS BEING LOADED. IT MAY BREAK THINGS!
             @Override
@@ -126,26 +127,23 @@ public final class ByteLens extends Application {
     @Override
     public void stop() {
         logger.info("Stopping...");
-        executors.forEach((k -> {
-            logger.info("\tStopping executor {}", k);
-            k.shutdown();
-            try {
-                if (!k.awaitTermination(500, TimeUnit.MILLISECONDS)) {
-                    k.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                k.shutdownNow();
-                Thread.currentThread().interrupt();
+        cachedExecutor.shutdown();
+        try {
+            if (!cachedExecutor.awaitTermination(500, TimeUnit.MILLISECONDS)) {
+                cachedExecutor.shutdownNow();
             }
-        }));
+        } catch (InterruptedException e) {
+            cachedExecutor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
-    public List<ExecutorService> getExecutors() {
-        return executors;
+    public ExecutorService getExecutor() {
+        return cachedExecutor;
     }
 
     public void submitTask(Runnable runnable) {
-        executors.getFirst().submit(runnable);
+        cachedExecutor.submit(runnable);
     }
 
     /**

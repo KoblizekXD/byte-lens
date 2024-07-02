@@ -40,8 +40,8 @@ public class StandardDirectoryWatcher {
         }
     }
 
-    public void start() {
-        executor.submit(this::processEvents);
+    public void start(ExecutorService service) {
+        service.submit(this::processEvents);
     }
 
     private void processEvents() {

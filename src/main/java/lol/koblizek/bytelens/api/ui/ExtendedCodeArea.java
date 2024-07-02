@@ -14,42 +14,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 
 import static lol.koblizek.bytelens.api.util.JavaPatterns.PATTERN;
 
 public class ExtendedCodeArea extends CodeArea {
 
-    private final ExecutorService highlighter;
-
     public ExtendedCodeArea() {
         super();
-        highlighter = Executors.newSingleThreadExecutor();
         setParagraphGraphicFactory(LineNumberFactory.get(this));
-        multiPlainChanges().successionEnds(Duration.ofMillis(5))
-                .retainLatestUntilLater(highlighter)
-                .supplyTask(this::computeHighlightingAsync)
-                .awaitLatest(multiPlainChanges())
-                .filterMap(t -> {
-                    if(t.isSuccess()) {
-                        return Optional.of(t.get());
-                    } else {
-                        t.getFailure().printStackTrace();
-                        return Optional.empty();
-                    }
-                })
-                .subscribe(this::applyHighlighting);
-        appendText("""
-                public class Main {
-                    public static void main(String[] args) {
-                        System.out.println("Hello, World!");
-                    }
-                }
-                """);
     }
 
-    private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
+    private Task<StyleSpans<Collection<String>>> computeHighlightingAsync(ExecutorService service) {
         String text = getText();
         Task<StyleSpans<Collection<String>>> task = new Task<>() {
             @Override
@@ -57,7 +33,7 @@ public class ExtendedCodeArea extends CodeArea {
                 return computeHighlighting(text);
             }
         };
-        highlighter.execute(task);
+        service.submit(task);
         return task;
     }
 
@@ -89,7 +65,32 @@ public class ExtendedCodeArea extends CodeArea {
                 .map(String::toLowerCase).orElseThrow();
     }
 
+    /**
+     * For the proper functioning of the code area, it is necessary to bridge it with the ByteLens instance.
+     * This is because the code area is using executor which needs to be tracked by the ByteLens instance.
+     * This operation should be done as soon as possible after the creation of the code area.
+     * @param byteLens ByteLens instance to bridge with
+     */
     public void bridge(@NotNull ByteLens byteLens) {
-        byteLens.getExecutors().add(highlighter);
+        multiPlainChanges().successionEnds(Duration.ofMillis(5))
+                .retainLatestUntilLater()
+                .supplyTask(() -> computeHighlightingAsync(byteLens.getExecutor()))
+                .awaitLatest(multiPlainChanges())
+                .filterMap(t -> {
+                    if(t.isSuccess()) {
+                        return Optional.of(t.get());
+                    } else {
+                        t.getFailure().printStackTrace();
+                        return Optional.empty();
+                    }
+                })
+                .subscribe(this::applyHighlighting);
+        appendText("""
+                public class Main {
+                    public static void main(String[] args) {
+                        System.out.println("Hello, World!");
+                    }
+                }
+                """);
     }
 }

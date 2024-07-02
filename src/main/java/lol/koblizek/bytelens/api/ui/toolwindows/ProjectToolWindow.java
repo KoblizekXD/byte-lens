@@ -86,8 +86,7 @@ public class ProjectToolWindow extends TreeView<String> implements ToolWindow.To
                         }
                     });
             var watcher = new StandardDirectoryWatcher(rootPath, rootItem);
-            watcher.start();
-            byteLens.getExecutors().add(watcher.getExecutor());
+            watcher.start(byteLens.getExecutor());
         } catch (IOException e) {
             byteLens.getLogger().error("An error occurred in initial file lookup:", e);
         }
