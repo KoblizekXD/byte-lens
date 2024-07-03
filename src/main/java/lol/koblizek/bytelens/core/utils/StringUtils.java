@@ -77,4 +77,32 @@ public class StringUtils {
             return null;
         }
     }
+
+    /**
+     * Reads the content of the remote file at the given URI.
+     * @param uri the address of the remote file
+     * @return the content of the remote file
+     */
+    public static @NotNull String readRemote(URI uri) {
+        try (var stream = uri.toURL().openStream()) {
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(StringUtils.class).error("Failed to read remote file: {}", uri, e);
+            return "";
+        }
+    }
+
+    /**
+     * Reads the content of the remote file at the given URI.
+     * @param address the address of the remote file
+     * @return the content of the remote file
+     */
+    public static @NotNull String readRemote(String address) {
+        try {
+            return readRemote(new URI(address));
+        } catch (URISyntaxException e) {
+            LoggerFactory.getLogger(StringUtils.class).error("Failed to parse URI: {}", address, e);
+            return "";
+        }
+    }
 }

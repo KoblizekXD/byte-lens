@@ -77,7 +77,6 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
 
     private IconifiedTreeItem getModule(Path rootPath) {
         IconifiedTreeItem rootItem = new IconifiedTreeItem(rootPath);
-        rootItem.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
         try {
             Files.list(rootPath)
                     .sorted(Comparator.comparing(Path::toString))

@@ -53,4 +53,8 @@ public class IconifiedTreeItem extends TreeItem<String> {
     public boolean isDirectory() {
         return Files.isDirectory(path);
     }
+
+    public String getExtension() {
+        return FilenameUtils.getExtension(path.getFileName().toString());
+    }
 }

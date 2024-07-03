@@ -12,6 +12,7 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
+import lol.koblizek.bytelens.core.decompiler.DecompilationManager;
 import lol.koblizek.bytelens.core.project.DefaultProjectType;
 import lol.koblizek.bytelens.core.utils.CustomNioPathDeserializer;
 import lol.koblizek.bytelens.core.utils.CustomNioPathSerializer;
@@ -45,6 +46,7 @@ public final class ByteLens extends Application {
     private static final ObjectMapper mapper = new ObjectMapper();
     private final List<DefaultProject> projects;
     private final ResourceManager resourceManager;
+    private final DecompilationManager decompilationManager;
     private DefaultProject currentProject;
 
     @Override
@@ -85,6 +87,7 @@ public final class ByteLens extends Application {
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         resourceManager = ResourceManager.create(this, "/lol/koblizek/bytelens/");
+        decompilationManager = DecompilationManager.init(this);
         getResourceManager().loadFont("fonts/inter-font.ttf");
         getResourceManager().loadFont("fonts/jetbrains-mono-font.ttf");
 
@@ -265,5 +268,12 @@ public final class ByteLens extends Application {
      */
     public static Path getUserDataPath() {
         return Path.of(System.getProperty("user.home"), ".bytelens/");
+    }
+
+    /**
+     * @return Path to the ByteLens cache directory
+     */
+    public static Path getCache() {
+        return getUserDataPath().resolve("cache/");
     }
 }

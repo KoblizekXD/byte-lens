@@ -31,7 +31,9 @@ tasks.withType<JavaCompile> {
 }
 
 dependencies {
+    compileOnly("org.vineflower:vineflower:1.10.1")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
+    implementation("dev.mccue:resolve:2024.05.26")
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.apache.xmlgraphics:batik-transcoder:1.17")
     implementation("org.apache.xmlgraphics:batik-codec:1.17")
