@@ -60,12 +60,7 @@
                 <SidePane fx:id="leftPanel" />
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0">
                     <TabPane fx:id="tabPane" AnchorPane.bottomAnchor="0"
-                             AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                        <Tab text="Heh?">
-                            <ExtendedCodeArea fx:id="codeArea"/>
-                        </Tab>
-                    </TabPane>
-                    <!--<ExtendedCodeArea visible="false" id="codeArea" editable="false" fx:id="codeArea" />-->
+                             AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
                 </AnchorPane>
                 <SidePane fx:id="rightPanel" />
             </PersistentSplitPane>

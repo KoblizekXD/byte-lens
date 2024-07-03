@@ -42,6 +42,10 @@ public class IconifiedTreeItem extends TreeItem<String> {
         setGraphic(new JetBrainsImage(targetIcon));
     }
 
+    public void overrideIcon(String icon) {
+        setGraphic(new JetBrainsImage(icon));
+    }
+
     public Path getPath() {
         return path;
     }

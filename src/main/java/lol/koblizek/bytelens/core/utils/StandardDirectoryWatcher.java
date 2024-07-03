@@ -12,6 +12,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Class for watching directory for changes and updating tree view accordingly.
+ * <p>
+ *     If a directories already exists in the tree, they won't be registered for watching.
+ * </p>
+ */
 public class StandardDirectoryWatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StandardDirectoryWatcher.class);
@@ -60,7 +66,7 @@ public class StandardDirectoryWatcher {
                 LOGGER.trace("New file event");
                 WatchEvent.Kind<?> kind = event.kind();
 
-                if (kind == StandardWatchEventKinds.OVERFLOW || event.context() instanceof Path) {
+                if (kind == StandardWatchEventKinds.OVERFLOW || !(event.context() instanceof Path)) {
                     continue;
                 }
 
