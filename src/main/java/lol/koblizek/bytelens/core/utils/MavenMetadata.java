@@ -50,7 +50,7 @@ public record MavenMetadata(
     public static MavenMetadata fromMavenCentral(String artifact) {
         String[] parts = artifact.split(":");
         return parseXml(StringUtils.readRemote("https://repo1.maven.org/maven2/" +
-                String.join("/", parts[0].split("\\.")) + parts[1] + "/maven-metadata.xml"));
+                String.join("/", parts[0].split("\\.")) + "/" + parts[1] + "/maven-metadata.xml"));
     }
 
     public static MavenMetadata parseXml(String content) {

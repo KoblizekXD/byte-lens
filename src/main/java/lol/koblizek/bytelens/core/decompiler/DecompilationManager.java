@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Class used to manage decompiler versioning.
+ * Can be obtained by calling {@link ByteLens#getDecompilationManager()}.
+ */
 public class DecompilationManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DecompilationManager.class);
@@ -43,8 +47,20 @@ public class DecompilationManager {
      */
     public String[] getAvailableDecompilers() {
         var metadata = MavenMetadata.fromMavenCentral("org.vineflower:vineflower");
-        return metadata.versions().stream().map(version -> metadata.artifact().toString() + version.toString())
+        return metadata.versions().stream().map(version -> metadata.artifact().toString() + "-" + version.toString())
                 .toArray(String[]::new);
+    }
+
+    /**
+     * Selects decompiler by its name.
+     * <p>
+     *     Decompiler will be either downloaded from remote repository or loaded from cache.
+     * </p>
+     * @param decompiler Decompiler to select(e.g. vineflower-1.10.1)
+     * @return Decompiler instance
+     */
+    public Decompiler selectDecompiler(String decompiler) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static String[] getProviders() {

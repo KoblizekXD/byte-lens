@@ -257,6 +257,13 @@ public final class ByteLens extends Application {
     }
 
     /**
+     * @return the decompilation manager used in ByteLens
+     */
+    public DecompilationManager getDecompilationManager() {
+        return decompilationManager;
+    }
+
+    /**
      * @return The main ObjectMapper used in ByteLens
      */
     public static ObjectMapper getMapper() {
