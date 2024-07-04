@@ -53,6 +53,12 @@ public record MavenMetadata(
                 String.join("/", parts[0].split("\\.")) + "/" + parts[1] + "/maven-metadata.xml"));
     }
 
+    public static MavenMetadata from(String repository, String artifact) {
+        String[] parts = artifact.split(":");
+        return parseXml(StringUtils.readRemote(repository + "/" +
+                String.join("/", parts[0].split("\\.")) + "/" + parts[1] + "/maven-metadata.xml"));
+    }
+
     public static MavenMetadata parseXml(String content) {
         var handler = new DefaultHandler() {
             Group group;
