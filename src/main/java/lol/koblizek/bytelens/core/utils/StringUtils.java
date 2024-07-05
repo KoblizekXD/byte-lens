@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -102,6 +101,17 @@ public class StringUtils {
             return readRemote(new URI(address));
         } catch (URISyntaxException e) {
             LoggerFactory.getLogger(StringUtils.class).error("Failed to parse URI: {}", address, e);
+            return "";
+        }
+    }
+
+    public static String stackTraceToString(Exception e) {
+        try (StringWriter sw = new StringWriter();
+             PrintWriter pw = new PrintWriter(sw)) {
+            e.printStackTrace(pw);
+            return sw.toString();
+        } catch (IOException ex) {
+            LoggerFactory.getLogger(StringUtils.class).error("Failed to convert stack trace to string", ex);
             return "";
         }
     }

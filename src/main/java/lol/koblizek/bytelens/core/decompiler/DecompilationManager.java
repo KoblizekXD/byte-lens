@@ -5,9 +5,9 @@ import lol.koblizek.bytelens.core.utils.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Class used to manage decompiler versioning.
@@ -22,6 +22,7 @@ public class DecompilationManager {
     }
 
     private final ByteLens byteLens;
+    private Decompiler decompiler;
 
     private DecompilationManager(ByteLens inst) {
         this.byteLens = inst;
@@ -32,28 +33,37 @@ public class DecompilationManager {
         CFR("org.benf:cfr", "https://repo1.maven.org/maven2/");
 
         private final String artifact;
-        private final String[] repositories;
+        private final String repository;
 
-        Providers(String artifact, String... repositories) {
+        Providers(String artifact, String repository) {
             this.artifact = artifact;
-            this.repositories = repositories;
+            this.repository = repository;
         }
 
         public String getArtifact() {
             return artifact;
         }
 
-        public String[] getRepositories() {
-            return repositories;
+        public String getRepositories() {
+            return repository;
         }
 
         public String[] getVersions() {
-            return Arrays.stream(getRepositories()).map(repo -> MavenMetadata.from(repo, getArtifact()).versions())
-                    .flatMap(Collection::stream).map(Object::toString).toArray(String[]::new);
+            return MavenMetadata.from(repository, getArtifact()).versions()
+                    .stream().map(Object::toString).toArray(String[]::new);
         }
 
-        public void download(String version, Path path) {
-
+        public void download(String version, Path out) {
+            try {
+                Files.copy(Path.of(repository + artifact.replaceAll(":.", "/") + "/" + version + "/" + artifact.split(":")[1] + "-" + version + ".jar")
+                        .toUri().toURL().openStream(), out);
+            } catch (IOException e) {
+                LOGGER.error("Failed to download decompiler", e);
+            }
         }
+    }
+
+    public Decompiler getDecompiler() {
+        return decompiler;
     }
 }

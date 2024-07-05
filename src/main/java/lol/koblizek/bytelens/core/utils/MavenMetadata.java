@@ -4,6 +4,8 @@ import dev.mccue.resolve.Artifact;
 import dev.mccue.resolve.Group;
 import dev.mccue.resolve.Version;
 import dev.mccue.resolve.VersionRange;
+import dev.mccue.resolve.maven.Classifier;
+import dev.mccue.resolve.maven.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -20,6 +22,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Represents a Maven metadata file.
+ * @param group
+ * @param artifact
+ * @param latest
+ * @param release
+ * @param versions
+ * @param lastUpdated
+ * @author Ethan McCue(emccue/bowbahdoe)
+ */
 public record MavenMetadata(
         Group group,
         Artifact artifact,
@@ -133,5 +145,31 @@ public record MavenMetadata(
                 .sorted(Comparator.reverseOrder())
                 .filter(range::includes)
                 .findFirst();
+    }
+
+    public static List<String> getArtifactPath(
+            Group group,
+            Artifact artifact,
+            Version version,
+            Classifier classifier,
+            Extension extension
+    ) {
+
+        var path = new ArrayList<>(Arrays.asList(group
+                .value().split("\\.")));
+
+        path.add(artifact.value());
+
+        path.add(version.toString());
+
+        path.add(
+                artifact
+                        + "-"
+                        + version
+                        + (!classifier.equals(Classifier.EMPTY) ? ("-" + classifier.value()) : "")
+                        + ((!extension.equals(Extension.EMPTY)) ? "." + extension : "")
+        );
+
+        return List.copyOf(path);
     }
 }
