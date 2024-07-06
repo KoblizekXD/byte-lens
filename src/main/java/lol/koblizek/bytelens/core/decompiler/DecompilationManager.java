@@ -9,10 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.module.Configuration;
+import java.lang.module.ModuleFinder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
+import java.util.ServiceLoader;
+import java.util.Set;
 
 /**
  * Class used to manage decompiler versioning.
@@ -28,6 +33,7 @@ public class DecompilationManager {
     }
 
     private final ByteLens byteLens;
+    private ModuleFinder moduleFinder;
     private Decompiler decompiler;
 
     private DecompilationManager(ByteLens inst) {
@@ -35,15 +41,21 @@ public class DecompilationManager {
     }
 
     public enum Providers {
-        VINEFLOWER("org.vineflower:vineflower", "https://repo1.maven.org/maven2/"),
-        CFR("org.benf:cfr", "https://repo1.maven.org/maven2/");
+        VINEFLOWER("org.vineflower:vineflower", "lol.koblizek.bytelens.core.decompiler.impl.vineflower", "https://repo1.maven.org/maven2/"),
+        CFR("org.benf:cfr", null, "https://repo1.maven.org/maven2/");
 
         private final String artifact;
+        private final String internalPackage;
         private final String repository;
 
-        Providers(String artifact, String repository) {
+        Providers(String artifact, String internalPackage, String repository) {
             this.artifact = artifact;
+            this.internalPackage = internalPackage;
             this.repository = repository;
+        }
+
+        public String getInternalPackage() {
+            return internalPackage;
         }
 
         public String getArtifact() {
@@ -61,6 +73,7 @@ public class DecompilationManager {
 
         public void download(String version, Path out) {
             try {
+                Files.createDirectories(out.getParent());
                 Files.copy(new URI(repository + artifact.replaceAll("[:.]", "/") + "/" + version + "/" + artifact.split(":")[1] + "-" + version + ".jar")
                         .toURL().openStream(), out);
             } catch (IOException | URISyntaxException e) {
@@ -68,11 +81,20 @@ public class DecompilationManager {
             }
         }
 
+        private Path extractInternalImplIfNotYet() throws IOException, URISyntaxException {
+            var target = ByteLens.getCache().resolve("decompiler-impls").resolve(toString().toLowerCase() + "-impl.jar");
+            Files.createDirectories(target.getParent());
+            if (!Files.exists(target)) {
+                Files.copy(getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar").toURI().toURL().openStream(), target);
+            }
+            return target;
+        }
+
         @Nullable
         Path getInternalImplementationPath() {
             try {
-                return Path.of(getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar").toURI());
-            } catch (URISyntaxException e) {
+                return extractInternalImplIfNotYet();
+            } catch (URISyntaxException | IOException e) {
                 LOGGER.error("Failed to get internal implementation path", e);
                 return null;
             }
@@ -90,10 +112,28 @@ public class DecompilationManager {
     public void setDecompiler(Providers provider, String version) {
         var jar = fetchDecompiler(provider, version);
         var impl = provider.getInternalImplementationPath();
-        if (jar == null || impl == null) {
+        if (impl == null) {
             LOGGER.error("Failed to set decompiler");
             return;
         }
+        var optDecompiler = fetchInternal(provider, jar);
+        if (optDecompiler.isPresent())
+            decompiler = optDecompiler.get();
+        else
+            LOGGER.error("Failed to set decompiler");
+    }
+
+    private Optional<Decompiler> fetchInternal(Providers provider, Path jar) {
+        moduleFinder = ModuleFinder.of(jar, provider.getInternalImplementationPath());
+        ModuleLayer parent = ModuleLayer.boot();
+        Configuration cf = parent.configuration().resolve(
+                moduleFinder,
+                ModuleFinder.of(),
+                Set.of(provider.getInternalPackage())
+        );
+        var loader = ModuleLayer.boot().defineModulesWithOneLoader(cf, ByteLens.class.getClassLoader());
+        return ServiceLoader.load(loader, Decompiler.class)
+                .findFirst();
     }
 
     public Decompiler getDecompiler() {

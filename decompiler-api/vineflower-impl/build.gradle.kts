@@ -21,6 +21,9 @@ dependencies {
 
 tasks.withType<Jar> {
     archiveFileName = "vineflower-impl.jar"
+    archiveClassifier = ""
+    archiveVersion = ""
+    archiveAppendix = ""
 }
 
 tasks.test {

@@ -37,7 +37,7 @@ tasks.withType<JavaCompile> {
 tasks.withType<Jar> {
     from(project(":decompiler-api:vineflower-impl").layout.buildDirectory.file("libs").get()) {
         into("libs")
-        include("vineflower-impl-*.jar")
+        include("vineflower-impl.jar")
     }
 }
 

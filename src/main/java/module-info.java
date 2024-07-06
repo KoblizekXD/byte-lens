@@ -18,6 +18,8 @@ module lol.koblizek.bytelens {
     requires org.slf4j;
     requires lol.koblizek.bytelens.core.decompiler.api;
 
+    uses lol.koblizek.bytelens.core.decompiler.api.Decompiler;
+
     opens lol.koblizek.bytelens.core.controllers to javafx.fxml;
     opens lol.koblizek.bytelens.api.ui to javafx.fxml;
     opens lol.koblizek.bytelens.api.ui.toolwindows to javafx.fxml;
