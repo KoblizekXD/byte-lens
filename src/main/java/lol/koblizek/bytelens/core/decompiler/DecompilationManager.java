@@ -3,10 +3,14 @@ package lol.koblizek.bytelens.core.decompiler;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 import lol.koblizek.bytelens.core.utils.MavenMetadata;
+import lol.koblizek.bytelens.core.utils.Preconditions;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -19,6 +23,7 @@ public class DecompilationManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DecompilationManager.class);
 
     public static DecompilationManager init(ByteLens inst) {
+        Preconditions.nonNull(inst);
         return new DecompilationManager(inst);
     }
 
@@ -56,15 +61,46 @@ public class DecompilationManager {
 
         public void download(String version, Path out) {
             try {
-                Files.copy(Path.of(repository + artifact.replaceAll(":.", "/") + "/" + version + "/" + artifact.split(":")[1] + "-" + version + ".jar")
-                        .toUri().toURL().openStream(), out);
-            } catch (IOException e) {
+                Files.copy(new URI(repository + artifact.replaceAll("[:.]", "/") + "/" + version + "/" + artifact.split(":")[1] + "-" + version + ".jar")
+                        .toURL().openStream(), out);
+            } catch (IOException | URISyntaxException e) {
                 LOGGER.error("Failed to download decompiler", e);
             }
+        }
+
+        @Nullable
+        Path getInternalImplementationPath() {
+            try {
+                return Path.of(getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar").toURI());
+            } catch (URISyntaxException e) {
+                LOGGER.error("Failed to get internal implementation path", e);
+                return null;
+            }
+        }
+    }
+
+    private Path fetchDecompiler(Providers provider, String version) {
+        Path jar = getDecompilerCache().resolve(provider.getArtifact().split(":")[1] + "-" + version + ".jar");
+        if (!Files.exists(jar)) {
+            provider.download(version, jar);
+        }
+        return jar;
+    }
+
+    public void setDecompiler(Providers provider, String version) {
+        var jar = fetchDecompiler(provider, version);
+        var impl = provider.getInternalImplementationPath();
+        if (jar == null || impl == null) {
+            LOGGER.error("Failed to set decompiler");
+            return;
         }
     }
 
     public Decompiler getDecompiler() {
         return decompiler;
+    }
+
+    public Path getDecompilerCache() {
+        return ByteLens.getCache().resolve("decompilers");
     }
 }

@@ -1,3 +1,5 @@
+import org.gradle.jvm.tasks.Jar
+
 plugins {
     id("java")
     id("org.javamodularity.moduleplugin") version "1.8.12"
@@ -15,6 +17,10 @@ dependencies {
     parent?.let { implementation(it.project(":decompiler-api")) }
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.withType<Jar> {
+    archiveFileName = "vineflower-impl.jar"
 }
 
 tasks.test {

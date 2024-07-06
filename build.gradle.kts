@@ -58,7 +58,7 @@ allprojects {
         }
         implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
         implementation("org.fxmisc.richtext:richtextfx:0.11.2")
-        compileOnly("org.jetbrains:annotations:24.1.0")
+        implementation("org.jetbrains:annotations:24.1.0")
     }
 }
 
