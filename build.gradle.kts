@@ -31,23 +31,30 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+allprojects {
+    apply(plugin = "java")
+    dependencies {
+        compileOnly("org.vineflower:vineflower:1.10.1")
+        implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
+        implementation("dev.mccue:resolve:2024.05.26")
+        implementation("org.slf4j:slf4j-api:2.0.13")
+        implementation("org.apache.xmlgraphics:batik-transcoder:1.17") {
+            exclude("xml-apis", "xml-apis")
+        }
+        implementation("org.apache.xmlgraphics:batik-codec:1.17") {
+            exclude("xml-apis", "xml-apis")
+        }
+        implementation("org.apache.xmlgraphics:batik-dom:1.17") {
+            exclude("xml-apis", "xml-apis")
+        }
+        implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+        implementation("org.fxmisc.richtext:richtextfx:0.11.2")
+        compileOnly("org.jetbrains:annotations:24.1.0")
+    }
+}
+
 dependencies {
-    compileOnly("org.vineflower:vineflower:1.10.1")
-    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
-    implementation("dev.mccue:resolve:2024.05.26")
-    implementation("org.slf4j:slf4j-api:2.0.13")
-    implementation("org.apache.xmlgraphics:batik-transcoder:1.17") {
-        exclude("xml-apis", "xml-apis")
-    }
-    implementation("org.apache.xmlgraphics:batik-codec:1.17") {
-        exclude("xml-apis", "xml-apis")
-    }
-    implementation("org.apache.xmlgraphics:batik-dom:1.17") {
-        exclude("xml-apis", "xml-apis")
-    }
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
-    implementation("org.fxmisc.richtext:richtextfx:0.11.2")
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    implementation(project(":decompiler-api"))
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

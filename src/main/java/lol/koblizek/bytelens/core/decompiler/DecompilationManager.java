@@ -1,6 +1,7 @@
 package lol.koblizek.bytelens.core.decompiler;
 
 import lol.koblizek.bytelens.core.ByteLens;
+import lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 import lol.koblizek.bytelens.core.utils.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -16,10 +16,12 @@ module lol.koblizek.bytelens {
     requires static org.jetbrains.annotations;
     requires jdk.xml.dom;
     requires org.slf4j;
+    requires lol.koblizek.bytelens.core.decompiler.api;
     requires static vineflower;
 
-    exports lol.koblizek.bytelens.core;
     opens lol.koblizek.bytelens.core.controllers to javafx.fxml;
     opens lol.koblizek.bytelens.api.ui to javafx.fxml;
     opens lol.koblizek.bytelens.api.ui.toolwindows to javafx.fxml;
+    exports lol.koblizek.bytelens.core;
+    exports lol.koblizek.bytelens.core.utils;
 }

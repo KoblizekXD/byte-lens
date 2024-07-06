@@ -1,6 +1,5 @@
-package lol.koblizek.bytelens.core.decompiler;
+package lol.koblizek.bytelens.core.decompiler.api;
 
-import lol.koblizek.bytelens.core.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +23,11 @@ public interface Decompiler {
             return decompilePreview(in.readAllBytes());
         } catch (IOException e) {
             LOGGER.error("Failed to read input stream", e);
-            return new FutureTask<>(() -> "/*" + StringUtils.stackTraceToString(e) + "*/\n");
+            return new FutureTask<>(() -> "/*" + NoConflictUtils.stackTraceToString(e) + "*/\n");
         }
     }
 
     Future<String> decompilePreview(byte[] bytecode);
     Future<String> decompile(byte[] bytecode);
 }
+
