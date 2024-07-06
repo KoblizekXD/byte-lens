@@ -1,6 +1,7 @@
 @file:Suppress("SpellCheckingInspection")
 
 import org.beryx.jlink.JlinkZipTask
+import org.gradle.jvm.tasks.Jar
 
 plugins {
     java
@@ -9,6 +10,8 @@ plugins {
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("org.beryx.jlink") version "2.25.0"
 }
+
+evaluationDependsOn(":decompiler-api:vineflower-impl")
 
 group = "lol.koblizek"
 version = "1.0-SNAPSHOT"
@@ -31,10 +34,16 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+tasks.withType<Jar> {
+    from(project(":decompiler-api:vineflower-impl").layout.buildDirectory.file("libs").get()) {
+        into("libs")
+        include("vineflower-impl-*.jar")
+    }
+}
+
 allprojects {
     apply(plugin = "java")
     dependencies {
-        compileOnly("org.vineflower:vineflower:1.10.1")
         implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
         implementation("dev.mccue:resolve:2024.05.26")
         implementation("org.slf4j:slf4j-api:2.0.13")

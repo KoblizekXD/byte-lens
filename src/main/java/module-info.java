@@ -17,7 +17,6 @@ module lol.koblizek.bytelens {
     requires jdk.xml.dom;
     requires org.slf4j;
     requires lol.koblizek.bytelens.core.decompiler.api;
-    requires static vineflower;
 
     opens lol.koblizek.bytelens.core.controllers to javafx.fxml;
     opens lol.koblizek.bytelens.api.ui to javafx.fxml;
