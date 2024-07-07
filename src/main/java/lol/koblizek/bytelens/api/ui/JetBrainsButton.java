@@ -19,6 +19,7 @@ public class JetBrainsButton extends Button {
     }
 
     public JetBrainsButton(StringProperty icon, IntegerProperty iconSize) {
+        getStyleClass().clear();
         getStyleClass().add("jetbrains-button");
         ImageView imageView = new ImageView();
         this.icon = icon;

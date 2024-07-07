@@ -67,7 +67,7 @@ public record MavenMetadata(
 
     public static MavenMetadata from(String repository, String artifact) {
         String[] parts = artifact.split(":");
-        return parseXml(StringUtils.readRemote(repository + "/" +
+        return parseXml(StringUtils.readRemote(repository +
                 String.join("/", parts[0].split("\\.")) + "/" + parts[1] + "/maven-metadata.xml"));
     }
 

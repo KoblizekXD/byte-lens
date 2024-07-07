@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../styles/darcula.css"
+      fx:controller="lol.koblizek.bytelens.core.controllers.SelectDecompilerModalController"
+      style="-fx-background-color: #2B2D30"
+      spacing="16"
+      alignment="CENTER"
+      prefHeight="100.0" prefWidth="300.0">
+    <Label text="Please select a default decompiler" />
+    <ComboBox fx:id="decompilerSelector" HBox.hgrow="ALWAYS" prefWidth="250" />
+    <Button onMouseClicked="#promptModalClose" fx:id="doneButton">Done</Button>
+    <padding>
+        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+    </padding>
+</VBox>

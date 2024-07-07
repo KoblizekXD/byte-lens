@@ -115,4 +115,13 @@ public class StringUtils {
             return "";
         }
     }
+
+    public static String[] reverseArray(String[] array) {
+        for (int i = 0; i < array.length / 2; i++) {
+            String temp = array[i];
+            array[i] = array[array.length - i - 1];
+            array[array.length - i - 1] = temp;
+        }
+        return array;
+    }
 }

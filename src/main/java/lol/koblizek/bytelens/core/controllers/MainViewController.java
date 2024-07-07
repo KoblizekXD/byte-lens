@@ -100,6 +100,7 @@ public class MainViewController extends Controller implements Opener {
                 }
             }
         }
+        SelectDecompilerModalController.open(byteLens);
     }
 
     @Override

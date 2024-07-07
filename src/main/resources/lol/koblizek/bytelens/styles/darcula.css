@@ -343,3 +343,13 @@ ParagraphText {
     -fx-background-color: #2E436E;
     -fx-background-radius: 4;
 }
+
+.button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-border-color: #4F5258;
+    -fx-text-fill: #dfe1e5;
+    -fx-padding: 4 14 4 14;
+    -fx-min-width: 72;
+}
