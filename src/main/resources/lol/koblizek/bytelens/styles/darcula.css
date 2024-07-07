@@ -303,3 +303,43 @@ ParagraphText {
 .tab .tab-label {
     -fx-text-fill: #dfe1e5;
 }
+
+.combo-box-popup .list-view {
+    -fx-effect: null;
+}
+
+.combo-box {
+    -fx-border-color: #4E5157;
+    -fx-background-color: #393B40;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 2 0 2 0;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #393B40;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #393B40;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #A1A6AD;
+}
+
+.combo-box .combo-box-popup .list-view {
+    -fx-background-color: #2B2D30;
+    -fx-border-color: #43454A;
+    -fx-border-radius: 2;
+    -fx-padding: 0 8 0 8;
+}
+
+.combo-box .combo-box-popup .list-cell {
+    -fx-background-color: #2B2D30;
+}
+
+.combo-box .combo-box-popup .list-cell:hover {
+    -fx-background-color: #2E436E;
+    -fx-background-radius: 4;
+}

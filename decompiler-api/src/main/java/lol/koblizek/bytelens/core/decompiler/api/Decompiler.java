@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+import java.nio.file.Path;
 
 /**
  * Default interface for decompilers.
@@ -18,16 +17,17 @@ public interface Decompiler {
     /**
      * @return preview of decompilation as string
      */
-    default Future<String> decompilePreview(InputStream in) {
+    default String decompilePreview(InputStream in) {
         try {
             return decompilePreview(in.readAllBytes());
         } catch (IOException e) {
             LOGGER.error("Failed to read input stream", e);
-            return new FutureTask<>(() -> "/*" + NoConflictUtils.stackTraceToString(e) + "*/\n");
+            return "/*" + NoConflictUtils.stackTraceToString(e) + "*/\n";
         }
     }
 
-    Future<String> decompilePreview(byte[] bytecode);
-    Future<String> decompile(byte[] bytecode);
+    String decompilePreview(byte[] bytecode);
+    String decompile(byte[] bytecode);
+    void decompile(Path in, Path out);
 }
 

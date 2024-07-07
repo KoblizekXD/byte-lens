@@ -11,6 +11,7 @@
             prefHeight="500.0" prefWidth="400.0">
     <VBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0">
         <Label>ByteLens</Label>
+        <ComboBox promptText="Hello" />
         <Label styleClass="darken" text="pre-release in-dev version" />
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <JetBrainsButton onMouseClicked="#buttonNewProjectClicked" icon="AllIcons.Expui.Welcome.CreateNewProjectTab">
