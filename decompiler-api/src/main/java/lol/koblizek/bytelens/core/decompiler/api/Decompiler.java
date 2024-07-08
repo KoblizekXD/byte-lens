@@ -23,6 +23,12 @@ public interface Decompiler {
         } catch (IOException e) {
             LOGGER.error("Failed to read input stream", e);
             return "/*" + NoConflictUtils.stackTraceToString(e) + "*/\n";
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                LOGGER.error("Failed to close input stream", e);
+            }
         }
     }
 

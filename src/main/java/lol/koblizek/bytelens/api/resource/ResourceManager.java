@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.api.resource;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
@@ -69,6 +70,17 @@ public final class ResourceManager {
             return new Scene(loader.load());
         } catch (IOException e) {
             LOGGER.error("Failed to load scene: {}", path, e);
+            return null;
+        }
+    }
+
+    public Node getNode(String path) {
+        try {
+            var loader = getFXML("views/" + path + ".fxml");
+            loader.setControllerFactory(this::injectByteLens);
+            return loader.load();
+        } catch (IOException e) {
+            LOGGER.error("Failed to load node: {}", path, e);
             return null;
         }
     }

@@ -15,7 +15,7 @@
       alignment="CENTER"
       prefHeight="100.0" prefWidth="300.0">
     <Label text="Please select a default decompiler" />
-    <ComboBox fx:id="decompilerSelector" HBox.hgrow="ALWAYS" prefWidth="250" />
+    <ComboBox id="comboBox" fx:id="decompilerSelector" HBox.hgrow="ALWAYS" prefWidth="250" />
     <Button onMouseClicked="#promptModalClose" fx:id="doneButton">Done</Button>
     <padding>
         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

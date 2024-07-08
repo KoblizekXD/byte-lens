@@ -2,6 +2,7 @@ package lol.koblizek.bytelens.core.utils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
@@ -10,9 +11,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class StringUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
 
     private StringUtils() {
         throw new UnsupportedOperationException("StringUtils is a utility class and cannot be instantiated");
@@ -72,7 +80,7 @@ public class StringUtils {
         try {
             return new URI(path).toURL();
         } catch (MalformedURLException | URISyntaxException e) {
-            LoggerFactory.getLogger(StringUtils.class).error("Failed to convert path to URL: {}", path, e);
+            LOGGER.error("Failed to convert path to URL: {}", path, e);
             return null;
         }
     }
@@ -86,7 +94,7 @@ public class StringUtils {
         try (var stream = uri.toURL().openStream()) {
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            LoggerFactory.getLogger(StringUtils.class).error("Failed to read remote file: {}", uri, e);
+            LOGGER.error("Failed to read remote file: {}", uri, e);
             return "";
         }
     }
@@ -100,7 +108,7 @@ public class StringUtils {
         try {
             return readRemote(new URI(address));
         } catch (URISyntaxException e) {
-            LoggerFactory.getLogger(StringUtils.class).error("Failed to parse URI: {}", address, e);
+            LOGGER.error("Failed to parse URI: {}", address, e);
             return "";
         }
     }
@@ -111,7 +119,7 @@ public class StringUtils {
             e.printStackTrace(pw);
             return sw.toString();
         } catch (IOException ex) {
-            LoggerFactory.getLogger(StringUtils.class).error("Failed to convert stack trace to string", ex);
+            LOGGER.error("Failed to convert stack trace to string", ex);
             return "";
         }
     }
@@ -132,5 +140,33 @@ public class StringUtils {
             }
         }
         return false;
+    }
+
+    public static String hashOf(InputStream stream) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            DigestInputStream dis = new DigestInputStream(stream, md);
+            dis.readAllBytes();
+            return new String(dis.getMessageDigest().digest());
+        } catch (NoSuchAlgorithmException | IOException e) {
+            LOGGER.error("Failed to hash input stream", e);
+            return "ReadError";
+        }
+    }
+
+    public static String hashOf(Path file) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            try (DigestInputStream dis = new DigestInputStream(Files.newInputStream(file), md)) {
+                dis.readAllBytes();
+                return new String(dis.getMessageDigest().digest());
+            } catch (IOException e) {
+                LOGGER.error("Failed to hash input stream", e);
+                return "ReadError";
+            }
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("Failed to get MD5 instance", e);
+            return "ReadError";
+        }
     }
 }

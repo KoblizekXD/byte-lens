@@ -21,12 +21,28 @@ public class SelectDecompilerModalController extends Controller {
         super(byteLens);
     }
 
+    private static DecompilationManager.Providers getProvider(String version) {
+        for (DecompilationManager.Providers value : DecompilationManager.Providers.values()) {
+            if (version.toUpperCase().contains(value.toString()))
+                return value;
+        }
+        return null;
+    }
+
     public static void open(ByteLens bl) {
         Stage stage = new Stage();
         stage.setTitle("Select decompiler");
         stage.initOwner(bl.getPrimaryStage());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setScene(bl.getResourceManager().getScene("select-decompiler-modal"));
+        stage.setOnHiding(e -> {
+            String[] arr = (String[]) ((Stage) e.getTarget()).getScene().lookup("comboBox")
+                    .getUserData();
+            bl.getDecompilationManager().setDecompiler(
+                    DecompilationManager.Providers.valueOf(arr[0].toUpperCase()),
+                    arr[1]
+            );
+        });
         stage.showAndWait();
     }
 
@@ -37,6 +53,14 @@ public class SelectDecompilerModalController extends Controller {
                 .map(v -> "Vineflower " + v)
                 .map(str -> str + (StringUtils.contains(cached, str) ? " (Cached)" : "")).toArray(String[]::new)));
         decompilerSelector.getSelectionModel().select(0);
+        decompilerSelector.getSelectionModel().selectedItemProperty().subscribe(string -> {
+            var provider = getProvider(string).toString();
+            System.out.println(decompilerSelector.getScene());
+            decompilerSelector.setUserData(new String[] {
+                    provider,
+                    string.substring(provider.length()).replace(" \\(Cached\\)", "")
+            });
+        });
     }
 
     @FXML

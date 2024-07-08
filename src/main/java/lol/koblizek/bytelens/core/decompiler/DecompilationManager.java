@@ -35,7 +35,6 @@ public class DecompilationManager {
     }
 
     private final ByteLens byteLens;
-    private ModuleFinder moduleFinder;
     private Decompiler decompiler;
 
     private DecompilationManager(ByteLens inst) {
@@ -83,11 +82,14 @@ public class DecompilationManager {
             }
         }
 
-        private Path extractInternalImplIfNotYet() throws IOException, URISyntaxException {
+        private Path extractInternalImplIfNotYet() throws IOException {
             var target = ByteLens.getCache().resolve("decompiler-impls").resolve(toString().toLowerCase() + "-impl.jar");
+            /* Check for hash difference because why not? */
+            var internalImpl = getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar");
             Files.createDirectories(target.getParent());
-            if (!Files.exists(target)) {
-                Files.copy(getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar").toURI().toURL().openStream(), target);
+            if (!Files.exists(target) || !StringUtils.hashOf(internalImpl.openStream()).equals(StringUtils.hashOf(target))) {
+                LOGGER.warn("Hash changed or file does not exist, extracting new internal implementation jar");
+                Files.copy(internalImpl.openStream(), target);
             }
             return target;
         }
@@ -96,7 +98,7 @@ public class DecompilationManager {
         Path getInternalImplementationPath() {
             try {
                 return extractInternalImplIfNotYet();
-            } catch (URISyntaxException | IOException e) {
+            } catch (IOException e) {
                 LOGGER.error("Failed to get internal implementation path", e);
                 return null;
             }
@@ -106,6 +108,7 @@ public class DecompilationManager {
     private Path fetchDecompiler(Providers provider, String version) {
         Path jar = getDecompilerCache().resolve(provider.getArtifact().split(":")[1] + "-" + version + ".jar");
         if (!Files.exists(jar)) {
+            LOGGER.info("Downloading decompiler version {} from {}", version, provider.getRepositories());
             provider.download(version, jar);
         }
         return jar;
@@ -140,7 +143,7 @@ public class DecompilationManager {
     }
 
     private Optional<Decompiler> fetchInternal(Providers provider, Path jar) {
-        moduleFinder = ModuleFinder.of(jar, provider.getInternalImplementationPath());
+        ModuleFinder moduleFinder = ModuleFinder.of(jar, provider.getInternalImplementationPath());
         ModuleLayer parent = ModuleLayer.boot();
         Configuration cf = parent.configuration().resolve(
                 moduleFinder,
