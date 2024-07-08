@@ -116,12 +116,21 @@ public class StringUtils {
         }
     }
 
-    public static String[] reverseArray(String[] array) {
+    public static <T> T[] reverseArray(T[] array) {
         for (int i = 0; i < array.length / 2; i++) {
-            String temp = array[i];
+            T temp = array[i];
             array[i] = array[array.length - i - 1];
             array[array.length - i - 1] = temp;
         }
         return array;
+    }
+
+    public static <T> boolean contains(T[] array, T t) {
+        for (T t1 : array) {
+            if (t1.equals(t)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

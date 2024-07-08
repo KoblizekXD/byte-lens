@@ -25,4 +25,8 @@ module lol.koblizek.bytelens {
     opens lol.koblizek.bytelens.api.ui.toolwindows to javafx.fxml;
     exports lol.koblizek.bytelens.core;
     exports lol.koblizek.bytelens.core.utils;
+    exports lol.koblizek.bytelens.api;
+    exports lol.koblizek.bytelens.api.resource;
+    exports lol.koblizek.bytelens.api.util;
+    exports lol.koblizek.bytelens.core.decompiler;
 }

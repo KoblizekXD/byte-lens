@@ -4,6 +4,8 @@ import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 import lol.koblizek.bytelens.core.utils.MavenMetadata;
 import lol.koblizek.bytelens.core.utils.Preconditions;
+import lol.koblizek.bytelens.core.utils.StringUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,6 +109,20 @@ public class DecompilationManager {
             provider.download(version, jar);
         }
         return jar;
+    }
+
+    public String[] getCachedDecompilers() {
+        try {
+            return Files.list(getDecompilerCache())
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .map(str -> FilenameUtils.getBaseName(str).replace('-', ' '))
+                    .map(StringUtils::capitalize)
+                    .toArray(String[]::new);
+        } catch (IOException e) {
+            LOGGER.error("Failed to get cached decompilers", e);
+            return new String[0];
+        }
     }
 
     public void setDecompiler(Providers provider, String version) {

@@ -32,8 +32,10 @@ public class SelectDecompilerModalController extends Controller {
 
     @Override
     public void initialize() {
+        var cached = getByteLens().getDecompilationManager().getCachedDecompilers();
         decompilerSelector.getItems().addAll(StringUtils.reverseArray(Arrays.stream(DecompilationManager.Providers.VINEFLOWER.getVersions())
-                .map(v -> "Vineflower " + v).toArray(String[]::new)));
+                .map(v -> "Vineflower " + v)
+                .map(str -> str + (StringUtils.contains(cached, str) ? " (Cached)" : "")).toArray(String[]::new)));
         decompilerSelector.getSelectionModel().select(0);
     }
 
