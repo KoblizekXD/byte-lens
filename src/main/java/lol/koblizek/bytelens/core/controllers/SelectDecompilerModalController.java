@@ -36,8 +36,9 @@ public class SelectDecompilerModalController extends Controller {
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setScene(bl.getResourceManager().getScene("select-decompiler-modal"));
         stage.setOnHiding(e -> {
-            String[] arr = (String[]) ((Stage) e.getTarget()).getScene().lookup("comboBox")
+            String[] arr = (String[]) ((Stage) e.getTarget()).getScene().lookup("#comboBox")
                     .getUserData();
+            System.out.println(arr[1]);
             bl.getDecompilationManager().setDecompiler(
                     DecompilationManager.Providers.valueOf(arr[0].toUpperCase()),
                     arr[1]
@@ -55,10 +56,9 @@ public class SelectDecompilerModalController extends Controller {
         decompilerSelector.getSelectionModel().select(0);
         decompilerSelector.getSelectionModel().selectedItemProperty().subscribe(string -> {
             var provider = getProvider(string).toString();
-            System.out.println(decompilerSelector.getScene());
             decompilerSelector.setUserData(new String[] {
                     provider,
-                    string.substring(provider.length()).replace(" \\(Cached\\)", "")
+                    string.substring(provider.length() + 1).replace(" (Cached)", "")
             });
         });
     }
