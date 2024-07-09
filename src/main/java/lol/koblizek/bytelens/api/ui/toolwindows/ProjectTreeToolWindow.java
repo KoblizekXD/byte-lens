@@ -104,7 +104,11 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
         if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory()) { // This means it's actual file/dir
             try {
                 codeArea.clear();
-                codeArea.appendText(Files.readString(iti.getPath()));
+                switch (iti.getExtension()) {
+                    case "class" -> codeArea.appendText(byteLens.getDecompilationManager().getDecompiler()
+                            .decompilePreview(Files.readAllBytes(iti.getPath())));
+                    case null, default -> codeArea.appendText(Files.readString(iti.getPath()));
+                }
             } catch (IOException e) {
                 byteLens.getLogger().error("Error occurred on file read!", e);
             }

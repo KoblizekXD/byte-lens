@@ -25,6 +25,10 @@ application {
     mainClass = "lol.koblizek.bytelens.core.ByteLens"
 }
 
+tasks.compileJava {
+    dependsOn(subprojects.map { it.tasks.named("compileJava") })
+}
+
 javafx {
     version = "22.0.1"
     modules = listOf("javafx.controls", "javafx.fxml", "javafx.swing")

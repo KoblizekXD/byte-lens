@@ -38,7 +38,6 @@ public class SelectDecompilerModalController extends Controller {
         stage.setOnHiding(e -> {
             String[] arr = (String[]) ((Stage) e.getTarget()).getScene().lookup("#comboBox")
                     .getUserData();
-            System.out.println(arr[1]);
             bl.getDecompilationManager().setDecompiler(
                     DecompilationManager.Providers.valueOf(arr[0].toUpperCase()),
                     arr[1]

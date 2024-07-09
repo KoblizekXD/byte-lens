@@ -18,6 +18,7 @@ module lol.koblizek.bytelens {
     requires org.slf4j;
     requires org.objectweb.asm;
     requires lol.koblizek.bytelens.core.decompiler.api;
+    requires reactfx;
 
     uses lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 
