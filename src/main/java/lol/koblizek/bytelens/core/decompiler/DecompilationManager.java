@@ -94,7 +94,9 @@ public class DecompilationManager {
             /* Check for hash difference because why not? */
             var internalImpl = getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar");
             Files.createDirectories(target.getParent());
-            if (!Files.exists(target) || !StringUtils.hashOf(internalImpl.openStream()).equals(StringUtils.hashOf(target))) {
+            if (!Files.exists(target) || (Files.exists(target) && !StringUtils.hashOf(internalImpl.openStream()).equals(StringUtils.hashOf(target)))) {
+                if (Files.exists(target))
+                    Files.delete(target);
                 LOGGER.warn("Hash changed or file does not exist, extracting new internal implementation jar");
                 Files.copy(internalImpl.openStream(), target);
             }
@@ -160,7 +162,7 @@ public class DecompilationManager {
                 ModuleFinder.of(),
                 Set.of(provider.getInternalPackage())
         );
-        var loader = ModuleLayer.boot().defineModulesWithOneLoader(cf, ByteLens.class.getClassLoader());
+        var loader = parent.defineModulesWithOneLoader(cf, ByteLens.class.getClassLoader());
         return ServiceLoader.load(loader, Decompiler.class)
                 .findFirst();
     }

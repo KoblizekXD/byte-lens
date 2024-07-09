@@ -16,6 +16,7 @@ module lol.koblizek.bytelens {
     requires static org.jetbrains.annotations;
     requires jdk.xml.dom;
     requires org.slf4j;
+    requires org.objectweb.asm;
     requires lol.koblizek.bytelens.core.decompiler.api;
 
     uses lol.koblizek.bytelens.core.decompiler.api.Decompiler;

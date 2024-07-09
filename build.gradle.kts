@@ -4,7 +4,7 @@ import org.beryx.jlink.JlinkZipTask
 import org.gradle.jvm.tasks.Jar
 
 plugins {
-    java
+    `java-library`
     application
     id("org.javamodularity.moduleplugin") version "1.8.12"
     id("org.openjfx.javafxplugin") version "0.1.0"
@@ -35,6 +35,7 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.withType<Jar> {
+    outputs.upToDateWhen { false }
     from(project(":decompiler-api:vineflower-impl").layout.buildDirectory.file("libs").get()) {
         into("libs")
         include("vineflower-impl.jar")
