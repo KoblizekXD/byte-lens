@@ -47,6 +47,7 @@ allprojects {
         implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
         implementation("dev.mccue:resolve:2024.05.26")
         implementation("org.slf4j:slf4j-api:2.0.13")
+        implementation("org.ow2.asm:asm:9.7")
         implementation("org.apache.xmlgraphics:batik-transcoder:1.17") {
             exclude("xml-apis", "xml-apis")
         }

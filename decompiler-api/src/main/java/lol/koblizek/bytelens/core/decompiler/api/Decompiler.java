@@ -6,18 +6,25 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Default interface for decompilers.
  */
-public interface Decompiler {
+public abstract class Decompiler {
 
-    Logger LOGGER = LoggerFactory.getLogger(Decompiler.class);
+    protected Map<String, Object> options;
+    protected static final Logger LOGGER = LoggerFactory.getLogger(Decompiler.class);
+
+    protected Decompiler(Map<String, Object> options) {
+        this.options = options;
+    }
 
     /**
      * @return preview of decompilation as string
      */
-    default String decompilePreview(InputStream in) {
+    public String decompilePreview(InputStream in) {
         try {
             return decompilePreview(in.readAllBytes());
         } catch (IOException e) {
@@ -32,8 +39,16 @@ public interface Decompiler {
         }
     }
 
-    String decompilePreview(byte[] bytecode);
-    String decompile(byte[] bytecode);
-    void decompile(Path in, Path out);
+    public Map<String, Object> getOptions() {
+        return options;
+    }
+
+    public void setOptions(Map<String, Object> options) {
+        this.options = options;
+    }
+
+    public abstract String decompilePreview(byte[] bytecode);
+    public abstract void decompile(Path in, Path out);
+    public abstract List<Option> getSupportedOptions();
 }
 

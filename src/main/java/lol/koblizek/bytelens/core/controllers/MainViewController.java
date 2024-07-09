@@ -101,6 +101,8 @@ public class MainViewController extends Controller implements Opener {
             }
         }
         SelectDecompilerModalController.open(byteLens);
+        var dm = getByteLens().getDecompilationManager();
+        getByteLens().getLogger().info("Powered by {}, version {}", dm.getProvider(), dm.getVersion());
     }
 
     @Override

@@ -36,6 +36,8 @@ public class DecompilationManager {
 
     private final ByteLens byteLens;
     private Decompiler decompiler;
+    private String provider;
+    private String version;
 
     private DecompilationManager(ByteLens inst) {
         this.byteLens = inst;
@@ -63,6 +65,10 @@ public class DecompilationManager {
             return artifact;
         }
 
+        public String getName() {
+            return StringUtils.capitalize(toString().toLowerCase());
+        }
+
         public String getRepositories() {
             return repository;
         }
@@ -74,7 +80,8 @@ public class DecompilationManager {
 
         public void download(String version, Path out) {
             try {
-                Files.createDirectories(out.getParent());
+                if (out.getParent() != null && !Files.exists(out.getParent()))
+                    Files.createDirectories(out.getParent());
                 Files.copy(new URI(repository + artifact.replaceAll("[:.]", "/") + "/" + version + "/" + artifact.split(":")[1] + "-" + version + ".jar")
                         .toURL().openStream(), out);
             } catch (IOException | URISyntaxException e) {
@@ -136,10 +143,13 @@ public class DecompilationManager {
             return;
         }
         var optDecompiler = fetchInternal(provider, jar);
-        if (optDecompiler.isPresent())
+        if (optDecompiler.isPresent()) {
             decompiler = optDecompiler.get();
-        else
+            this.provider = provider.getName();
+            this.version = version;
+        } else {
             LOGGER.error("Failed to set decompiler");
+        }
     }
 
     private Optional<Decompiler> fetchInternal(Providers provider, Path jar) {
@@ -157,6 +167,14 @@ public class DecompilationManager {
 
     public Decompiler getDecompiler() {
         return decompiler;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public Path getDecompilerCache() {
