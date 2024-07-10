@@ -1,5 +1,7 @@
 package lol.koblizek.bytelens.api.ui;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import javafx.concurrent.Task;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.fxmisc.richtext.CodeArea;
@@ -39,6 +41,22 @@ public class ExtendedCodeArea extends CodeArea {
 
     private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
         setStyleSpans(0, highlighting);
+    }
+
+    private static StyleSpans<Collection<String>> computeHighlightingParsed(String text) {
+        JavaParser parser = new JavaParser();
+        StyleSpansBuilder<Collection<String>> spansBuilder
+                = new StyleSpansBuilder<>();
+        var result = parser.parse(text);
+        if (result.getProblems().isEmpty()) {
+            result.getResult().get().stream().forEach(node -> {
+                if (node instanceof StringLiteralExpr) {
+                    spansBuilder.add(Collections.emptyList(), node.getRange().get().begin.column);
+                    spansBuilder.add(Collections.singleton("string"), node.toString().length());
+                }
+            });
+        }
+        return spansBuilder.create();
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {

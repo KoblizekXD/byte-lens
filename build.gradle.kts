@@ -49,6 +49,7 @@ tasks.withType<Jar> {
 allprojects {
     apply(plugin = "java")
     dependencies {
+        implementation("com.github.javaparser:javaparser-core:3.26.1")
         implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
         implementation("dev.mccue:resolve:2024.05.26")
         implementation("org.slf4j:slf4j-api:2.0.13")
