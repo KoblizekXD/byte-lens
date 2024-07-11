@@ -1,3 +1,6 @@
+.root {
+    -fx-accent: rgba(255, 255, 255, 0.1);
+}
 
 .tool-bar, .menu-bar, SideToolBar {
     -fx-background-color: #2b2d30;
@@ -20,7 +23,7 @@
     -fx-background-color: rgba(255, 255, 255, 0.1);
 }
 
-.menu:hover, .menu-item:hover, .menu:showing, .menu:focused, .context-menu:selected, .menu-item:selected, .menu:pressed, .menu-item:pressed {
+.menu:hover, .menu-item:hover, .menu:showing, .menu:focused, .context-menu:selected, .menu-item:selected, .menu:pressed, .menu-item:pressed, .menu-item:focused {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-background-radius: 4;
 }
@@ -40,8 +43,9 @@
 }
 
 .separator .line {
-    -fx-border-color: #37393E;
-    -fx-border-width: 1;
+    -fx-border-color: #37393E transparent transparent transparent,
+    transparent transparent transparent transparent;
+    -fx-border-insets: 0, 1 0 0 0;
 }
 
 .mnemonic-underline {
@@ -55,7 +59,22 @@
     -fx-pref-width: 250;
     -fx-background-radius: 4;
     -fx-background-color: #2b2d30;
+    -fx-border-color: #43454A;
     -fx-text-fill: #dfe1e5;
+    -fx-padding: 4;
+}
+
+.context-menu .menu-item:focused {
+    -fx-background-color: #2E436E;
+}
+
+.context-menu .separator {
+    -fx-padding: 4 0 4 0;
+}
+
+.menu-item > .accelerator-text {
+    -fx-text-fill: #63676B;
+    -fx-alignment: center-right;
 }
 
 .split-pane {

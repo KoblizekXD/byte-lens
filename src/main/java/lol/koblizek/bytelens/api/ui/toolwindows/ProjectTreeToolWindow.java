@@ -1,10 +1,10 @@
 package lol.koblizek.bytelens.api.ui.toolwindows;
 
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
@@ -45,7 +45,7 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
     public void initialize() {
         Optional<DefaultProject> optionalProject = byteLens.getCurrentProject();
         optionalProject.ifPresentOrElse(project -> {
-            this.getSelectionModel().selectedItemProperty().addListener(this::itemSelectionEvent);
+            this.setOnMouseClicked(this::itemSelectionEvent);
             root.setValue(project.getName());
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
             appendTreeItem(root, project.getProjectFile().getFileName().toString(), item ->
@@ -95,8 +95,9 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
         return rootItem;
     }
 
-    private void itemSelectionEvent(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> oldV, TreeItem<String> newV) {
-        if (newV == null) {
+    private void itemSelectionEvent(MouseEvent event) {
+        TreeItem<String> newV = this.getSelectionModel().getSelectedItem();
+        if (newV == null || event.getClickCount() != 2) {
             return;
         }
         ExtendedCodeArea codeArea = new ExtendedCodeArea();
