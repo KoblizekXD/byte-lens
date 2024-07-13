@@ -2,11 +2,11 @@
 Java bytecode analyzer and decompiler.  
 
 > [!WARNING]  
-> This project is in an early state of development, there's no release date, if you want to try ByteLens before it officialy releases, clone the repository and run the application task.
+> This project is in an early state of development, there's no release date, if you would like to try ByteLens before it officialy releases, clone the repository and run the application task.
 
 ### Contributing  
-Before attempting to contribute, please open an issue to discuss the changes you would like to make
-or contact me on Discord: `@koblizekxd`.
+Before trying to contribute, please open an issue to discuss the changes you would like to make
+or contact me on Discord: `@koblizekxd`. Standard contribution guidelines apply, use same code style that is being used everywhere in the codebase.
 
 ### License
 Licensed under GNU GPL v3.0. See [LICENSE](LICENSE.txt) for more information.
