@@ -159,6 +159,7 @@ AnchorPane {
 }
 
 /* Code Area */
+
 .styled-text-area .text {
     -fx-font-family: "JetBrains Mono Medium";
     -fx-fill: #dfe1e5;
@@ -240,6 +241,7 @@ ParagraphText {
 }
 
 /* Styles exclusive to home view */
+
 .welcome-button {
     -fx-padding: 12;
     -fx-background-color: #2B2D30;
