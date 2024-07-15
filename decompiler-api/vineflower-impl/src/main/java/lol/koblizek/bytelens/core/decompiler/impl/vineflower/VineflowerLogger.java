@@ -1,5 +1,5 @@
 /*
- * This file is part of byte-lens, licensed under the GNU General Public License v3.0.
+ * This file is part of byte-lens.
  *
  * Copyright (c) 2024 KoblizekXD
  *
