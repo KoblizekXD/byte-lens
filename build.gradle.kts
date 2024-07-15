@@ -3,11 +3,14 @@
 import org.beryx.jlink.JlinkZipTask
 import org.gradle.jvm.tasks.Jar
 
+defaultTasks("licenseFormat")
+
 plugins {
     `java-library`
     application
     id("org.javamodularity.moduleplugin") version "1.8.12"
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("org.cadixdev.licenser") version "0.6.1"
     id("org.beryx.jlink") version "2.25.0"
 }
 
@@ -48,6 +51,14 @@ tasks.withType<Jar> {
 
 allprojects {
     apply(plugin = "java")
+    apply(plugin = "org.cadixdev.licenser")
+
+    license {
+        header(rootProject.file("HEADER"))
+        include("**/*.java")
+        newLine = true
+    }
+
     dependencies {
         implementation("com.github.javaparser:javaparser-core:3.26.1")
         implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
