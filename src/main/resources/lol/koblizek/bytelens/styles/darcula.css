@@ -74,7 +74,7 @@
 
 .menu-item > .accelerator-text {
     -fx-text-fill: #63676B;
-    -fx-alignment: center-right;
+    -fx-translate-x: 50; /* Cheat thingy because idk other solution */
 }
 
 .split-pane {
