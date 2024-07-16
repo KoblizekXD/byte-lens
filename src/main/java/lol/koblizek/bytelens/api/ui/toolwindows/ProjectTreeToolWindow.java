@@ -70,26 +70,26 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
             appendTreeItem(root, project.getProjectFile().getFileName().toString(), item ->
                     item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
             appendTreeItem(root, "Sources", item -> {
-                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
+                item.overrideIcon("AllIcons.Expui.Nodes.Module");
                 item.getChildren().add(getModule(project.getSources()));
             });
             appendTreeItem(root, "Resources", item -> {
-                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
+                item.overrideIcon("AllIcons.Expui.Nodes.Module");
                 item.getChildren().add(getModule(project.getResources()));
             });
             appendTreeItem(root, "External Libraries", item -> {
-                item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module"));
+                item.overrideIcon("AllIcons.Expui.Nodes.Module");
                 item.getChildren().add(getModule(project.getReferenceLibraries()));
             });
-            appendTreeItem(root, "Workspace", item -> item.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Module")));
+            appendTreeItem(root, "Workspace", item -> item.overrideIcon("AllIcons.Expui.Nodes.Module"));
         }, () -> {
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ErrorIntroduction"));
             root.setValue("No module/project is open");
         });
     }
 
-    private void appendTreeItem(TreeItem<String> parent, String value, Consumer<TreeItem<String>> configurator) {
-        var item = new TreeItem<>(value);
+    private void appendTreeItem(TreeItem<String> parent, String value, Consumer<IconifiedTreeItem> configurator) {
+        var item = new IconifiedTreeItem(value);
         configurator.accept(item);
         parent.getChildren().add(item);
     }
@@ -121,7 +121,7 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
         }
         ExtendedCodeArea codeArea = new ExtendedCodeArea();
         codeArea.bridge(byteLens);
-        if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory()) { // This means it's actual file/dir
+        if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory() && iti.isFileSystemManaged()) { // This means it's actual file/dir
             try {
                 codeArea.clear();
                 switch (iti.getExtension()) {

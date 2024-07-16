@@ -40,6 +40,11 @@ public class IconifiedTreeItem extends TreeItem<String> {
         setValue(value.getFileName().toString());
     }
 
+    public IconifiedTreeItem(String value) {
+        super();
+        setValue(value);
+    }
+
     public void updateGraphics() {
         updateGraphics(path);
     }
@@ -70,10 +75,14 @@ public class IconifiedTreeItem extends TreeItem<String> {
     }
 
     public boolean isDirectory() {
-        return Files.isDirectory(path);
+        return path != null && Files.isDirectory(path);
     }
 
     public String getExtension() {
         return FilenameUtils.getExtension(path.getFileName().toString());
+    }
+
+    public boolean isFileSystemManaged() {
+        return path != null;
     }
 }

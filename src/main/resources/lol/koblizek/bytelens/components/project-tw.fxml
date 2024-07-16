@@ -14,9 +14,7 @@
          AnchorPane.leftAnchor="0"
          AnchorPane.bottomAnchor="0"
          AnchorPane.rightAnchor="0">
-    <TreeItem fx:id="root" value="Undefined project">
-
-    </TreeItem>
+    <TreeItem fx:id="root" value="Undefined project" />
     <contextMenu>
         <DefaultContextMenu />
     </contextMenu>

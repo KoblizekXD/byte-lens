@@ -43,6 +43,8 @@ public class DefaultContextMenu extends ContextMenu {
 
     @FXML
     public void initialize() {
-        
+        setOnShowing(e -> {
+
+        });
     }
 }

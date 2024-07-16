@@ -77,6 +77,11 @@
     -fx-translate-x: 50; /* Cheat thingy because idk other solution */
 }
 
+.menu .arrow {
+    -fx-translate-x: 40;
+    -fx-background-color: #dfe1e5, #dfe1e5;
+}
+
 .split-pane {
     -fx-padding: 0;
 }
