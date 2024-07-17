@@ -24,6 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import javafx.util.converter.DefaultStringConverter;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
@@ -32,6 +33,7 @@ import lol.koblizek.bytelens.api.ui.Opener;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
+import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +45,7 @@ import java.util.function.Consumer;
 public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindow.ToolWindowNode {
 
     private final Opener opener;
-    @FXML private TreeItem<String> root;
+    @FXML private IconifiedTreeItem root;
 
     private ByteLens byteLens;
 
@@ -64,6 +66,7 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
     public void initialize() {
         Optional<DefaultProject> optionalProject = byteLens.getCurrentProject();
         optionalProject.ifPresentOrElse(project -> {
+            setCellFactory(view -> new MenuTargetedTreeCell(new DefaultStringConverter()));
             this.setOnMouseClicked(this::itemSelectionEvent);
             root.setValue(project.getName());
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
@@ -115,7 +118,7 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
     }
 
     private void itemSelectionEvent(MouseEvent event) {
-        TreeItem<String> newV = this.getSelectionModel().getSelectedItem();
+        IconifiedTreeItem newV = (IconifiedTreeItem) this.getSelectionModel().getSelectedItem();
         if (newV == null || event.getClickCount() != 2) {
             return;
         }

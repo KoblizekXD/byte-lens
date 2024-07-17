@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class IconifiedTreeItem extends TreeItem<String> {
+public class IconifiedTreeItem extends TreeItem<String> implements CustomContextMenuTarget {
 
     private Path path;
 
@@ -43,6 +43,10 @@ public class IconifiedTreeItem extends TreeItem<String> {
     public IconifiedTreeItem(String value) {
         super();
         setValue(value);
+    }
+
+    public IconifiedTreeItem() {
+        super();
     }
 
     public void updateGraphics() {
@@ -84,5 +88,10 @@ public class IconifiedTreeItem extends TreeItem<String> {
 
     public boolean isFileSystemManaged() {
         return path != null;
+    }
+
+    @Override
+    public boolean apply() {
+        return true;
     }
 }

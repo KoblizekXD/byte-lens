@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TreeItem?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import lol.koblizek.bytelens.api.ui.DefaultContextMenu?>
+<?import lol.koblizek.bytelens.api.util.IconifiedTreeItem?>
 <fx:root xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          styleClass="tree-view"
@@ -14,8 +13,5 @@
          AnchorPane.leftAnchor="0"
          AnchorPane.bottomAnchor="0"
          AnchorPane.rightAnchor="0">
-    <TreeItem fx:id="root" value="Undefined project" />
-    <contextMenu>
-        <DefaultContextMenu />
-    </contextMenu>
+    <IconifiedTreeItem fx:id="root" value="Undefined project" />
 </fx:root>

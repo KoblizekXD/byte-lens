@@ -17,32 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package lol.koblizek.bytelens.api.ui;
+package lol.koblizek.bytelens.core.utils.ui;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ContextMenu;
-import org.slf4j.LoggerFactory;
+import javafx.event.Event;
+import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.util.StringConverter;
+import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 
-import java.io.IOException;
+public class MenuTargetedTreeCell extends TextFieldTreeCell<String> {
 
-public class DefaultContextMenu extends ContextMenu {
-
-    public DefaultContextMenu() {
-        super();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/default-context-menu.fxml"));
-        loader.setRoot(this);
-        loader.setController(this);
-
-        try {
-            loader.load();
-        } catch (IOException e) {
-            LoggerFactory.getLogger(getClass()).error("Failed to load", e);
-        }
+    public MenuTargetedTreeCell(StringConverter<String> converter) {
+        super(converter);
+        this.setOnContextMenuRequested(Event::consume);
     }
 
-    @FXML
-    public void initialize() {
-
+    @Override
+    public void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+        if (getTreeItem() != null) {
+            setContextMenu(((IconifiedTreeItem) getTreeItem()).getContextMenu());
+        }
     }
 }
