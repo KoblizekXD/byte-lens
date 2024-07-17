@@ -117,6 +117,9 @@ public final class ByteLens extends Application {
         projectTypes.add(new DefaultProjectType());
     }
 
+    /**
+     * @return The main resource manager used in ByteLens
+     */
     public ResourceManager getResourceManager() {
         return resourceManager;
     }
@@ -147,6 +150,9 @@ public final class ByteLens extends Application {
         return logger;
     }
 
+    /**
+     * Immediately stops the ByteLens application
+     */
     @Override
     public void stop() {
         logger.info("Stopping...");

@@ -142,6 +142,10 @@ public class DecompilationManager {
         return jar;
     }
 
+    /**
+     * Returns all decompilers, that are cached - their jar files are fetched from remote repositories.
+     * @return Array of cached decompilers
+     */
     public String[] getCachedDecompilers() {
         try {
             return Files.list(getDecompilerCache())
@@ -156,6 +160,12 @@ public class DecompilationManager {
         }
     }
 
+    /**
+     * Sets the decompiler to the specified version. If the decompiler is not cached, it will be downloaded
+     * from remote repository.
+     * @param provider Decompiler provider
+     * @param version Decompiler version
+     */
     public void setDecompiler(Providers provider, String version) {
         var jar = fetchDecompiler(provider, version);
         var impl = provider.getInternalImplementationPath();
@@ -186,18 +196,30 @@ public class DecompilationManager {
                 .findFirst();
     }
 
+    /**
+     * @return Current decompiler
+     */
     public Decompiler getDecompiler() {
         return decompiler;
     }
 
+    /**
+     * @return Current decompiler provider
+     */
     public String getProvider() {
         return provider;
     }
 
+    /**
+     * @return Current decompiler version
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * @return Path to decompiler cache
+     */
     public Path getDecompilerCache() {
         return ByteLens.getCache().resolve("decompilers");
     }

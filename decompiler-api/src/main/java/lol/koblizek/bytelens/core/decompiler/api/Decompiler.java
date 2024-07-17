@@ -58,16 +58,39 @@ public abstract class Decompiler {
         }
     }
 
+    /**
+     * Returns currently set options for this decompiler. This method returns modifiable map.
+     * @return currently set options for this decompiler
+     */
     public Map<String, Object> getOptions() {
         return options;
     }
 
+    /**
+     * @param options new options for this decompiler
+     */
     public void setOptions(Map<String, Object> options) {
         this.options = options;
     }
 
+    /**
+     * Decompiles given input bytecode and returns preview of decompilation as string.
+     * @param bytecode input bytecode
+     * @return preview of decompilation as string
+     */
     public abstract String decompilePreview(byte[] bytecode);
+
+    /**
+     * Decompiles given input file and saves it to output file or directory.
+     * @param in input file
+     * @param out output file or directory
+     */
     public abstract void decompile(Path in, Path out);
+
+    /**
+     * Returns all supported options for this decompiler.
+     * @return supported options
+     */
     public abstract List<Option> getSupportedOptions();
 }
 

@@ -82,6 +82,10 @@ public final class ResourceManager {
         return path;
     }
 
+    /**
+     * @param path Relative path to the FXML file
+     * @return Scene loaded from the FXML file
+     */
     public Scene getScene(String path) {
         try {
             var loader = getFXML("views/" + path + ".fxml");
@@ -93,6 +97,10 @@ public final class ResourceManager {
         }
     }
 
+    /**
+     * @param path Relative path to the FXML file
+     * @return Default node loaded from the FXML file
+     */
     public Node getNode(String path) {
         try {
             var loader = getFXML("views/" + path + ".fxml");
@@ -104,16 +112,28 @@ public final class ResourceManager {
         }
     }
 
+    /**
+     * @param path Relative path to the resource
+     * @return URL of the resource
+     */
     public URL get(@NotNull String path) {
         Objects.requireNonNull(path);
         return Objects.requireNonNull(getClass().getResource(this.path + path));
     }
 
+    /**
+     * @param path Relative path to the FXML file
+     * @return FXMLLoader of the FXML file
+     */
     public FXMLLoader getFXML(@NotNull String path) {
         Objects.requireNonNull(path);
         return new FXMLLoader(get(path));
     }
 
+    /**
+     * @param path Relative path to the resource
+     * @return InputStream of the resource
+     */
     public InputStream openStream(@NotNull String path) {
         Objects.requireNonNull(path);
         return getClass().getResourceAsStream(this.path + path);
@@ -132,6 +152,11 @@ public final class ResourceManager {
         throw new IllegalArgumentException("No constructor found for " + type);
     }
 
+    /**
+     * Loads properties from the specified path
+     * @param path Relative path to the properties file
+     * @return Properties object with the loaded properties
+     */
     public Properties getProperties(String path) {
         var properties = new Properties();
         try (var stream = getClass().getResourceAsStream(this.path + path)) {
@@ -142,6 +167,10 @@ public final class ResourceManager {
         return properties;
     }
 
+    /**
+     * Loads a font from the specified path, with the font size of 12
+     * @param path Relative path to the font file
+     */
     public void loadFont(String path) {
         try (var stream = getClass().getResourceAsStream(this.path + path)) {
             Font.loadFont(stream, 12);
@@ -150,10 +179,27 @@ public final class ResourceManager {
         }
     }
 
+    /**
+     * Returns an icon from the JetBrains icon pack, with default size of 16x16.
+     * @param id Icon ID
+     * @param isDark Whether the icon should be in dark mode
+     * @return Image instance of the icon
+     * @see #getJBIcon(String, boolean, int, int)
+     */
     public static Image getJBIcon(String id, boolean isDark) {
         return getJBIcon(id, isDark, 16, 16);
     }
 
+    /**
+     * Returns an icon from the JetBrains icon pack.
+     * Image will first be tried to be loaded from cache, if it fails, it will be remotely
+     * downloaded, converted into png and saved to cache.
+     * @param id Icon ID
+     * @param isDark Whether the icon should be in dark mode
+     * @param width Icon width
+     * @param height Icon height
+     * @return Image instance of the icon
+     */
     public static Image getJBIcon(String id, boolean isDark, int width, int height) {
         return tryGetFromCache(id + "@" + width + "x" + height).orElseGet(() -> {
             var url = StringUtils.toRemoteURL(StringUtils.getCompliantIconURL(id, isDark));

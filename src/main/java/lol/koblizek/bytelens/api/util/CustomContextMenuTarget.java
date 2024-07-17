@@ -22,6 +22,9 @@ package lol.koblizek.bytelens.api.util;
 import javafx.scene.control.ContextMenu;
 import lol.koblizek.bytelens.api.ui.DefaultContextMenu;
 
+/**
+ * Interface for classes that can provide a custom context menu.
+ */
 public interface CustomContextMenuTarget {
 
     default boolean apply() {

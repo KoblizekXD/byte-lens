@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.api.util;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeItem;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import org.apache.commons.io.FilenameUtils;
@@ -29,6 +30,7 @@ import java.nio.file.Path;
 public class IconifiedTreeItem extends TreeItem<String> implements CustomContextMenuTarget {
 
     private Path path;
+    private ContextMenu contextMenu;
 
     /**
      * @param value Path, has to be file name otherwise it will look ugly
@@ -93,5 +95,14 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
     @Override
     public boolean apply() {
         return true;
+    }
+
+    @Override
+    public ContextMenu getContextMenu() {
+        return (contextMenu == null) ? CustomContextMenuTarget.super.getContextMenu() : contextMenu;
+    }
+
+    public void setContextMenu(ContextMenu contextMenu) {
+        this.contextMenu = contextMenu;
     }
 }
