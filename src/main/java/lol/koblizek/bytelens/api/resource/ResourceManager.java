@@ -23,6 +23,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import lol.koblizek.bytelens.core.ByteLens;
@@ -210,12 +211,29 @@ public final class ResourceManager {
         });
     }
 
+    /**
+     * Reads the content as string of the resource from the specified URL in UTF-8 encoding
+     * @param url URL of the resource
+     * @return Content of the resource as a string
+     */
     public static @Nullable String read(@NotNull URL url) {
         Objects.requireNonNull(url);
         try (InputStream stream = url.openStream()) {
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.error("Failed to read resource: {}", url, e);
+            return null;
+        }
+    }
+
+    public <T extends ContextMenu> T getContextMenu(String path, Class<T> type) {
+        try {
+            var loader = getFXML("components/context-menus/" + path + ".fxml");
+            loader.setController(injectByteLens(type));
+            loader.setRoot(loader.getController());
+            return loader.load();
+        } catch (IOException e) {
+            LOGGER.error("Failed to load context menu: {}", path, e);
             return null;
         }
     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<fx:root xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         prefHeight="400.0" prefWidth="600.0"
+         type="ContextMenu">
+    <items>
+        <Menu text="Import">
+            <MenuItem text="File" />
+            <MenuItem text="Directory" />
+        </Menu>
+        <SeparatorMenuItem />
+        <MenuItem text="Cut" accelerator="Shortcut+X" />
+        <MenuItem text="Copy" accelerator="Shortcut+C" />
+        <MenuItem text="Copy Path/Reference" />
+        <MenuItem text="Paste" accelerator="Shortcut+V" />
+        <SeparatorMenuItem />
+        <MenuItem text="Delete" accelerator="Delete" />
+    </items>
+</fx:root>

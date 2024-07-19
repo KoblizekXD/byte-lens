@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package lol.koblizek.bytelens.api.ui;
+package lol.koblizek.bytelens.api.ui.contextmenus;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +30,7 @@ public class DefaultContextMenu extends ContextMenu {
 
     public DefaultContextMenu() {
         super();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/default-context-menu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/context-menus/default-context-menu.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 

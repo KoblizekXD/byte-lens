@@ -93,11 +93,6 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
     }
 
     @Override
-    public boolean apply() {
-        return true;
-    }
-
-    @Override
     public ContextMenu getContextMenu() {
         return (contextMenu == null) ? CustomContextMenuTarget.super.getContextMenu() : contextMenu;
     }
