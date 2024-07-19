@@ -28,6 +28,7 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -117,7 +118,7 @@ public class ExtendedCodeArea extends CodeArea {
                     if(t.isSuccess()) {
                         return Optional.of(t.get());
                     } else {
-                        t.getFailure().printStackTrace();
+                        LoggerFactory.getLogger("ExtendedCodeArea").error("Error occurred during highlighting", t.getFailure());
                         return Optional.empty();
                     }
                 })

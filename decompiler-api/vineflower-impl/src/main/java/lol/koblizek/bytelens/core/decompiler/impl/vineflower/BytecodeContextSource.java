@@ -60,7 +60,7 @@ public class BytecodeContextSource implements IContextSource {
         return new IOutputSink() {
             @Override
             public void begin() {
-
+                // Not used
             }
 
             @Override
@@ -70,17 +70,17 @@ public class BytecodeContextSource implements IContextSource {
 
             @Override
             public void acceptDirectory(String directory) {
-
+                // Not used
             }
 
             @Override
             public void acceptOther(String path) {
-
+                // Not used
             }
 
             @Override
             public void close() throws IOException {
-
+                // Not used
             }
         };
     }
