@@ -56,7 +56,6 @@
     -fx-effect: null;
     -fx-border-width: 1;
     -fx-border-radius: 4;
-    -fx-pref-width: 250;
     -fx-background-radius: 4;
     -fx-background-color: #2b2d30;
     -fx-border-color: #43454A;
@@ -74,11 +73,11 @@
 
 .menu-item > .accelerator-text {
     -fx-text-fill: #63676B;
-    -fx-translate-x: 50; /* Cheat thingy because idk other solution */
+    /*-fx-translate-x: 50; /* Cheat thingy because idk other solution */
 }
 
 .menu .arrow {
-    -fx-translate-x: 40;
+    /*-fx-translate-x: 40;*/
     -fx-background-color: #dfe1e5, #dfe1e5;
 }
 
