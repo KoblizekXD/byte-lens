@@ -76,15 +76,21 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
             appendTreeItem(root, "Sources", item -> {
                 item.overrideIcon("AllIcons.Expui.Nodes.Module");
                 item.setContextMenu(byteLens.getResourceManager().getContextMenu("default-module-context-menu", DefaultModuleContextMenu.class));
-                item.getChildren().add(getModule(project.getSources()));
+                var icon = getModule(project.getSources());
+                icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
+                item.getChildren().add(icon);
             });
             appendTreeItem(root, "Resources", item -> {
                 item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.getChildren().add(getModule(project.getResources()));
+                var icon = getModule(project.getResources());
+                icon.overrideIcon("AllIcons.Expui.Nodes.ResourcesRoot");
+                item.getChildren().add(icon);
             });
             appendTreeItem(root, "External Libraries", item -> {
                 item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.getChildren().add(getModule(project.getReferenceLibraries()));
+                var icon = getModule(project.getReferenceLibraries());
+                icon.overrideIcon("AllIcons.Expui.Nodes.LibraryFolder");
+                item.getChildren().add(icon);
             });
             appendTreeItem(root, "Workspace", item -> item.overrideIcon("AllIcons.Expui.Nodes.Module"));
         }, () -> {
