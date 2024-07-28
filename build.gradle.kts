@@ -2,6 +2,7 @@
 
 import org.beryx.jlink.JlinkZipTask
 import org.gradle.jvm.tasks.Jar
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
 defaultTasks("licenseFormat")
 
@@ -102,3 +103,14 @@ jlink {
 tasks.withType<JlinkZipTask> {
     group = "distribution"
 }
+
+configurations.matching { it.name.contains("DownloadSources") || it.name.contains("downloadSources") }
+    .configureEach {
+        attributes {
+            val os = DefaultNativePlatform.getCurrentOperatingSystem().toFamilyName()
+            val arch = DefaultNativePlatform.getCurrentArchitecture().name
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class, Usage.JAVA_RUNTIME))
+            attribute(OperatingSystemFamily.OPERATING_SYSTEM_ATTRIBUTE, objects.named(OperatingSystemFamily::class, os))
+            attribute(MachineArchitecture.ARCHITECTURE_ATTRIBUTE, objects.named(MachineArchitecture::class, arch))
+        }
+    }

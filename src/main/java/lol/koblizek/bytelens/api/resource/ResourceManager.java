@@ -238,6 +238,10 @@ public final class ResourceManager {
         }
     }
 
+    public ContextMenu getContextMenu(String path) {
+        return getContextMenu(path, ContextMenu.class);
+    }
+
     private static @Nullable Image convertSVGToImage(@NotNull URL url, int width, int height) {
         Objects.requireNonNull(url);
         String svgContent = read(url);

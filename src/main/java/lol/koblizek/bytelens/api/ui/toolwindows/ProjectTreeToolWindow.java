@@ -30,7 +30,6 @@ import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import lol.koblizek.bytelens.api.ui.Opener;
-import lol.koblizek.bytelens.api.ui.contextmenus.DefaultModuleContextMenu;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
@@ -75,7 +74,7 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
                     item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
             appendTreeItem(root, "Sources", item -> {
                 item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.setContextMenu(byteLens.getResourceManager().getContextMenu("default-module-context-menu", DefaultModuleContextMenu.class));
+                item.setContextMenu(byteLens.getResourceManager().getContextMenu("default-module-context-menu"));
                 var icon = getModule(project.getSources());
                 icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
                 item.getChildren().add(icon);
