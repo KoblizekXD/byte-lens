@@ -243,7 +243,12 @@ public final class ResourceManager {
         String svgContent = read(url);
 
         if (svgContent == null) {
-            return null;
+            // Return stub image if failed to read SVG content
+            try {
+                return SwingFXUtils.toFXImage(ImageIO.read(ResourceManager.class.getResourceAsStream("/lol/koblizek/bytelens/resources/stub_dark@16x16.png")), null);
+            } catch (IOException e) {
+                LOGGER.error("Failed to read stub image, this isn't supposed to happen", e);
+            }
         }
 
         svgContent = svgContent.replaceFirst("width=\"\\d+\"", "width=\"" + width + "\"")
