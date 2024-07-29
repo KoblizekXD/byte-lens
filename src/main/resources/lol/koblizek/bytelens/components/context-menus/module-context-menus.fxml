@@ -2,15 +2,17 @@
 
 <?import javafx.scene.control.*?>
 <?import lol.koblizek.bytelens.api.ui.contextmenus.ContextMenuContainer?>
-<?import lol.koblizek.bytelens.api.util.IconifiedMenuItem?>
-<ContextMenuContainer xmlns="http://javafx.com/javafx"
-
-                      xmlns:fx="http://javafx.com/fxml">
+<?import lol.koblizek.bytelens.api.util.*?>
+<ContextMenuContainer xmlns="http://javafx.com/javafx">
     <ContextMenu id="source-module">
         <items>
             <Menu text="Import">
-                <MenuItem text="File" />
-                <MenuItem text="Directory" />
+                <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.Class" text="Class File" />
+            </Menu>
+            <Menu text="New">
+                <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Text" text="File" />
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.Folder" text="Directory" />
             </Menu>
             <SeparatorMenuItem />
             <IconifiedMenuItem icon="AllIcons.Expui.General.Cut" text="Cut" accelerator="Shortcut+X" />
@@ -19,6 +21,33 @@
             <IconifiedMenuItem icon="AllIcons.Expui.General.Paste" text="Paste" accelerator="Shortcut+V" />
             <SeparatorMenuItem />
             <IconifiedMenuItem icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
+        </items>
+    </ContextMenu>
+    <ContextMenu id="resource-module">
+        <items>
+            <Menu text="Import">
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Mappings" />
+            </Menu>
+            <Menu text="New">
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Empty Mappings" />
+                <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Text" text="File" />
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.Folder" text="Directory" />
+            </Menu>
+            <SeparatorMenuItem />
+            <IconifiedMenuItem icon="AllIcons.Expui.General.Cut" text="Cut" accelerator="Shortcut+X" />
+            <IconifiedMenuItem icon="AllIcons.Expui.General.Copy" text="Copy" accelerator="Shortcut+C" />
+            <MenuItem text="Copy Path/Reference" />
+            <IconifiedMenuItem icon="AllIcons.Expui.General.Paste" text="Paste" accelerator="Shortcut+V" />
+            <SeparatorMenuItem />
+            <IconifiedMenuItem icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
+        </items>
+    </ContextMenu>
+    <ContextMenu id="ext-lib-module">
+        <items>
+            <Menu text="Import">
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Jar File" />
+                <IconifiedMenuItem icon="MavenIcons.Images.Expui.toolwindow.Maven" text="From Maven" />
+            </Menu>
         </items>
     </ContextMenu>
 </ContextMenuContainer>
