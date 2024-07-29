@@ -35,7 +35,6 @@ import java.nio.file.Path;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
 
 public class StringUtils {
 
@@ -90,12 +89,12 @@ public class StringUtils {
      * @return an input stream of the given string
      */
     public static @NotNull InputStream stream(@NotNull String string) {
-        Objects.requireNonNull(string);
+        Preconditions.nonNull(string);
         return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
     }
 
     public static @Nullable URL toRemoteURL(@NotNull String path) {
-        Objects.requireNonNull(path);
+        Preconditions.nonNull(path);
         try {
             return new URI(path).toURL();
         } catch (MalformedURLException | URISyntaxException e) {

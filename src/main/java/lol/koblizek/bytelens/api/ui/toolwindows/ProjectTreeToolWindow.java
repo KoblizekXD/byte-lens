@@ -23,22 +23,14 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.MouseEvent;
-import javafx.util.converter.DefaultStringConverter;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
-import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
 import lol.koblizek.bytelens.api.ui.Opener;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
-import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
-import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -66,87 +58,28 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
     public void initialize() {
         Optional<DefaultProject> optionalProject = byteLens.getCurrentProject();
         optionalProject.ifPresentOrElse(project -> {
-            var contextMenuContainer = byteLens.getResourceManager().getContextMenuContainer("module-context-menus");
-            assert contextMenuContainer != null;
-            setCellFactory(view -> new MenuTargetedTreeCell(new DefaultStringConverter()));
-            this.setOnMouseClicked(this::itemSelectionEvent);
-            root.setValue(project.getName());
-            root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ModuleGroup"));
-            appendTreeItem(root, project.getProjectFile().getFileName().toString(), item ->
-                    item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
-            appendTreeItem(root, "Sources", item -> {
-                item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.setContextMenu(contextMenuContainer.findById("source-module").get());
-                var icon = getModule(project.getSources());
-                icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
-                item.getChildren().add(icon);
-            });
-            appendTreeItem(root, "Resources", item -> {
-                item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.setContextMenu(contextMenuContainer.findById("resource-module").get());
-                var icon = getModule(project.getResources());
-                icon.overrideIcon("AllIcons.Expui.Nodes.ResourcesRoot");
-                item.getChildren().add(icon);
-            });
-            appendTreeItem(root, "External Libraries", item -> {
-                item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.setContextMenu(contextMenuContainer.findById("ext-lib-module").get());
-                var icon = getModule(project.getReferenceLibraries());
-                icon.overrideIcon("AllIcons.Expui.Nodes.LibraryFolder");
-                item.getChildren().add(icon);
-            });
-            appendTreeItem(root, "Workspace", item -> item.overrideIcon("AllIcons.Expui.Nodes.Module"));
+            byteLens.findProjectType(project.getClass()).ifPresentOrElse(creator -> {
+                creator.setupProjectTreeToolWindow(byteLens, this);
+            }, () ->
+                    byteLens.getLogger().error("No project type found for project: {}, was it loaded?", project.getClass().getSimpleName()));
         }, () -> {
             root.setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.ErrorIntroduction"));
             root.setValue("No module/project is open");
         });
     }
 
-    private void appendTreeItem(TreeItem<String> parent, String value, Consumer<IconifiedTreeItem> configurator) {
+    public void appendTreeItem(TreeItem<String> parent, String value, Consumer<IconifiedTreeItem> configurator) {
         var item = new IconifiedTreeItem(value);
         configurator.accept(item);
         parent.getChildren().add(item);
     }
 
-    private IconifiedTreeItem getModule(Path rootPath) {
-        IconifiedTreeItem rootItem = new IconifiedTreeItem(rootPath);
-        try {
-            Files.list(rootPath)
-                    .sorted(Comparator.comparing(Path::toString))
-                    .forEach(path -> {
-                        if (Files.isDirectory(path)) {
-                            rootItem.getChildren().add(getModule(path));
-                        } else {
-                            rootItem.getChildren().add(new IconifiedTreeItem(path));
-                        }
-                    });
-            var watcher = new StandardDirectoryWatcher(rootPath, rootItem);
-            watcher.start(byteLens.getCachedExecutor());
-        } catch (IOException e) {
-            byteLens.getLogger().error("An error occurred in initial file lookup:", e);
-        }
-        return rootItem;
+
+    public IconifiedTreeItem root() {
+        return root;
     }
 
-    private void itemSelectionEvent(MouseEvent event) {
-        IconifiedTreeItem newV = (IconifiedTreeItem) this.getSelectionModel().getSelectedItem();
-        if (newV == null || event.getClickCount() != 2) {
-            return;
-        }
-        ExtendedCodeArea codeArea = new ExtendedCodeArea();
-        codeArea.bridge(byteLens);
-        if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory() && iti.isFileSystemManaged()) { // This means it's actual file/dir
-            try {
-                codeArea.clear();
-                switch (iti.getExtension()) {
-                    case "class" -> codeArea.appendText(byteLens.getDecompilationManager().getDecompiler()
-                            .decompilePreview(Files.readAllBytes(iti.getPath())));
-                    case null, default -> codeArea.appendText(Files.readString(iti.getPath()));
-                }
-            } catch (IOException e) {
-                byteLens.getLogger().error("Error occurred on file read!", e);
-            }
-            opener.open(codeArea, iti.getPath().getFileName().toString());
-        }
+    public Opener opener() {
+        return opener;
     }
 }

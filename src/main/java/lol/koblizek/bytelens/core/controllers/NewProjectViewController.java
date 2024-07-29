@@ -49,7 +49,7 @@ public class NewProjectViewController extends Controller {
 
     @Override
     public void initialize() {
-        getByteLens().getProjectTypes().forEach(projectTypeListing.getItems()::add);
+        getByteLens().getProjectTypes().values().forEach(projectTypeListing.getItems()::add);
         projectTypeListing.getSelectionModel().select(0);
         projectTypeListing.getSelectionModel().selectedItemProperty().subscribe(menu -> {
             if (menu == null) {

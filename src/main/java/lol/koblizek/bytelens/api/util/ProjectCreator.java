@@ -20,6 +20,8 @@
 package lol.koblizek.bytelens.api.util;
 
 import lol.koblizek.bytelens.api.DefaultProject;
+import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
+import lol.koblizek.bytelens.core.ByteLens;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -56,6 +58,20 @@ public abstract class ProjectCreator {
      * @return The created project
      */
     public abstract @NotNull DefaultProject createProject(Map<String, Object> data);
+
+    /**
+     * Setups the initial project tree tool window for current project type.
+     * <p>
+     *     If this method returns false, no tool window will be set up for the project type,
+     *     otherwise the tool window will be set up and the project type can add its own items to the tree.
+     * </p>
+     * @param toolWindow The tool window to set up
+     * @param byteLens The current ByteLens instance
+     * @return Whether the project type has set up the tool window(basically return true if you override this method)
+     */
+    public boolean setupProjectTreeToolWindow(@NotNull ByteLens byteLens, @NotNull ProjectTreeToolWindow toolWindow) {
+        return false;
+    }
 
     @Override
     public final String toString() {

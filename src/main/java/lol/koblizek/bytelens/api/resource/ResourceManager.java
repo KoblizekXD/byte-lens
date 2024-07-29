@@ -119,7 +119,7 @@ public final class ResourceManager {
      * @return URL of the resource
      */
     public URL get(@NotNull String path) {
-        Objects.requireNonNull(path);
+        Preconditions.nonNull(path);
         return Objects.requireNonNull(getClass().getResource(this.path + path));
     }
 
@@ -128,7 +128,7 @@ public final class ResourceManager {
      * @return FXMLLoader of the FXML file
      */
     public FXMLLoader getFXML(@NotNull String path) {
-        Objects.requireNonNull(path);
+        Preconditions.nonNull(path);
         return new FXMLLoader(get(path));
     }
 
@@ -137,7 +137,7 @@ public final class ResourceManager {
      * @return InputStream of the resource
      */
     public InputStream openStream(@NotNull String path) {
-        Objects.requireNonNull(path);
+        Preconditions.nonNull(path);
         return getClass().getResourceAsStream(this.path + path);
     }
 
@@ -218,7 +218,7 @@ public final class ResourceManager {
      * @return Content of the resource as a string
      */
     public static @Nullable String read(@NotNull URL url) {
-        Objects.requireNonNull(url);
+        Preconditions.nonNull(url);
         try (InputStream stream = url.openStream()) {
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -254,7 +254,7 @@ public final class ResourceManager {
     }
 
     private static @Nullable Image convertSVGToImage(@NotNull URL url, int width, int height) {
-        Objects.requireNonNull(url);
+        Preconditions.nonNull(url);
         String svgContent = read(url);
 
         if (svgContent == null) {

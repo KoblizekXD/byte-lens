@@ -44,9 +44,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -59,7 +57,7 @@ public final class ByteLens extends Application {
 
     private Stage primaryStage;
     private final List<ToolWindow> toolWindows;
-    private final List<ProjectCreator> projectTypes;
+    private final Map<Class<? extends DefaultProject>, ProjectCreator> projectTypes;
     private final Logger logger;
     private final ExecutorService cachedExecutor;
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -102,7 +100,7 @@ public final class ByteLens extends Application {
             }
         };
         toolWindows = new ArrayList<>();
-        projectTypes = new ArrayList<>();
+        projectTypes = new HashMap<>();
 
         Thread.setDefaultUncaughtExceptionHandler(new ExecutionExceptionHandler());
         resourceManager = ResourceManager.create(this, "/lol/koblizek/bytelens/");
@@ -114,7 +112,7 @@ public final class ByteLens extends Application {
         createAppFiles();
         loadAppData();
 
-        projectTypes.add(new DefaultProjectType());
+        projectTypes.put(DefaultProject.class, new DefaultProjectType());
     }
 
     /**
@@ -131,15 +129,22 @@ public final class ByteLens extends Application {
         return primaryStage;
     }
 
+    /**
+     * @return List of all tool windows usable in ByteLens
+     */
     @Contract(pure = true)
     public @NotNull List<ToolWindow> getToolWindows() {
         return toolWindows;
     }
 
+    public Optional<ProjectCreator> findProjectType(Class<? extends DefaultProject> projectType) {
+        return Optional.ofNullable(projectTypes.get(projectType));
+    }
+
     /**
      * @return List of all project types used in "New Project" dialog
      */
-    public List<ProjectCreator> getProjectTypes() {
+    public Map<Class<? extends DefaultProject>, ProjectCreator> getProjectTypes() {
         return projectTypes;
     }
 
