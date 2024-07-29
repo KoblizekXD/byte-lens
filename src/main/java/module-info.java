@@ -49,6 +49,7 @@ module lol.koblizek.bytelens {
     exports lol.koblizek.bytelens.core.utils;
     exports lol.koblizek.bytelens.api;
     exports lol.koblizek.bytelens.api.resource;
+    exports lol.koblizek.bytelens.api.ui.contextmenus;
     exports lol.koblizek.bytelens.api.util;
     exports lol.koblizek.bytelens.core.decompiler;
     opens lol.koblizek.bytelens.api.ui.contextmenus to javafx.fxml;

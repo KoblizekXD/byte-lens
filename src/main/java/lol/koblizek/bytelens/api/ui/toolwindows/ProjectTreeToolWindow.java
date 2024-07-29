@@ -66,6 +66,8 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
     public void initialize() {
         Optional<DefaultProject> optionalProject = byteLens.getCurrentProject();
         optionalProject.ifPresentOrElse(project -> {
+            var contextMenuContainer = byteLens.getResourceManager().getContextMenuContainer("module-context-menus");
+            assert contextMenuContainer != null;
             setCellFactory(view -> new MenuTargetedTreeCell(new DefaultStringConverter()));
             this.setOnMouseClicked(this::itemSelectionEvent);
             root.setValue(project.getName());
@@ -74,7 +76,7 @@ public class ProjectTreeToolWindow extends TreeView<String> implements ToolWindo
                     item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
             appendTreeItem(root, "Sources", item -> {
                 item.overrideIcon("AllIcons.Expui.Nodes.Module");
-                item.setContextMenu(byteLens.getResourceManager().getContextMenu("default-module-context-menu"));
+                item.setContextMenu(contextMenuContainer.findById("source-module").get());
                 var icon = getModule(project.getSources());
                 icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
                 item.getChildren().add(icon);

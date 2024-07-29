@@ -26,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
+import lol.koblizek.bytelens.api.ui.contextmenus.ContextMenuContainer;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.Preconditions;
 import lol.koblizek.bytelens.core.utils.StringUtils;
@@ -240,6 +241,16 @@ public final class ResourceManager {
 
     public ContextMenu getContextMenu(String path) {
         return getContextMenu(path, ContextMenu.class);
+    }
+
+    public ContextMenuContainer getContextMenuContainer(String path) {
+        FXMLLoader loader = getFXML("components/context-menus/" + path + ".fxml");
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            LOGGER.error("Failed to load context menu container: {}", path, e);
+            return null;
+        }
     }
 
     private static @Nullable Image convertSVGToImage(@NotNull URL url, int width, int height) {
