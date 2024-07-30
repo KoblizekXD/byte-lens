@@ -68,8 +68,9 @@ public class DefaultProjectType extends ProjectCreator {
     }
 
     @Override
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public boolean setupProjectTreeToolWindow(@NotNull ByteLens byteLens, @NotNull ProjectTreeToolWindow toolWindow) {
-        @SuppressWarnings("OptionalGetWithoutIsPresent") var project = byteLens.getCurrentProject().get();
+        var project = byteLens.getCurrentProject().get();
         var contextMenuContainer = byteLens.getResourceManager().getContextMenuContainer("module-context-menus");
         assert contextMenuContainer != null;
         toolWindow.setCellFactory(view -> new MenuTargetedTreeCell(new DefaultStringConverter()));

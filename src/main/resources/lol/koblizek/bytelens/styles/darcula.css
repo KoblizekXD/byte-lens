@@ -376,3 +376,12 @@ ParagraphText {
     -fx-padding: 4 14 4 14;
     -fx-min-width: 72;
 }
+
+/* Attempted changes to tree item arrows
+.tree-disclosure-node .arrow {
+    -fx-background-color: #dfe1e5;
+    -fx-shape: "M 0 -3.5 L 4 0 L 0 3.5";
+    -fx-fill: transparent;
+    -fx-stroke-width: 1;
+    -fx-stroke: #dfe1e5;
+}*/
