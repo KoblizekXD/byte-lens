@@ -246,6 +246,7 @@ public final class ResourceManager {
     public ContextMenuContainer getContextMenuContainer(String path) {
         FXMLLoader loader = getFXML("components/context-menus/" + path + ".fxml");
         try {
+            loader.setControllerFactory(this::injectByteLens);
             return loader.load();
         } catch (IOException e) {
             LOGGER.error("Failed to load context menu container: {}", path, e);

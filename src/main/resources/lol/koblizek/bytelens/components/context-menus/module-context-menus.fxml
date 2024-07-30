@@ -3,11 +3,14 @@
 <?import javafx.scene.control.*?>
 <?import lol.koblizek.bytelens.api.ui.contextmenus.ContextMenuContainer?>
 <?import lol.koblizek.bytelens.api.util.*?>
-<ContextMenuContainer xmlns="http://javafx.com/javafx">
+<ContextMenuContainer
+        fx:controller="lol.koblizek.bytelens.core.controllers.ModuleContextMenusController"
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml">
     <ContextMenu id="source-module">
         <items>
             <Menu text="Import">
-                <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
+                <IconifiedMenuItem onAction="#sourceModuleImportJar" fx:id="sourceModuleImportJar" icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
                 <IconifiedMenuItem icon="AllIcons.Expui.Nodes.Class" text="Class File" />
             </Menu>
             <Menu text="New">

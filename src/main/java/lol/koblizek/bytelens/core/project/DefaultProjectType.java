@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.core.project;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.util.converter.DefaultStringConverter;
@@ -81,22 +82,19 @@ public class DefaultProjectType extends ProjectCreator {
                 item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
         toolWindow.appendTreeItem(toolWindow.root(), "Sources", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            item.setContextMenu(contextMenuContainer.findById("source-module").get());
-            var icon = getModule(byteLens, project.getSources());
+            var icon = getModule(byteLens, project.getSources(), contextMenuContainer.findById("source-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
             item.getChildren().add(icon);
         });
         toolWindow.appendTreeItem(toolWindow.root(), "Resources", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            item.setContextMenu(contextMenuContainer.findById("resource-module").get());
-            var icon = getModule(byteLens, project.getResources());
+            var icon = getModule(byteLens, project.getResources(), contextMenuContainer.findById("resource-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.ResourcesRoot");
             item.getChildren().add(icon);
         });
         toolWindow.appendTreeItem(toolWindow.root(), "External Libraries", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            item.setContextMenu(contextMenuContainer.findById("ext-lib-module").get());
-            var icon = getModule(byteLens, project.getReferenceLibraries());
+            var icon = getModule(byteLens, project.getReferenceLibraries(), contextMenuContainer.findById("ext-lib-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.LibraryFolder");
             item.getChildren().add(icon);
         });
@@ -104,14 +102,15 @@ public class DefaultProjectType extends ProjectCreator {
         return true;
     }
 
-    private IconifiedTreeItem getModule(ByteLens byteLens, Path rootPath) {
+    private IconifiedTreeItem getModule(ByteLens byteLens, Path rootPath, ContextMenu contextMenu) {
         IconifiedTreeItem rootItem = new IconifiedTreeItem(rootPath);
+        rootItem.setContextMenu(contextMenu);
         try {
             Files.list(rootPath)
                     .sorted(Comparator.comparing(Path::toString))
                     .forEach(path -> {
                         if (Files.isDirectory(path)) {
-                            rootItem.getChildren().add(getModule(byteLens, path));
+                            rootItem.getChildren().add(getModule(byteLens, path, contextMenu));
                         } else {
                             rootItem.getChildren().add(new IconifiedTreeItem(path));
                         }
