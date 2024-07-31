@@ -19,16 +19,15 @@
 
 package lol.koblizek.bytelens.core.utils.ui;
 
-import javafx.event.Event;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.util.StringConverter;
+import lol.koblizek.bytelens.api.ui.contextmenus.LigmaContextMenu;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 
 public class MenuTargetedTreeCell extends TextFieldTreeCell<String> {
 
     public MenuTargetedTreeCell(StringConverter<String> converter) {
         super(converter);
-        this.setOnContextMenuRequested(Event::consume);
     }
 
     @Override
@@ -36,6 +35,9 @@ public class MenuTargetedTreeCell extends TextFieldTreeCell<String> {
         super.updateItem(item, empty);
         if (getTreeItem() != null) {
             setContextMenu(((IconifiedTreeItem) getTreeItem()).getContextMenu());
+            if (getContextMenu() instanceof LigmaContextMenu cm) {
+                this.setOnContextMenuRequested(event -> cm.getOnContextMenuRequested().handle(event));
+            }
         }
     }
 }
