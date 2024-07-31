@@ -236,6 +236,7 @@ ParagraphText {
     -fx-border-width: 0;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
+    -fx-alignment: center;
     -fx-pref-width: 26;
     -fx-pref-height: 26;
 }
