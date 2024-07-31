@@ -23,7 +23,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.stage.FileChooser;
-import lol.koblizek.bytelens.api.ui.contextmenus.LigmaContextMenu;
 import lol.koblizek.bytelens.api.util.IconifiedMenuItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
@@ -35,7 +34,6 @@ import java.nio.file.Files;
 
 public class ModuleContextMenusController extends Controller {
 
-    @FXML private LigmaContextMenu sourceModule;
     @FXML private IconifiedMenuItem sourceModuleImportJar;
 
     private IconifiedTreeItem selectedTreeItem;
@@ -51,25 +49,42 @@ public class ModuleContextMenusController extends Controller {
 
     @FXML
     private void sourceModuleImportJar(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Import Source Jar File");
-        fileChooser.getExtensionFilters().addAll(
+        importFile("Import Source Archive",
                 new FileChooser.ExtensionFilter("Jar Files", "*.jar", "*.war", "*.zip"),
                 new FileChooser.ExtensionFilter("Android Library", "*.aar"),
-                new FileChooser.ExtensionFilter("Android Application", "*.apk")
+                new FileChooser.ExtensionFilter("Android Application", "*.apk"));
+    }
+
+    @FXML
+    private void sourceModuleImportClass(ActionEvent actionEvent) {
+        importFile("Import Class File", new FileChooser.ExtensionFilter("Class Files", "*.class", "*.dex"));
+    }
+
+    @FXML
+    private void resourceModuleImportMappings(ActionEvent actionEvent) {
+        importFile("Import Mappings",
+                new FileChooser.ExtensionFilter("Mappings Files", "*.txt", "*.csv", "*.tiny", "*.tsrg", "*.mappings", "*.proguard")
         );
+    }
+
+    private void importFile(String title, FileChooser.ExtensionFilter... filters) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().addAll(filters);
         File f = fileChooser.showOpenDialog(getByteLens().getPrimaryStage());
         if (f != null) {
-            try {
-                Files.copy(f.toPath(), selectedTreeItem.getPath().resolve(f.getName()));
-            } catch (IOException e) {
-                getLogger().error("Failed to copy file", e);
-            }
+            getByteLens().submitTask(() -> {
+                try {
+                    Files.copy(f.toPath(), selectedTreeItem.getPath().resolve(f.getName()));
+                } catch (IOException e) {
+                    getLogger().error("Failed to copy file", e);
+                }
+            });
         }
     }
 
     @FXML
     public void shown(ContextMenuEvent windowEvent) {
-        selectedTreeItem = (IconifiedTreeItem) ((MenuTargetedTreeCell)windowEvent.getSource()).getTreeItem();
+        selectedTreeItem = (IconifiedTreeItem) ((MenuTargetedTreeCell) windowEvent.getSource()).getTreeItem();
     }
 }

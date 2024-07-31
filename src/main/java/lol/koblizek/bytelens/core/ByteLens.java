@@ -187,6 +187,7 @@ public final class ByteLens extends Application {
      * @param runnable Task to submit to the executor
      */
     public void submitTask(Runnable runnable) {
+        logger.debug("Submitted new task for parallel execution");
         cachedExecutor.submit(runnable);
     }
 

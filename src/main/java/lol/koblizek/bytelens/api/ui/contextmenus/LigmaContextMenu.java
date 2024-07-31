@@ -28,7 +28,7 @@ import javafx.scene.input.ContextMenuEvent;
 
 public class LigmaContextMenu extends ContextMenu {
 
-    private final ObjectProperty<EventHandler<ContextMenuEvent>> onContextMenuRequested = new ObjectPropertyBase<EventHandler<ContextMenuEvent>>() {
+    private final ObjectProperty<EventHandler<ContextMenuEvent>> onContextMenuRequested = new ObjectPropertyBase<>() {
 
         @Override
         protected void invalidated() {

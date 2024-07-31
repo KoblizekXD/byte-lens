@@ -65,7 +65,7 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
             case "java" -> "AllIcons.Expui.FileTypes.Java";
             case "jar" -> "AllIcons.Expui.FileTypes.Archive";
             case "json" -> "AllIcons.Expui.FileTypes.Json";
-            case "tiny", "tsrg", "mappings", "proguard" -> "AllIcons.Expui.Nodes.DataTables";
+            case "csv", "tiny", "tsrg", "mappings", "proguard" -> "AllIcons.Expui.Nodes.DataTables";
             default -> "AllIcons.Expui.FileTypes.Text";
         };
         path = p;

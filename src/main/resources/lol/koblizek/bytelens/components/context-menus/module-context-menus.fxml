@@ -8,11 +8,11 @@
         fx:controller="lol.koblizek.bytelens.core.controllers.ModuleContextMenusController"
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml">
-    <LigmaContextMenu fx:id="sourceModule" onContextMenuRequested="#shown" id="source-module">
+    <LigmaContextMenu onContextMenuRequested="#shown" id="source-module">
         <items>
             <Menu text="Import">
                 <IconifiedMenuItem onAction="#sourceModuleImportJar" fx:id="sourceModuleImportJar" icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
-                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.Class" text="Class File" />
+                <IconifiedMenuItem onAction="#sourceModuleImportClass" icon="AllIcons.Expui.Nodes.Class" text="Class File" />
             </Menu>
             <Menu text="New">
                 <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Text" text="File" />
@@ -30,7 +30,7 @@
     <ContextMenu id="resource-module">
         <items>
             <Menu text="Import">
-                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Mappings" />
+                <IconifiedMenuItem onAction="#resourceModuleImportMappings" icon="AllIcons.Expui.Nodes.DataTables" text="Mappings" />
             </Menu>
             <Menu text="New">
                 <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Empty Mappings" />
