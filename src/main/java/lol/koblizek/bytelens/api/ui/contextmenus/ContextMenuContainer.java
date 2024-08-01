@@ -27,6 +27,9 @@ import javafx.scene.control.ContextMenu;
 
 import java.util.Optional;
 
+/**
+ * Container which can hold multiple context menus.
+ */
 @DefaultProperty("items")
 public class ContextMenuContainer extends Node {
     private final ObservableList<ContextMenu> items;

@@ -19,15 +19,23 @@
 
 package lol.koblizek.bytelens.core.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
+import lol.koblizek.bytelens.api.ui.SearchArea;
 import lol.koblizek.bytelens.core.ByteLens;
+
+import java.util.ArrayList;
 
 public class HomeViewController extends Controller {
 
+    @FXML private SearchArea searchArea;
+    private ObservableList<String> projectListingDefault;
     @FXML private ListView<String> projectListing;
 
     public HomeViewController(ByteLens byteLens) {
@@ -48,6 +56,7 @@ public class HomeViewController extends Controller {
         for (DefaultProject project : getByteLens().getProjects()) {
             projectListing.getItems().add(project.getName());
         }
+        projectListingDefault = FXCollections.observableList(new ArrayList<>(projectListing.getItems()));
     }
 
     @FXML
@@ -58,5 +67,15 @@ public class HomeViewController extends Controller {
         stage.setTitle("New Project");
         stage.setScene(getByteLens().getScene("new-project-view"));
         stage.show();
+    }
+
+    @FXML
+    public void searchBarTyped(KeyEvent keyEvent) {
+        projectListing.getItems().clear();
+        for (String s : projectListingDefault) {
+            if (s.toLowerCase().contains(searchArea.getText().toLowerCase())) {
+                projectListing.getItems().add(s);
+            }
+        }
     }
 }

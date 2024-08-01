@@ -11,6 +11,6 @@
         <JetBrainsImage AnchorPane.topAnchor="4" AnchorPane.leftAnchor="4" AnchorPane.bottomAnchor="4" icon="AllIcons.Expui.General.Search" />
     </AnchorPane>
     <AnchorPane style="-fx-background-color: transparent">
-        <TextField styleClass="search-area" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="0" />
+        <TextField fx:id="actualTextField" styleClass="search-area" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="0" />
     </AnchorPane>
 </fx:root>

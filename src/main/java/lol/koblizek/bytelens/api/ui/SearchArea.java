@@ -19,13 +19,40 @@
 
 package lol.koblizek.bytelens.api.ui;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class SearchArea extends StackPane {
+
+    @FXML private TextField actualTextField;
+
+    private final ObjectProperty<EventHandler<KeyEvent>> onAction = new ObjectPropertyBase<>() {
+
+        @Override
+        protected void invalidated() {
+            setEventHandler(KeyEvent.KEY_TYPED, get());
+        }
+
+        @Override
+        public Object getBean() {
+            return SearchArea.this;
+        }
+
+        @Override
+        public String getName() {
+            return "onKeyTyped";
+        }
+    };
+
     public SearchArea() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/search-area.fxml"));
         loader.setRoot(this);
@@ -37,4 +64,17 @@ public class SearchArea extends StackPane {
             LoggerFactory.getLogger(getClass()).error("Failed to load", e);
         }
     }
+
+    @FXML
+    private void initialize() {
+        actualTextField.onKeyTypedProperty().bind(onAction);
+    }
+
+    public String getText() {
+        return actualTextField.getText();
+    }
+
+    public final ObjectProperty<EventHandler<KeyEvent>> onActionProperty() { return onAction; }
+    public final EventHandler<KeyEvent> getOnAction() { return onActionProperty().get(); }
+    public final void setOnAction(EventHandler<KeyEvent> value) { onActionProperty().set(value); }
 }

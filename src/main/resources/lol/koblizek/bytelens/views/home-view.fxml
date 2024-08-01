@@ -22,7 +22,7 @@
             <JetBrainsButton icon="AllIcons.Expui.General.ProjectStructure">
                 <tooltip><Tooltip text="Project Management" /></tooltip>
             </JetBrainsButton>
-            <SearchArea HBox.hgrow="ALWAYS" />
+            <SearchArea fx:id="searchArea" onAction="#searchBarTyped" HBox.hgrow="ALWAYS" />
         </HBox>
         <ListView VBox.vgrow="ALWAYS" fx:id="projectListing" styleClass="project-listing" />
     </VBox>
