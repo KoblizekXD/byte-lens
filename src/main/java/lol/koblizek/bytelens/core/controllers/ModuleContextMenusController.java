@@ -21,16 +21,22 @@ package lol.koblizek.bytelens.core.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import lol.koblizek.bytelens.api.util.IconifiedMenuItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
 
 public class ModuleContextMenusController extends Controller {
 
@@ -86,5 +92,51 @@ public class ModuleContextMenusController extends Controller {
     @FXML
     public void shown(ContextMenuEvent windowEvent) {
         selectedTreeItem = (IconifiedTreeItem) ((MenuTargetedTreeCell) windowEvent.getSource()).getTreeItem();
+    }
+
+    @FXML
+    public void copyAction(ActionEvent event) {
+        var clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.put(DataFormat.FILES, Collections.singletonList(selectedTreeItem.getPath().toFile()));
+        clipboard.setContent(content);
+        getLogger().info("Copied file/directory into clipboard: {}", selectedTreeItem.getPath());
+    }
+
+    @FXML
+    public void deleteAction(ActionEvent event) {
+        getByteLens().submitTask(() -> {
+            getLogger().info("Deleting file/directory: {}", selectedTreeItem.getPath());
+            try {
+                if (Files.isDirectory(selectedTreeItem.getPath())) {
+                    FileUtils.deleteDirectory(selectedTreeItem.getPath().toFile());
+                } else {
+                    Files.delete(selectedTreeItem.getPath());
+                }
+            } catch (IOException e) {
+                getLogger().error("Failed to delete file", e);
+            }
+        });
+    }
+
+    @FXML
+    public void pasteAction(ActionEvent event) {
+        var clipboard = Clipboard.getSystemClipboard();
+        if (clipboard.getFiles() == null) return;
+
+        getByteLens().submitTask(() -> {
+            for (Path file : clipboard.getFiles().stream().map(File::toPath).toList()) {
+                getLogger().info("Pasting file/directory: {}", file);
+                try {
+                    if (Files.isDirectory(file)) {
+                        FileUtils.copyDirectory(file.toFile(), selectedTreeItem.getPath().toFile());
+                    } else {
+                        Files.copy(file, selectedTreeItem.getPath().resolve(file.getFileName()));
+                    }
+                } catch (IOException e) {
+                    getLogger().error("Failed to paste file/directory: {}", file, e);
+                }
+            }
+        });
     }
 }

@@ -20,11 +20,11 @@
             </Menu>
             <SeparatorMenuItem />
             <IconifiedMenuItem icon="AllIcons.Expui.General.Cut" text="Cut" accelerator="Shortcut+X" />
-            <IconifiedMenuItem icon="AllIcons.Expui.General.Copy" text="Copy" accelerator="Shortcut+C" />
+            <IconifiedMenuItem onAction="#copyAction" icon="AllIcons.Expui.General.Copy" text="Copy" accelerator="Shortcut+C" />
             <MenuItem text="Copy Path/Reference" />
-            <IconifiedMenuItem icon="AllIcons.Expui.General.Paste" text="Paste" accelerator="Shortcut+V" />
+            <IconifiedMenuItem onAction="#pasteAction" icon="AllIcons.Expui.General.Paste" text="Paste" accelerator="Shortcut+V" />
             <SeparatorMenuItem />
-            <IconifiedMenuItem icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
+            <IconifiedMenuItem onAction="#deleteAction" icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
         </items>
     </LigmaContextMenu>
     <ContextMenu id="resource-module">
