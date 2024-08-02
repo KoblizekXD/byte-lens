@@ -28,6 +28,10 @@
     -fx-background-radius: 4;
 }
 
+.menu-bar .menu {
+    -fx-background-radius: 0;
+}
+
 .menu-bar > * > .menu > .menu-item, .menu-bar > * > .menu > .menu, .menu > .menu {
     -fx-pref-height: 26;
     -fx-padding: 4 0 0 4;

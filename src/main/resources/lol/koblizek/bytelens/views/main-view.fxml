@@ -24,7 +24,7 @@
                         </Menu>
                     </Menu>
                     <SeparatorMenuItem />
-                    <MenuItem text="Exit" />
+                    <MenuItem onAction="#exit" text="Exit" />
                 </Menu>
                 <Menu text="_Edit">
                     <MenuItem text="Delete" />

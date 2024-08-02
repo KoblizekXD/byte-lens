@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.core.controllers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -135,5 +136,10 @@ public class MainViewController extends Controller implements Opener {
     @FXML
     public void closeProject(ActionEvent event) {
         getByteLens().closeActiveProject();
+    }
+
+    @FXML
+    public void exit(ActionEvent event) {
+        Platform.exit();
     }
 }
