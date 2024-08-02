@@ -30,7 +30,7 @@ public abstract class Controller {
     private final ByteLens byteLens;
 
     @FXML
-    public abstract void initialize();
+    public void initialize() {}
 
     protected Controller(ByteLens byteLens) {
         this.byteLens = byteLens;

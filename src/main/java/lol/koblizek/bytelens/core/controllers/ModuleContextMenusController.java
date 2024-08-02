@@ -49,11 +49,6 @@ public class ModuleContextMenusController extends Controller {
         super(byteLens);
     }
 
-    @Override
-    public void initialize() {
-
-    }
-
     @FXML
     private void sourceModuleImportJar(ActionEvent actionEvent) {
         importFile("Import Source Archive",
@@ -131,24 +126,17 @@ public class ModuleContextMenusController extends Controller {
         if (clipboard.getFiles() == null) return;
         var files = clipboard.getFiles();
         getByteLens().submitTask(() -> {
-            for (Path file : files.stream().map(File::toPath).toList()) {
-                getLogger().info("Pasting file/directory: {}", file);
+            for (Path source : files.stream().map(File::toPath).toList()) {
+                getLogger().info("Pasting file/directory: {}", source);
                 try {
-                    if (Files.isDirectory(file)) {
-                        if (Files.isDirectory(selectedTreeItem.getPath()))
-                            FileUtils.copyDirectory(file.toFile(), selectedTreeItem.getPath().toFile());
-                        else
-                            FileUtils.copyDirectory(file.toFile(), selectedTreeItem.getPath().getParent().toFile());
+                    Path targetPath = Files.isDirectory(selectedTreeItem.getPath()) ? selectedTreeItem.getPath() : selectedTreeItem.getPath().getParent();
+                    if (Files.isDirectory(source)) {
+                        FileUtils.copyDirectory(source.toFile(), targetPath.toFile());
                     } else {
-                        if (Files.isDirectory(selectedTreeItem.getPath()))
-                            Files.copy(file, selectedTreeItem.getPath().resolve(file.getFileName()),
-                                    StandardCopyOption.REPLACE_EXISTING);
-                        else
-                            Files.copy(file, selectedTreeItem.getPath().resolveSibling(file.getFileName()),
-                                    StandardCopyOption.REPLACE_EXISTING);
+                        Files.copy(source, targetPath.resolve(source.getFileName()), StandardCopyOption.REPLACE_EXISTING);
                     }
                 } catch (IOException e) {
-                    getLogger().error("Failed to paste file/directory: {}", file, e);
+                    getLogger().error("Failed to paste file/directory: {}", source, e);
                 }
             }
         });
