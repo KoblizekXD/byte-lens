@@ -11,7 +11,7 @@
                     <MenuItem text="New" />
                     <MenuItem text="Open" />
                     <MenuItem text="Recent Projects" />
-                    <MenuItem text="Close Project" />
+                    <MenuItem onAction="#closeProject" text="Close Project" />
                     <SeparatorMenuItem />
                     <MenuItem text="Settings" />
                     <MenuItem text="Project Settings" />

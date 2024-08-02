@@ -264,6 +264,24 @@ public final class ByteLens extends Application {
         logger.info("Opened project {}", project.getName());
     }
 
+    public void closeActiveProject() {
+        logger.trace("Attempting to close active project");
+        if (currentProject == null) {
+            logger.warn("No project to close, action ignored");
+            return;
+        }
+        Stage stage = new Stage();
+        stage.setTitle("ByteLens");
+        stage.setScene(getScene("home-view"));
+        stage.show();
+        if (primaryStage != null) {
+            primaryStage.close();
+        }
+        primaryStage = stage;
+        currentProject = null;
+        logger.info("Closed project");
+    }
+
     /**
      * Finds a project by its name in loaded projects
      * @param name Name of the project to find

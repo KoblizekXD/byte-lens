@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.core.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
@@ -129,5 +130,10 @@ public class MainViewController extends Controller implements Opener {
         tab.setContent(node);
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
+    }
+
+    @FXML
+    public void closeProject(ActionEvent event) {
+        getByteLens().closeActiveProject();
     }
 }

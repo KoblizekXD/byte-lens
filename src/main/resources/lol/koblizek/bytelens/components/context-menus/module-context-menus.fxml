@@ -49,7 +49,7 @@
     <LigmaContextMenu onContextMenuRequested="#shown" id="ext-lib-module">
         <items>
             <Menu text="Import">
-                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Jar File" />
+                <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
                 <IconifiedMenuItem icon="MavenIcons.Images.Expui.toolwindow.Maven" text="From Maven" />
             </Menu>
         </items>
