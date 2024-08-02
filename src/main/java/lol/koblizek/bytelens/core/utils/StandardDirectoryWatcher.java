@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.core.utils;
 
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import org.slf4j.Logger;
@@ -45,10 +46,12 @@ public class StandardDirectoryWatcher {
     private final Path dir;
     private final ExecutorService executor;
     private final IconifiedTreeItem root;
+    private final ContextMenu contextMenu;
     private final Map<WatchKey, Path> keys;
 
-    public StandardDirectoryWatcher(Path dir, IconifiedTreeItem root) throws IOException {
+    public StandardDirectoryWatcher(Path dir, IconifiedTreeItem root, ContextMenu contextMenu) throws IOException {
         this.root = root;
+        this.contextMenu = contextMenu;
         this.watcher = FileSystems.getDefault().newWatchService();
         this.dir = dir;
         this.executor = Executors.newSingleThreadExecutor();
@@ -119,6 +122,7 @@ public class StandardDirectoryWatcher {
                 parentItem = treeItem;
             } else {
                 var nP = new IconifiedTreeItem(full);
+                nP.setContextMenu(contextMenu);
                 parentItem.getChildren().add(nP);
                 parentItem = nP;
             }

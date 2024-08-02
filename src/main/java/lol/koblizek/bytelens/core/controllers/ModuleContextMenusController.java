@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 
 public class ModuleContextMenusController extends Controller {
@@ -81,7 +82,12 @@ public class ModuleContextMenusController extends Controller {
         if (f != null) {
             getByteLens().submitTask(() -> {
                 try {
-                    Files.copy(f.toPath(), selectedTreeItem.getPath().resolve(f.getName()));
+                    if (Files.isDirectory(selectedTreeItem.getPath()))
+                        Files.copy(f.toPath(), selectedTreeItem.getPath().resolve(f.getName()),
+                                StandardCopyOption.REPLACE_EXISTING);
+                    else
+                        Files.copy(f.toPath(), selectedTreeItem.getPath().resolveSibling(f.getName()),
+                                StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     getLogger().error("Failed to copy file", e);
                 }
@@ -123,15 +129,23 @@ public class ModuleContextMenusController extends Controller {
     public void pasteAction(ActionEvent event) {
         var clipboard = Clipboard.getSystemClipboard();
         if (clipboard.getFiles() == null) return;
-
+        var files = clipboard.getFiles();
         getByteLens().submitTask(() -> {
-            for (Path file : clipboard.getFiles().stream().map(File::toPath).toList()) {
+            for (Path file : files.stream().map(File::toPath).toList()) {
                 getLogger().info("Pasting file/directory: {}", file);
                 try {
                     if (Files.isDirectory(file)) {
-                        FileUtils.copyDirectory(file.toFile(), selectedTreeItem.getPath().toFile());
+                        if (Files.isDirectory(selectedTreeItem.getPath()))
+                            FileUtils.copyDirectory(file.toFile(), selectedTreeItem.getPath().toFile());
+                        else
+                            FileUtils.copyDirectory(file.toFile(), selectedTreeItem.getPath().getParent().toFile());
                     } else {
-                        Files.copy(file, selectedTreeItem.getPath().resolve(file.getFileName()));
+                        if (Files.isDirectory(selectedTreeItem.getPath()))
+                            Files.copy(file, selectedTreeItem.getPath().resolve(file.getFileName()),
+                                    StandardCopyOption.REPLACE_EXISTING);
+                        else
+                            Files.copy(file, selectedTreeItem.getPath().resolveSibling(file.getFileName()),
+                                    StandardCopyOption.REPLACE_EXISTING);
                     }
                 } catch (IOException e) {
                     getLogger().error("Failed to paste file/directory: {}", file, e);

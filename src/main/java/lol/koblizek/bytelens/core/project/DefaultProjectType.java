@@ -112,10 +112,12 @@ public class DefaultProjectType extends ProjectCreator {
                         if (Files.isDirectory(path)) {
                             rootItem.getChildren().add(getModule(byteLens, path, contextMenu));
                         } else {
-                            rootItem.getChildren().add(new IconifiedTreeItem(path));
+                            var item = new IconifiedTreeItem(path);
+                            item.setContextMenu(contextMenu);
+                            rootItem.getChildren().add(item);
                         }
                     });
-            var watcher = new StandardDirectoryWatcher(rootPath, rootItem);
+            var watcher = new StandardDirectoryWatcher(rootPath, rootItem, contextMenu);
             watcher.start(byteLens.getCachedExecutor());
         } catch (IOException e) {
             byteLens.getLogger().error("An error occurred in initial file lookup:", e);

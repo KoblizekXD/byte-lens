@@ -27,7 +27,7 @@
             <IconifiedMenuItem onAction="#deleteAction" icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
         </items>
     </LigmaContextMenu>
-    <ContextMenu id="resource-module">
+    <LigmaContextMenu onContextMenuRequested="#shown" id="resource-module">
         <items>
             <Menu text="Import">
                 <IconifiedMenuItem onAction="#resourceModuleImportMappings" icon="AllIcons.Expui.Nodes.DataTables" text="Mappings" />
@@ -45,13 +45,13 @@
             <SeparatorMenuItem />
             <IconifiedMenuItem icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
         </items>
-    </ContextMenu>
-    <ContextMenu id="ext-lib-module">
+    </LigmaContextMenu>
+    <LigmaContextMenu onContextMenuRequested="#shown" id="ext-lib-module">
         <items>
             <Menu text="Import">
                 <IconifiedMenuItem icon="AllIcons.Expui.Nodes.DataTables" text="Jar File" />
                 <IconifiedMenuItem icon="MavenIcons.Images.Expui.toolwindow.Maven" text="From Maven" />
             </Menu>
         </items>
-    </ContextMenu>
+    </LigmaContextMenu>
 </ContextMenuContainer>
