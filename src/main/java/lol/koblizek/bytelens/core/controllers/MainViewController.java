@@ -25,12 +25,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
 import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
+import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 
 public class MainViewController extends Controller implements Opener {
 
+    @FXML private ProjectTabPane projectTabPane;
     @FXML private TabPane tabPane;
     @FXML private MenuBar menubar;
     @FXML private SideToolBar leftToolbar;
@@ -127,10 +128,7 @@ public class MainViewController extends Controller implements Opener {
 
     @Override
     public void open(Node node, @Nullable String name) {
-        Tab tab = new Tab(name);
-        tab.setContent(node);
-        tabPane.getTabs().add(tab);
-        tabPane.getSelectionModel().select(tab);
+        projectTabPane.addTab(new IconifiedTreeItem(name), node);
     }
 
     @FXML
