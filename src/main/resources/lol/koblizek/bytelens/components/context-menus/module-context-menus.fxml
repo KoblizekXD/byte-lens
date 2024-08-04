@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import lol.koblizek.bytelens.api.ui.contextmenus.ContextMenuContainer?>
-<?import lol.koblizek.bytelens.api.ui.contextmenus.LigmaContextMenu?>
+<?import lol.koblizek.bytelens.api.ui.contextmenus.*?>
 <?import lol.koblizek.bytelens.api.util.*?>
 <ContextMenuContainer
         fx:controller="lol.koblizek.bytelens.core.controllers.ModuleContextMenusController"
@@ -51,6 +50,13 @@
             <Menu text="Import">
                 <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
                 <IconifiedMenuItem icon="MavenIcons.Images.Expui.toolwindow.Maven" text="From Maven" />
+            </Menu>
+        </items>
+    </LigmaContextMenu>
+    <LigmaContextMenu inherits="source-module" id="class-file-only">
+        <items>
+            <Menu text="Decompile">
+
             </Menu>
         </items>
     </LigmaContextMenu>

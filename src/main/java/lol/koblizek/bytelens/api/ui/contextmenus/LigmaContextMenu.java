@@ -21,6 +21,8 @@ package lol.koblizek.bytelens.api.ui.contextmenus;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.control.ContextMenu;
@@ -45,6 +47,7 @@ public class LigmaContextMenu extends ContextMenu {
             return "contextMenuRequested";
         }
     };
+    private final StringProperty inherits = new SimpleStringProperty(null);
     private static final EventType<ContextMenuEvent> CONTEXT_MENU_REQUESTED = new EventType<>(ContextMenuEvent.ANY, "CONTEXT_MENU_REQUESTED");
 
     public LigmaContextMenu() {
@@ -65,5 +68,17 @@ public class LigmaContextMenu extends ContextMenu {
 
     public static EventType<ContextMenuEvent> contextMenuRequested() {
         return CONTEXT_MENU_REQUESTED;
+    }
+
+    public StringProperty inheritsProperty() {
+        return inherits;
+    }
+
+    public String getInherits() {
+        return inherits.get();
+    }
+
+    public void setInherits(String value) {
+        inherits.set(value);
     }
 }
