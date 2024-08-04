@@ -156,10 +156,10 @@ public class ModuleContextMenusController extends Controller {
                 ExtendedCodeArea codeArea = new ExtendedCodeArea();
                 codeArea.bridge(getByteLens());
                 codeArea.appendText(ASMUtil.wrapTextifier(reader));
-                opener.open(codeArea, "Instructions");
+                opener.open(codeArea, "Instructions.disasm");
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            getLogger().error("Failed to decompile file", e);
         }
     }
 }

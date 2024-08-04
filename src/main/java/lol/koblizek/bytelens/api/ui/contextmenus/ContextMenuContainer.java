@@ -19,12 +19,12 @@
 
 package lol.koblizek.bytelens.api.ui.contextmenus;
 
-import javafx.application.Platform;
 import javafx.beans.DefaultProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +47,11 @@ public class ContextMenuContainer extends Node {
             for (ContextMenu contextMenu : getItems()) {
                 if (contextMenu instanceof LigmaContextMenu ligmaContextMenu && ligmaContextMenu.getInherits() != null) {
                     Optional<ContextMenu> parent = findById(ligmaContextMenu.getInherits());
-                    parent.ifPresentOrElse(par ->
-                            Platform.runLater(() ->
-                                    par.getItems().addAll(new ArrayList<>(ligmaContextMenu.getItems()))), () -> LOGGER.warn("Could not find parent context menu with id '{}'", ligmaContextMenu.getInherits()));
+                    parent.ifPresentOrElse(par -> {
+                        var temp = par.getItems().toArray(MenuItem[]::new);
+                        ligmaContextMenu.getItems().addAll(new ArrayList<>(par.getItems()));
+                        par.getItems().addAll(temp);
+                    }, () -> LOGGER.warn("Could not find parent context menu with id '{}'", ligmaContextMenu.getInherits()));
                 }
             }
         });

@@ -12,7 +12,7 @@
          alignment="CENTER">
     <AnchorPane VBox.vgrow="ALWAYS" >
         <VBox AnchorPane.leftAnchor="4" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="4" alignment="CENTER">
-            <HBox spacing="4" alignment="CENTER">
+            <HBox spacing="8" alignment="CENTER">
                 <JetBrainsImage icon="AllIcons.Expui.Nodes.Class" fx:id="headIcon" />
                 <Label alignment="CENTER" fx:id="headLabel" text="Test.java" />
                 <JetBrainsButton icon="AllIcons.Expui.General.CloseSmall" iconSize="8" fx:id="closeTab" />

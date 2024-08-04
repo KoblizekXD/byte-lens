@@ -59,6 +59,8 @@
                 <IconifiedMenuItem text="To source" />
                 <IconifiedMenuItem text="ASMifiy" />
                 <IconifiedMenuItem onAction="#decompileToInstructions" text="Bytecode instructions" />
+                <IconifiedMenuItem onAction="#decompileToInstructions" text="Javap dump" />
+                <IconifiedMenuItem onAction="#decompileToInstructions" text="Jasmin bytecode" />
             </Menu>
         </items>
     </LigmaContextMenu>

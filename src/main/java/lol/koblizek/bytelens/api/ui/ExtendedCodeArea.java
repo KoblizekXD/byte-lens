@@ -109,12 +109,5 @@ public class ExtendedCodeArea extends CodeArea {
                     }
                 })
                 .subscribe(this::applyHighlighting);
-        appendText("""
-                public class Main {
-                    public static void main(String[] args) {
-                        System.out.println("Hello, World!");
-                    }
-                }
-                """);
     }
 }
