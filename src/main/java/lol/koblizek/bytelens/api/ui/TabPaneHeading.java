@@ -19,12 +19,14 @@
 
 package lol.koblizek.bytelens.api.ui;
 
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,7 @@ public class TabPaneHeading extends VBox {
     @FXML private JetBrainsImage headIcon;
     @FXML private Label headLabel;
     @FXML private JetBrainsButton closeTab;
+    @FXML private Pane headingSelector;
 
     public TabPaneHeading(IconifiedTreeItem item) {
         super();
@@ -67,5 +70,13 @@ public class TabPaneHeading extends VBox {
 
     public void setClickTabHandler(EventHandler<MouseEvent> e) {
         setOnMouseClicked(e);
+    }
+
+    public void setSelected(boolean state) {
+        headingSelector.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), state);
+    }
+
+    public boolean isSelected() {
+        return headingSelector.getPseudoClassStates().contains(PseudoClass.getPseudoClass("selected"));
     }
 }

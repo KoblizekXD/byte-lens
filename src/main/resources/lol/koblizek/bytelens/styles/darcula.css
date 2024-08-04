@@ -397,15 +397,15 @@ ParagraphText {
     -fx-pref-height: 40;
 }
 
-.tab-pane .item-holder {
+.tab-pane .item-holder:showing {
     -fx-border-color: #313244;
     -fx-border-width: 0 0 1 0;
     -fx-pref-height: 40;
 }
 
 .tab-pane-heading:selected {
-    -fx-border-color: #3574F0;
-    -fx-border-width: 0 0 4 0;
+    /*-fx-border-color: #3574F0;
+    -fx-border-width: 0 0 4 0;*/
 }
 
 .tab-pane-heading .jetbrains-button {
@@ -413,4 +413,10 @@ ParagraphText {
     -fx-background-radius: 8;
     -fx-pref-width: 8;
     -fx-pref-height: 8;
+}
+
+.tab-pane-heading .heading-selector:selected {
+    -fx-border-color: #3574F0;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
 }

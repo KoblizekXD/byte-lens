@@ -10,11 +10,14 @@
          styleClass="tab-pane-heading"
          type="VBox"
          alignment="CENTER">
-    <AnchorPane>
-        <HBox AnchorPane.leftAnchor="4" AnchorPane.rightAnchor="4" spacing="4" alignment="CENTER">
-            <JetBrainsImage icon="AllIcons.Expui.Nodes.Class" fx:id="headIcon" />
-            <Label alignment="CENTER" fx:id="headLabel" text="Test.java" />
-            <JetBrainsButton icon="AllIcons.Expui.General.CloseSmall" iconSize="8" fx:id="closeTab" />
-        </HBox>
+    <AnchorPane VBox.vgrow="ALWAYS" >
+        <VBox AnchorPane.leftAnchor="4" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="4" alignment="CENTER">
+            <HBox spacing="4" alignment="CENTER">
+                <JetBrainsImage icon="AllIcons.Expui.Nodes.Class" fx:id="headIcon" />
+                <Label alignment="CENTER" fx:id="headLabel" text="Test.java" />
+                <JetBrainsButton icon="AllIcons.Expui.General.CloseSmall" iconSize="8" fx:id="closeTab" />
+            </HBox>
+        </VBox>
+        <Pane fx:id="headingSelector" styleClass="heading-selector" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" />
     </AnchorPane>
 </fx:root>

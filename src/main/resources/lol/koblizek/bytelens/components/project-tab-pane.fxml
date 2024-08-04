@@ -4,6 +4,7 @@
 <fx:root xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          stylesheets="@../styles/darcula.css"
+         styleClass="tab-pane"
          type="VBox">
     <HBox styleClass="item-holder" fx:id="itemHolder" />
     <AnchorPane VBox.vgrow="ALWAYS" fx:id="freeSpace" />

@@ -79,6 +79,7 @@ public class ProjectTabPane extends VBox {
             setActiveTab(0);
         } else {
             freeSpace.getChildren().clear();
+            setItemHolderShowing(false);
         }
     }
 
@@ -91,16 +92,21 @@ public class ProjectTabPane extends VBox {
             tabs.get(j).setActive(i == j);
             if (i == j) {
                 freeSpace.getChildren().setAll(tabs.get(j).content);
+                setItemHolderShowing(true);
             }
         }
     }
 
+    private void setItemHolderShowing(boolean state) {
+        itemHolder.pseudoClassStateChanged(PseudoClass.getPseudoClass("showing"), state);
+    }
+
     record Tab(IconifiedTreeItem item, TabPaneHeading heading, Node content) {
         public void setActive(boolean state) {
-            heading.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), state);
+            heading.setSelected(state);
         }
         public boolean isActive() {
-            return heading.getPseudoClassStates().contains(PseudoClass.getPseudoClass("selected"));
+            return heading.isSelected();
         }
     }
 }
