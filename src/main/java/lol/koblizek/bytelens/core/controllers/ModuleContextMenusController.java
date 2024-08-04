@@ -26,14 +26,19 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
+import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
+import lol.koblizek.bytelens.api.ui.Opener;
+import lol.koblizek.bytelens.api.util.ASMUtil;
 import lol.koblizek.bytelens.api.util.IconifiedMenuItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 import org.apache.commons.io.FileUtils;
+import org.objectweb.asm.ClassReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -140,5 +145,21 @@ public class ModuleContextMenusController extends Controller {
                 }
             }
         });
+    }
+
+    @FXML
+    public void decompileToInstructions(ActionEvent event) {
+        try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
+            ClassReader reader = new ClassReader(is);
+            if (getByteLens().getPrimaryStage().getScene().getUserData() != null
+                    && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
+                ExtendedCodeArea codeArea = new ExtendedCodeArea();
+                codeArea.bridge(getByteLens());
+                codeArea.appendText(ASMUtil.wrapTextifier(reader));
+                opener.open(codeArea, "Instructions");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

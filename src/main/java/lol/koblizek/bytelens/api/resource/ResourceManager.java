@@ -85,6 +85,7 @@ public final class ResourceManager {
     }
 
     /**
+     * Returns a scene from the specified FXML file, including the controller passed as user data
      * @param path Relative path to the FXML file
      * @return Scene loaded from the FXML file
      */
@@ -92,7 +93,9 @@ public final class ResourceManager {
         try {
             var loader = getFXML("views/" + path + ".fxml");
             loader.setControllerFactory(this::injectByteLens);
-            return new Scene(loader.load());
+            Scene scene = new Scene(loader.load());
+            scene.setUserData(loader.getController());
+            return scene;
         } catch (IOException e) {
             LOGGER.error("Failed to load scene: {}", path, e);
             return null;

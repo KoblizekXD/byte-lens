@@ -56,7 +56,9 @@
     <LigmaContextMenu inherits="source-module" id="class-file-only">
         <items>
             <Menu text="Decompile">
-
+                <IconifiedMenuItem text="To source" />
+                <IconifiedMenuItem text="ASMifiy" />
+                <IconifiedMenuItem onAction="#decompileToInstructions" text="Bytecode instructions" />
             </Menu>
         </items>
     </LigmaContextMenu>

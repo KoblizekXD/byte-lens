@@ -58,7 +58,11 @@ public class ExtendedCodeArea extends CodeArea {
     }
 
     private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
-        setStyleSpans(0, highlighting);
+        try {
+            setStyleSpans(0, highlighting);
+        } catch (Exception e) {
+            LoggerFactory.getLogger("ExtendedCodeArea").error("Error occurred during highlighting", e);
+        }
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
