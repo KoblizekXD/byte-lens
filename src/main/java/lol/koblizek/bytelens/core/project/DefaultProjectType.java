@@ -21,6 +21,7 @@ package lol.koblizek.bytelens.core.project;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseEvent;
 import javafx.util.converter.DefaultStringConverter;
 import lol.koblizek.bytelens.api.DefaultProject;
@@ -30,6 +31,7 @@ import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
+import lol.koblizek.bytelens.core.utils.AdvancedDirectoryWatcher;
 import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +41,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class DefaultProjectType extends ProjectCreator {
     @Override
@@ -82,7 +87,8 @@ public class DefaultProjectType extends ProjectCreator {
                 item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
         toolWindow.appendTreeItem(toolWindow.root(), "Sources", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            var icon = getModule(byteLens, project.getSources(), contextMenuContainer.findById("source-module").get());
+            var icon = // renderModule(byteLens, project.getSources(), iti -> contextMenuContainer.findById("source-module").get());
+                    getModule(byteLens, project.getSources(), contextMenuContainer.findById("source-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
             item.getChildren().add(icon);
         });
@@ -123,6 +129,66 @@ public class DefaultProjectType extends ProjectCreator {
             byteLens.getLogger().error("An error occurred in initial file lookup:", e);
         }
         return rootItem;
+    }
+
+    private IconifiedTreeItem renderModule(ByteLens byteLens, Path rootPath, Function<IconifiedTreeItem, ContextMenu> selector) {
+        IconifiedTreeItem root = null;
+        try (Stream<Path> paths = Files.walk(rootPath)) {
+            IconifiedTreeItem finalRoot = (root = new IconifiedTreeItem(rootPath));
+            AdvancedDirectoryWatcher watcher = new AdvancedDirectoryWatcher();
+            watcher.registerDir(rootPath, () -> {}, () -> {});
+            root.setContextMenu(selector.apply(root));
+            paths.sorted(Comparator.comparing(Path::toString))
+                    .forEach(path -> {
+                        if (path.equals(rootPath)) return;
+                        if (Files.isDirectory(path)) {
+                            watcher.registerDir(path, () -> {
+                                translatePath(finalRoot, rootPath, path, selector);
+                                finalRoot.setContextMenu(selector.apply(finalRoot));
+                            }, () -> {
+                                reverseTranslatePath(finalRoot, rootPath, rootPath.relativize(path));
+                            });
+                        }
+                        translatePath(finalRoot, rootPath, path, selector);
+                    });
+            watcher.start(byteLens.getCachedExecutor());
+        } catch (IOException e) {
+            byteLens.getLogger().error("An error occurred in initial file lookup:", e);
+        }
+        return root;
+    }
+
+    private void translatePath(IconifiedTreeItem root, Path rootPath, Path added, Function<IconifiedTreeItem, ContextMenu> selector) {
+        for (Path path : rootPath.relativize(added)) {
+            if (getChildren(root).contains(path.toString())) {
+                //noinspection OptionalGetWithoutIsPresent
+                root = (IconifiedTreeItem) root.getChildren().stream()
+                        .filter(item -> item.getValue().equals(path.toString()))
+                        .findFirst().get();
+            } else {
+                var item = new IconifiedTreeItem(added);
+                root.getChildren().add(item);
+                root = item;
+                root.setContextMenu(selector.apply(root));
+            }
+        }
+    }
+
+    private void reverseTranslatePath(IconifiedTreeItem root, Path rootPath, Path removed) {
+        for (int i = 0; i < rootPath.relativize(removed).getNameCount(); i++) {
+            Path path = rootPath.relativize(removed).getName(i);
+            if (i == rootPath.relativize(removed).getNameCount() - 2) {
+                root.getChildren().remove(path.toString());
+            } else {
+                root = (IconifiedTreeItem) root.getChildren().stream()
+                        .filter(item -> item.getValue().equals(path.toString()))
+                        .findFirst().get();
+            }
+        }
+    }
+
+    private List<String> getChildren(IconifiedTreeItem item) {
+        return item.getChildren().stream().map(TreeItem::getValue).toList();
     }
 
     private void itemSelectionEvent(ByteLens byteLens, ProjectTreeToolWindow tw, MouseEvent event) {
