@@ -1,3 +1,22 @@
+/*
+ * This file is part of byte-lens.
+ *
+ * Copyright (c) 2024 KoblizekXD
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package lol.koblizek.bytelens.core.utils;
 
 import org.slf4j.Logger;
@@ -8,6 +27,7 @@ import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public class AdvancedDirectoryWatcher {
 
@@ -21,7 +41,7 @@ public class AdvancedDirectoryWatcher {
         this.keys = new HashMap<>();
     }
 
-    public void registerDir(Path dir, Runnable onCreate, Runnable onDelete) {
+    public void registerDir(Path dir, Consumer<Path> onCreate, Consumer<Path> onDelete) {
         try {
             keys.put(dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE,
                     StandardWatchEventKinds.ENTRY_DELETE), new DirectoryEvent(dir, onCreate, onDelete));
@@ -63,9 +83,9 @@ public class AdvancedDirectoryWatcher {
                     if (Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)) {
                         registerDir(child, e.onCreate(), e.onDelete());
                     }
-                    e.onCreate().run();
+                    e.onCreate().accept(child);
                 } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                    e.onDelete().run();
+                    e.onDelete().accept(child);
                 }
 
                 boolean valid = key.reset();
@@ -76,6 +96,6 @@ public class AdvancedDirectoryWatcher {
         }
     }
 
-    record DirectoryEvent(Path path, Runnable onCreate, Runnable onDelete) {
+    record DirectoryEvent(Path path, Consumer<Path> onCreate, Consumer<Path> onDelete) {
     }
 }

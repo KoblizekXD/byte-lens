@@ -87,8 +87,8 @@ public class DefaultProjectType extends ProjectCreator {
                 item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
         toolWindow.appendTreeItem(toolWindow.root(), "Sources", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            var icon = // renderModule(byteLens, project.getSources(), iti -> contextMenuContainer.findById("source-module").get());
-                    getModule(byteLens, project.getSources(), contextMenuContainer.findById("source-module").get());
+            var icon = renderModule(byteLens, project.getSources(), iti -> contextMenuContainer.findById("source-module").get());
+                    // getModule(byteLens, project.getSources(), contextMenuContainer.findById("source-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
             item.getChildren().add(icon);
         });
@@ -136,17 +136,20 @@ public class DefaultProjectType extends ProjectCreator {
         try (Stream<Path> paths = Files.walk(rootPath)) {
             IconifiedTreeItem finalRoot = (root = new IconifiedTreeItem(rootPath));
             AdvancedDirectoryWatcher watcher = new AdvancedDirectoryWatcher();
-            watcher.registerDir(rootPath, () -> {}, () -> {});
+            watcher.registerDir(rootPath, p -> {
+                translatePath(finalRoot, rootPath, p, selector);
+                finalRoot.setContextMenu(selector.apply(finalRoot));
+            }, p -> reverseTranslatePath(finalRoot, rootPath, p));
             root.setContextMenu(selector.apply(root));
             paths.sorted(Comparator.comparing(Path::toString))
                     .forEach(path -> {
                         if (path.equals(rootPath)) return;
                         if (Files.isDirectory(path)) {
-                            watcher.registerDir(path, () -> {
-                                translatePath(finalRoot, rootPath, path, selector);
+                            watcher.registerDir(path, p -> {
+                                translatePath(finalRoot, rootPath, p, selector);
                                 finalRoot.setContextMenu(selector.apply(finalRoot));
-                            }, () -> {
-                                reverseTranslatePath(finalRoot, rootPath, rootPath.relativize(path));
+                            }, p -> {
+                                reverseTranslatePath(finalRoot, rootPath, p);
                             });
                         }
                         translatePath(finalRoot, rootPath, path, selector);
@@ -177,8 +180,8 @@ public class DefaultProjectType extends ProjectCreator {
     private void reverseTranslatePath(IconifiedTreeItem root, Path rootPath, Path removed) {
         for (int i = 0; i < rootPath.relativize(removed).getNameCount(); i++) {
             Path path = rootPath.relativize(removed).getName(i);
-            if (i == rootPath.relativize(removed).getNameCount() - 2) {
-                root.getChildren().remove(path.toString());
+            if (i == rootPath.relativize(removed).getNameCount() - 1) {
+                root.getChildren().removeIf(item -> item.getValue().equals(path.toString()));
             } else {
                 root = (IconifiedTreeItem) root.getChildren().stream()
                         .filter(item -> item.getValue().equals(path.toString()))
