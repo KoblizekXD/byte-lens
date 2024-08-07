@@ -87,8 +87,11 @@ public class DefaultProjectType extends ProjectCreator {
                 item.setGraphic(new JetBrainsImage("AllIcons.Expui.FileTypes.Json")));
         toolWindow.appendTreeItem(toolWindow.root(), "Sources", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            var icon = renderModule(byteLens, project.getSources(), iti -> contextMenuContainer.findById("source-module").get());
-                    // getModule(byteLens, project.getSources(), contextMenuContainer.findById("source-module").get());
+            var icon = renderModule(byteLens, project.getSources(), iti -> {
+                if (iti.getExtension().equals("class"))
+                    return contextMenuContainer.findById("class-file").get();
+                return contextMenuContainer.findById("source-module").get();
+            });
             icon.overrideIcon("AllIcons.Expui.Nodes.SourceRoot");
             item.getChildren().add(icon);
         });
