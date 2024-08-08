@@ -41,18 +41,6 @@ public class ContextMenuContainer extends Node {
 
     public ContextMenuContainer() {
         items = FXCollections.observableArrayList();
-        items.subscribe(() -> {
-            for (ContextMenu contextMenu : getItems()) {
-                if (contextMenu instanceof LigmaContextMenu ligmaContextMenu && ligmaContextMenu.getInherits() != null) {
-                    Optional<ContextMenu> parent = findById(ligmaContextMenu.getInherits());
-                    parent.ifPresentOrElse(par -> {
-                        for (int i = 0; i < par.getItems().size(); i++) {
-                            System.out.println(ligmaContextMenu.getItems().add(par.getItems().get(i)));
-                        }
-                    }, () -> LOGGER.warn("Could not find parent context menu with id '{}'", ligmaContextMenu.getInherits()));
-                }
-            }
-        });
     }
 
     public ObservableList<ContextMenu> itemsProperty() {

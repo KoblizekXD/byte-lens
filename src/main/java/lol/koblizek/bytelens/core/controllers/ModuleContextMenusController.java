@@ -29,7 +29,6 @@ import javafx.stage.FileChooser;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.Opener;
 import lol.koblizek.bytelens.api.util.ASMUtil;
-import lol.koblizek.bytelens.api.util.IconifiedMenuItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
@@ -45,8 +44,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 
 public class ModuleContextMenusController extends Controller {
-
-    @FXML private IconifiedMenuItem sourceModuleImportJar;
 
     private IconifiedTreeItem selectedTreeItem;
 
@@ -149,17 +146,19 @@ public class ModuleContextMenusController extends Controller {
 
     @FXML
     public void decompileToInstructions(ActionEvent event) {
-        try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
-            ClassReader reader = new ClassReader(is);
-            if (getByteLens().getPrimaryStage().getScene().getUserData() != null
-                    && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
-                ExtendedCodeArea codeArea = new ExtendedCodeArea();
-                codeArea.bridge(getByteLens());
-                codeArea.appendText(ASMUtil.wrapTextifier(reader));
-                opener.open(codeArea, "Instructions.disasm");
+        getByteLens().submitTask(() -> {
+            try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
+                ClassReader reader = new ClassReader(is);
+                if (getByteLens().getPrimaryStage().getScene().getUserData() != null
+                        && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
+                    ExtendedCodeArea codeArea = new ExtendedCodeArea();
+                    codeArea.bridge(getByteLens());
+                    codeArea.appendText(ASMUtil.wrapTextifier(reader));
+                    opener.open(codeArea, "Instructions.disasm");
+                }
+            } catch (IOException e) {
+                getLogger().error("Failed to decompile file", e);
             }
-        } catch (IOException e) {
-            getLogger().error("Failed to decompile file", e);
-        }
+        });
     }
 }

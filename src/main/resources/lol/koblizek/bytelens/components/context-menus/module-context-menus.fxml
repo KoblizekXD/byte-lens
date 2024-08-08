@@ -10,7 +10,7 @@
     <LigmaContextMenu onContextMenuRequested="#shown" id="source-module">
         <items>
             <Menu text="Import">
-                <IconifiedMenuItem onAction="#sourceModuleImportJar" fx:id="sourceModuleImportJar" icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
+                <IconifiedMenuItem onAction="#sourceModuleImportJar" icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
                 <IconifiedMenuItem onAction="#sourceModuleImportClass" icon="AllIcons.Expui.Nodes.Class" text="Class File" />
             </Menu>
             <Menu text="New">
@@ -62,6 +62,22 @@
                 <IconifiedMenuItem onAction="#decompileToInstructions" text="Javap dump" />
                 <IconifiedMenuItem onAction="#decompileToInstructions" text="Jasmin bytecode" />
             </Menu>
+            <SeparatorMenuItem />
+            <Menu text="Import">
+                <IconifiedMenuItem onAction="#sourceModuleImportJar" icon="AllIcons.Expui.FileTypes.Archive" text="Jar File" />
+                <IconifiedMenuItem onAction="#sourceModuleImportClass" icon="AllIcons.Expui.Nodes.Class" text="Class File" />
+            </Menu>
+            <Menu text="New">
+                <IconifiedMenuItem icon="AllIcons.Expui.FileTypes.Text" text="File" />
+                <IconifiedMenuItem icon="AllIcons.Expui.Nodes.Folder" text="Directory" />
+            </Menu>
+            <SeparatorMenuItem />
+            <IconifiedMenuItem icon="AllIcons.Expui.General.Cut" text="Cut" accelerator="Shortcut+X" />
+            <IconifiedMenuItem onAction="#copyAction" icon="AllIcons.Expui.General.Copy" text="Copy" accelerator="Shortcut+C" />
+            <MenuItem text="Copy Path/Reference" />
+            <IconifiedMenuItem onAction="#pasteAction" icon="AllIcons.Expui.General.Paste" text="Paste" accelerator="Shortcut+V" />
+            <SeparatorMenuItem />
+            <IconifiedMenuItem onAction="#deleteAction" icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
         </items>
     </LigmaContextMenu>
 </ContextMenuContainer>
