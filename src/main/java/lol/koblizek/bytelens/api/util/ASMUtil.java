@@ -19,6 +19,11 @@
 
 package lol.koblizek.bytelens.api.util;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.Indentation;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.Textifier;
@@ -48,6 +53,11 @@ public final class ASMUtil {
         PrintWriter printWriter = new PrintWriter(stringWriter);
         var tcv = new TraceClassVisitor(null, new ASMifier(), printWriter);
         reader.accept(tcv, ClassReader.EXPAND_FRAMES);
-        return stringWriter.toString();
+        // We will pretty print the asmified code, which is otherwise ugly
+        DefaultPrettyPrinter prettyPrinter = new DefaultPrettyPrinter();
+        DefaultPrinterConfiguration configuration = new DefaultPrinterConfiguration();
+        configuration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.INDENTATION, new Indentation(Indentation.IndentType.SPACES, 4)));
+        prettyPrinter.setConfiguration(configuration);
+        return prettyPrinter.print(StaticJavaParser.parse(stringWriter.toString()));
     }
 }
