@@ -32,7 +32,6 @@ import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.AdvancedDirectoryWatcher;
-import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 import org.jetbrains.annotations.NotNull;
 
@@ -97,41 +96,18 @@ public class DefaultProjectType extends ProjectCreator {
         });
         toolWindow.appendTreeItem(toolWindow.root(), "Resources", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            var icon = getModule(byteLens, project.getResources(), contextMenuContainer.findById("resource-module").get());
+            var icon = renderModule(byteLens, project.getResources(), iti -> contextMenuContainer.findById("resource-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.ResourcesRoot");
             item.getChildren().add(icon);
         });
         toolWindow.appendTreeItem(toolWindow.root(), "External Libraries", item -> {
             item.overrideIcon("AllIcons.Expui.Nodes.Module");
-            var icon = getModule(byteLens, project.getReferenceLibraries(), contextMenuContainer.findById("ext-lib-module").get());
+            var icon = renderModule(byteLens, project.getReferenceLibraries(), iti -> contextMenuContainer.findById("ext-lib-module").get());
             icon.overrideIcon("AllIcons.Expui.Nodes.LibraryFolder");
             item.getChildren().add(icon);
         });
         toolWindow.appendTreeItem(toolWindow.root(), "Workspace", item -> item.overrideIcon("AllIcons.Expui.Nodes.Module"));
         return true;
-    }
-
-    private IconifiedTreeItem getModule(ByteLens byteLens, Path rootPath, ContextMenu contextMenu) {
-        IconifiedTreeItem rootItem = new IconifiedTreeItem(rootPath);
-        rootItem.setContextMenu(contextMenu);
-        try {
-            Files.list(rootPath)
-                    .sorted(Comparator.comparing(Path::toString))
-                    .forEach(path -> {
-                        if (Files.isDirectory(path)) {
-                            rootItem.getChildren().add(getModule(byteLens, path, contextMenu));
-                        } else {
-                            var item = new IconifiedTreeItem(path);
-                            item.setContextMenu(contextMenu);
-                            rootItem.getChildren().add(item);
-                        }
-                    });
-            var watcher = new StandardDirectoryWatcher(rootPath, rootItem, contextMenu);
-            watcher.start(byteLens.getCachedExecutor());
-        } catch (IOException e) {
-            byteLens.getLogger().error("An error occurred in initial file lookup:", e);
-        }
-        return rootItem;
     }
 
     private IconifiedTreeItem renderModule(ByteLens byteLens, Path rootPath, Function<IconifiedTreeItem, ContextMenu> selector) {
