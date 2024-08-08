@@ -45,9 +45,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public final class ByteLens extends Application {
 
@@ -183,12 +181,23 @@ public final class ByteLens extends Application {
     /**
      * Submits task to the cached executor
      * @see ExecutorService#submit(Runnable)
-     * @see this#getCachedExecutor()
+     * @see #getCachedExecutor()
      * @param runnable Task to submit to the executor
      */
     public void submitTask(Runnable runnable) {
         logger.debug("Submitted new task for parallel execution");
         cachedExecutor.submit(runnable);
+    }
+
+    /**
+     * Submits task to the cached executor
+     * @see ExecutorService#submit(Runnable)
+     * @see #getCachedExecutor()
+     * @param callable Task to submit to the executor
+     */
+    public <T> Future<T> submitTask(Callable<T> callable) {
+        logger.debug("Submitted new task for parallel execution");
+        return cachedExecutor.submit(callable);
     }
 
     /**

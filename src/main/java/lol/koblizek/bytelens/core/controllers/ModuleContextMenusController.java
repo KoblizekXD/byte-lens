@@ -146,19 +146,42 @@ public class ModuleContextMenusController extends Controller {
 
     @FXML
     public void decompileToInstructions(ActionEvent event) {
-        getByteLens().submitTask(() -> {
-            try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
-                ClassReader reader = new ClassReader(is);
-                if (getByteLens().getPrimaryStage().getScene().getUserData() != null
-                        && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
-                    ExtendedCodeArea codeArea = new ExtendedCodeArea();
-                    codeArea.bridge(getByteLens());
-                    codeArea.appendText(ASMUtil.wrapTextifier(reader));
-                    opener.open(codeArea, "Instructions.disasm");
-                }
-            } catch (IOException e) {
-                getLogger().error("Failed to decompile file", e);
+        try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
+            if (getByteLens().getPrimaryStage().getScene().getUserData() != null
+                    && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
+                ExtendedCodeArea codeArea = new ExtendedCodeArea();
+                codeArea.bridge(getByteLens());
+                codeArea.appendText(getByteLens().submitTask(() -> {
+                    ClassReader reader = new ClassReader(is);
+                    return ASMUtil.wrapTextifier(reader);
+                }).get());
+                opener.open(codeArea, "Instructions.class.asm");
             }
-        });
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            getLogger().error("Failed to decompile file", e);
+        }
+    }
+
+    @FXML
+    public void decompileToASMLikeCode(ActionEvent event) {
+        try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
+            if (getByteLens().getPrimaryStage().getScene().getUserData() != null
+                    && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
+
+                ExtendedCodeArea codeArea = new ExtendedCodeArea();
+                codeArea.bridge(getByteLens());
+                codeArea.appendText(getByteLens().submitTask(() -> {
+                    ClassReader reader = new ClassReader(is);
+                    return ASMUtil.wrapASMifier(reader);
+                }).get());
+                opener.open(codeArea, "ASMified.class.asm");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            getLogger().error("Failed to decompile file", e);
+        }
     }
 }

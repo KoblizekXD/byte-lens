@@ -20,6 +20,7 @@
 package lol.koblizek.bytelens.api.util;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.ASMifier;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceClassVisitor;
 import org.slf4j.Logger;
@@ -38,6 +39,14 @@ public final class ASMUtil {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         var tcv = new TraceClassVisitor(null, new Textifier(), printWriter);
+        reader.accept(tcv, ClassReader.EXPAND_FRAMES);
+        return stringWriter.toString();
+    }
+
+    public static String wrapASMifier(ClassReader reader) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        var tcv = new TraceClassVisitor(null, new ASMifier(), printWriter);
         reader.accept(tcv, ClassReader.EXPAND_FRAMES);
         return stringWriter.toString();
     }
