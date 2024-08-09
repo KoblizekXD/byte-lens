@@ -155,7 +155,7 @@ public class ModuleContextMenusController extends Controller {
                     ClassReader reader = new ClassReader(is);
                     return ASMUtil.wrapTextifier(reader);
                 }).get());
-                opener.open(codeArea, "Instructions.class.asm");
+                opener.open(codeArea, selectedTreeItem.getValue() + ".asm");
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -176,8 +176,22 @@ public class ModuleContextMenusController extends Controller {
                     ClassReader reader = new ClassReader(is);
                     return ASMUtil.wrapASMifier(reader);
                 }).get());
-                opener.open(codeArea, "ASMified.class.asm");
+                opener.open(codeArea, selectedTreeItem.getValue() + ".asm");
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            getLogger().error("Failed to decompile file", e);
+        }
+    }
+
+    public void decompile(ActionEvent event) {
+        try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
+            ExtendedCodeArea codeArea = new ExtendedCodeArea();
+            codeArea.bridge(getByteLens());
+            codeArea.appendText(getByteLens().submitTask(() -> getByteLens().getDecompilationManager().getDecompiler()
+                    .decompilePreview(is)).get());
+            ((Opener) getByteLens().getSceneController()).open(codeArea, selectedTreeItem.getValue() + ".java");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {

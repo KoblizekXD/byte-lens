@@ -31,6 +31,7 @@ import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
+import lol.koblizek.bytelens.core.controllers.Controller;
 import lol.koblizek.bytelens.core.decompiler.DecompilationManager;
 import lol.koblizek.bytelens.core.project.DefaultProjectType;
 import lol.koblizek.bytelens.core.utils.CustomNioPathDeserializer;
@@ -341,5 +342,13 @@ public final class ByteLens extends Application {
      */
     public static Path getCache() {
         return getUserDataPath().resolve("cache/");
+    }
+
+    public Object getSceneController() {
+        Object userData = primaryStage.getScene().getUserData();
+        if (!(userData instanceof Controller))
+            logger.warn("Scene controller is not an instance of Controller, this may cause issues while casting\n" +
+                    "Please do not manually set user data of scenes!");
+        return userData;
     }
 }
