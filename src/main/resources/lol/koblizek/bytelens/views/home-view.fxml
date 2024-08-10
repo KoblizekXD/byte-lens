@@ -16,7 +16,7 @@
             <JetBrainsButton onMouseClicked="#buttonNewProjectClicked" icon="AllIcons.Expui.Welcome.CreateNewProjectTab">
                 <tooltip><Tooltip text="Create New Project" /></tooltip>
             </JetBrainsButton>
-            <JetBrainsButton icon="AllIcons.Expui.Welcome.Open">
+            <JetBrainsButton onMouseClicked="#buttonOpenExistingProjectClicked" icon="AllIcons.Expui.Welcome.Open">
                 <tooltip><Tooltip text="Open Existing" /></tooltip>
             </JetBrainsButton>
             <JetBrainsButton icon="AllIcons.Expui.General.ProjectStructure">

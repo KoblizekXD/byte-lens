@@ -24,6 +24,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.DefaultProject;
@@ -76,6 +78,20 @@ public class HomeViewController extends Controller {
             if (s.toLowerCase().contains(searchArea.getText().toLowerCase())) {
                 projectListing.getItems().add(s);
             }
+        }
+    }
+
+    @FXML
+    public void buttonOpenExistingProjectClicked(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Existing Project");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ByteLens Project", "*.bl.json"));
+        var file = fileChooser.showOpenDialog(getByteLens().getPrimaryStage());
+        if (file != null) {
+            getLogger().info("Importing project from file: {}", file.getAbsolutePath());
+            getByteLens().openProject(new DefaultProject(file.toPath().getParent()));
+            getByteLens().getProjects().addLast(getByteLens().getCurrentProject().get());
+            getLogger().info("Project imported successfully");
         }
     }
 }

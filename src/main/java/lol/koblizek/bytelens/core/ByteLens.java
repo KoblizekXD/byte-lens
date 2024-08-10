@@ -90,8 +90,12 @@ public final class ByteLens extends Application {
                 whenPathNotExists(projectsFile, Files::createFile);
                 try {
                     List<String> arr = mapper.readValue(projectsFile.toFile(), new TypeReference<>() {});
-                    arr.add(project.getProjectPath().toString());
-                    mapper.writeValue(projectsFile.toFile(), arr);
+                    if (!arr.contains(project.getProjectPath().toString())) {
+                        arr.add(project.getProjectPath().toString());
+                        mapper.writeValue(projectsFile.toFile(), arr);
+                    } else {
+                        logger.warn("Project already exists in projects.json, ignoring");
+                    }
                 } catch (IOException e) {
                     logger.error("IO Error:", e);
                 }
