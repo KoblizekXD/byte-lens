@@ -48,6 +48,9 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
 
+import static lol.koblizek.bytelens.api.util.Constants.LOG_TASK_SUBMIT;
+import static lol.koblizek.bytelens.api.util.Constants.PROJECTS_FILE;
+
 public final class ByteLens extends Application {
 
     public static void main(String[] args) {
@@ -86,7 +89,7 @@ public final class ByteLens extends Application {
             // PLEASE CALL ADD LAST ONLY WHEN NEW PROJECT IS CREATED, NOT WHENEVER IT IS BEING LOADED. IT MAY BREAK THINGS!
             @Override
             public void addLast(DefaultProject project) {
-                Path projectsFile = getUserDataPath().resolve("projects.json");
+                Path projectsFile = getUserDataPath().resolve(PROJECTS_FILE);
                 whenPathNotExists(projectsFile, Files::createFile);
                 try {
                     List<String> arr = mapper.readValue(projectsFile.toFile(), new TypeReference<>() {});
@@ -145,7 +148,7 @@ public final class ByteLens extends Application {
     }
 
     /**
-     * @return List of all project types used in "New Project" dialog
+     * @return Map of all project types used in "New Project" dialog together with their creators
      */
     public Map<Class<? extends DefaultProject>, ProjectCreator> getProjectTypes() {
         return projectTypes;
@@ -190,7 +193,7 @@ public final class ByteLens extends Application {
      * @param runnable Task to submit to the executor
      */
     public void submitTask(Runnable runnable) {
-        logger.debug("Submitted new task for parallel execution");
+        logger.debug(LOG_TASK_SUBMIT);
         cachedExecutor.submit(runnable);
     }
 
@@ -201,7 +204,7 @@ public final class ByteLens extends Application {
      * @param callable Task to submit to the executor
      */
     public <T> Future<T> submitTask(Callable<T> callable) {
-        logger.debug("Submitted new task for parallel execution");
+        logger.debug(LOG_TASK_SUBMIT);
         return cachedExecutor.submit(callable);
     }
 
@@ -225,12 +228,12 @@ public final class ByteLens extends Application {
         Path blPath = getUserDataPath();
         whenPathNotExists(blPath, path ->
                 Files.createDirectories(blPath));
-        whenPathNotExists(blPath.resolve("projects.json"),
+        whenPathNotExists(blPath.resolve(PROJECTS_FILE),
                 path -> mapper.writeValue(Files.createFile(path).toFile(), new ArrayList<String>()));
     }
 
     private void loadAppData() {
-        Path projectsPath = getUserDataPath().resolve("projects.json");
+        Path projectsPath = getUserDataPath().resolve(PROJECTS_FILE);
         try {
             mapper.readValue(projectsPath.toFile(), new TypeReference<ArrayList<Path>>() {})
                     .stream().distinct().filter(p -> {

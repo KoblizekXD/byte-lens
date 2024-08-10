@@ -19,9 +19,6 @@
 
 package lol.koblizek.bytelens.core.utils;
 
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.TreeItem;
-import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,39 +27,28 @@ import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 /**
- * Class for watching directory for changes and updating tree view accordingly.
- * <p>
- *     If a directories already exists in the tree, they won't be registered for watching.
- * </p>
+ * A simple directory watcher that uses the WatchService API to watch for file events in a directory.
+ * These changes then can be processed by the user with {@code onCreate} and {@code onDelete events}.
  */
 public class StandardDirectoryWatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StandardDirectoryWatcher.class);
 
     private final WatchService watcher;
-    private final Path dir;
-    private final ExecutorService executor;
-    private final IconifiedTreeItem root;
-    private final ContextMenu contextMenu;
-    private final Map<WatchKey, Path> keys;
+    private final Map<WatchKey, DirectoryEvent> keys;
 
-    public StandardDirectoryWatcher(Path dir, IconifiedTreeItem root, ContextMenu contextMenu) throws IOException {
-        this.root = root;
-        this.contextMenu = contextMenu;
+    public StandardDirectoryWatcher() throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
-        this.dir = dir;
-        this.executor = Executors.newSingleThreadExecutor();
         this.keys = new HashMap<>();
-        registerDir(dir);
     }
 
-    private void registerDir(Path dir) {
+    public void registerDir(Path dir, Consumer<Path> onCreate, Consumer<Path> onDelete) {
         try {
             keys.put(dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE,
-                    StandardWatchEventKinds.ENTRY_DELETE), dir);
+                    StandardWatchEventKinds.ENTRY_DELETE), new DirectoryEvent(dir, onCreate, onDelete));
         } catch (IOException e) {
             LOGGER.error("Exception occurred while registering directory to watcher", e);
         }
@@ -81,11 +67,11 @@ public class StandardDirectoryWatcher {
                 Thread.currentThread().interrupt();
                 break;
             }
-
-            Path path = keys.get(key);
+            DirectoryEvent e = keys.get(key);
+            Path path = e.path();
 
             for (WatchEvent<?> event : key.pollEvents()) {
-                LOGGER.trace("New file event");
+                LOGGER.trace("New file event has occurred: {}", event);
                 WatchEvent.Kind<?> kind = event.kind();
 
                 if (kind == StandardWatchEventKinds.OVERFLOW || !(event.context() instanceof Path)) {
@@ -99,45 +85,21 @@ public class StandardDirectoryWatcher {
 
                 if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
                     if (Files.isDirectory(child, LinkOption.NOFOLLOW_LINKS)) {
-                        registerDir(child);
+                        registerDir(child, e.onCreate(), e.onDelete());
                     }
-                    addTreeItem(root, dir.relativize(child), child);
+                    e.onCreate().accept(child);
                 } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                    removeTreeItem(root, dir.relativize(child));
+                    e.onDelete().accept(child);
+                }
+
+                boolean valid = key.reset();
+                if (!valid) {
+                    break;
                 }
             }
-
-            boolean valid = key.reset();
-            if (!valid) {
-                break;
-            }
         }
     }
 
-    private void addTreeItem(IconifiedTreeItem parentItem, Path relative, Path full) {
-        for (Path path : relative) {
-            var opt = parentItem.getChildren().stream()
-                    .filter(it -> it.getValue().equals(path.toString())).findFirst();
-            if (opt.isPresent() && opt.get() instanceof IconifiedTreeItem treeItem) {
-                parentItem = treeItem;
-            } else {
-                var nP = new IconifiedTreeItem(full);
-                nP.setContextMenu(contextMenu);
-                parentItem.getChildren().add(nP);
-                parentItem = nP;
-            }
-        }
-    }
-
-    private void removeTreeItem(TreeItem<String> parentItem, Path relative) {
-        for (Path path : relative) {
-            parentItem = parentItem.getChildren().stream().filter(it -> it.getValue().equals(path.toString()))
-                    .findFirst().orElseThrow();
-        }
-        parentItem.getParent().getChildren().remove(parentItem);
-    }
-
-    public ExecutorService getExecutor() {
-        return executor;
+    record DirectoryEvent(Path path, Consumer<Path> onCreate, Consumer<Path> onDelete) {
     }
 }

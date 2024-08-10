@@ -52,6 +52,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 
+import static lol.koblizek.bytelens.api.util.Constants.FXML_EXT;
+
 public final class ResourceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
@@ -91,7 +93,7 @@ public final class ResourceManager {
      */
     public Scene getScene(String path) {
         try {
-            var loader = getFXML("views/" + path + ".fxml");
+            var loader = getFXML("views/" + path + FXML_EXT);
             loader.setControllerFactory(this::injectByteLens);
             Scene scene = new Scene(loader.load());
             scene.setUserData(loader.getController());
@@ -108,7 +110,7 @@ public final class ResourceManager {
      */
     public Node getNode(String path) {
         try {
-            var loader = getFXML("views/" + path + ".fxml");
+            var loader = getFXML("views/" + path + FXML_EXT);
             loader.setControllerFactory(this::injectByteLens);
             return loader.load();
         } catch (IOException e) {
@@ -211,7 +213,7 @@ public final class ResourceManager {
             if (url == null) {
                 return null;
             }
-            return saveInCache(id, convertSVGToImage(url, width, height));
+            return saveInCache(id, Preconditions.requireNonNull(convertSVGToImage(url, width, height)));
         });
     }
 
@@ -232,7 +234,7 @@ public final class ResourceManager {
 
     public <T extends ContextMenu> T getContextMenu(String path, Class<T> type) {
         try {
-            var loader = getFXML("components/context-menus/" + path + ".fxml");
+            var loader = getFXML("components/context-menus/" + path + FXML_EXT);
             loader.setController(injectByteLens(type));
             loader.setRoot(loader.getController());
             return loader.load();
@@ -247,7 +249,7 @@ public final class ResourceManager {
     }
 
     public ContextMenuContainer getContextMenuContainer(String path) {
-        FXMLLoader loader = getFXML("components/context-menus/" + path + ".fxml");
+        FXMLLoader loader = getFXML("components/context-menus/" + path + FXML_EXT);
         try {
             loader.setControllerFactory(this::injectByteLens);
             return loader.load();
@@ -264,9 +266,12 @@ public final class ResourceManager {
         if (svgContent == null) {
             // Return stub image if failed to read SVG content
             try {
-                return SwingFXUtils.toFXImage(ImageIO.read(ResourceManager.class.getResourceAsStream("/lol/koblizek/bytelens/resources/stub_dark@16x16.png")), null);
+                return SwingFXUtils.toFXImage(ImageIO.read(Preconditions.requireNonNull(
+                        ResourceManager.class.getResourceAsStream("/lol/koblizek/bytelens/resources/stub_dark@16x16.png")
+                )), null);
             } catch (IOException e) {
-                LOGGER.error("Failed to read stub image, this isn't supposed to happen", e);
+                LOGGER.error("Failed to read stub image, this isn't supposed to happen, returning unexpected null", e);
+                return null;
             }
         }
 

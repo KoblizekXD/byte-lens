@@ -31,7 +31,7 @@ import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
-import lol.koblizek.bytelens.core.utils.AdvancedDirectoryWatcher;
+import lol.koblizek.bytelens.core.utils.StandardDirectoryWatcher;
 import lol.koblizek.bytelens.core.utils.StringUtils;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 import org.apache.commons.io.FilenameUtils;
@@ -116,7 +116,7 @@ public class DefaultProjectType extends ProjectCreator {
         IconifiedTreeItem root = null;
         try (Stream<Path> paths = Files.walk(rootPath)) {
             IconifiedTreeItem finalRoot = (root = new IconifiedTreeItem(rootPath));
-            AdvancedDirectoryWatcher watcher = new AdvancedDirectoryWatcher();
+            StandardDirectoryWatcher watcher = new StandardDirectoryWatcher();
             watcher.registerDir(rootPath, p -> {
                 translatePath(finalRoot, rootPath, p, selector);
                 finalRoot.setContextMenu(selector.apply(finalRoot));

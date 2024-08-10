@@ -52,7 +52,10 @@ public class HomeViewController extends Controller {
                 if (selectedItem == null || selectedItem.isBlank()) {
                     return;
                 }
-                getByteLens().openProject(getByteLens().findProjectByName(selectedItem).get());
+                getByteLens().findProjectByName(selectedItem).ifPresentOrElse(project ->
+                        getByteLens().openProject(project),
+                        () -> getLogger().error("Failed to open project - project with name {} not found, but was present in listing", selectedItem)
+                );
             }
         });
         for (DefaultProject project : getByteLens().getProjects()) {
@@ -90,7 +93,10 @@ public class HomeViewController extends Controller {
         if (file != null) {
             getLogger().info("Importing project from file: {}", file.getAbsolutePath());
             getByteLens().openProject(new DefaultProject(file.toPath().getParent()));
-            getByteLens().getProjects().addLast(getByteLens().getCurrentProject().get());
+            getByteLens().getCurrentProject().ifPresentOrElse(project ->
+                    getByteLens().getProjects().addLast(project),
+                    () -> getLogger().error("Failed to import project - current project is not assigned")
+            );
             getLogger().info("Project imported successfully");
         }
     }

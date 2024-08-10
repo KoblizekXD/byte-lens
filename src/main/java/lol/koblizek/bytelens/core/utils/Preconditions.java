@@ -66,4 +66,11 @@ public final class Preconditions {
             throw new NullPointerException("One or more objects are null");
         }
     }
+
+    public static <T> T requireNonNull(T o) {
+        if (o == null) {
+            throw new NullPointerException();
+        }
+        return o;
+    }
 }
