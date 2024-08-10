@@ -185,6 +185,7 @@ public class ModuleContextMenusController extends Controller {
         }
     }
 
+    @FXML
     public void decompile(ActionEvent event) {
         try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
             ExtendedCodeArea codeArea = new ExtendedCodeArea();

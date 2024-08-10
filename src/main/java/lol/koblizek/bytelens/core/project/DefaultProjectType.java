@@ -32,7 +32,9 @@ import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.AdvancedDirectoryWatcher;
+import lol.koblizek.bytelens.core.utils.StringUtils;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -181,17 +183,22 @@ public class DefaultProjectType extends ProjectCreator {
         ExtendedCodeArea codeArea = new ExtendedCodeArea();
         codeArea.bridge(byteLens);
         if (newV instanceof IconifiedTreeItem iti && !iti.isDirectory() && iti.isFileSystemManaged()) { // This means it's actual file/dir
+            String tabName = iti.getPath().getFileName().toString();
             try {
                 codeArea.clear();
                 switch (iti.getExtension()) {
-                    case "class" -> codeArea.appendText(byteLens.getDecompilationManager().getDecompiler()
-                            .decompilePreview(Files.readAllBytes(iti.getPath())));
+                    case "class" -> {
+                        codeArea.appendText(byteLens.getDecompilationManager().getDecompiler()
+                                .decompilePreview(Files.readAllBytes(iti.getPath())));
+                        tabName = FilenameUtils.getBaseName(tabName) + ".java";
+                    }
                     case null, default -> codeArea.appendText(Files.readString(iti.getPath()));
                 }
             } catch (IOException e) {
                 byteLens.getLogger().error("Error occurred on file read!", e);
+                codeArea.appendText(StringUtils.stackTraceToString(e));
             }
-            tw.opener().open(codeArea, iti.getPath().getFileName().toString());
+            tw.opener().open(codeArea, tabName);
         }
     }
 }
