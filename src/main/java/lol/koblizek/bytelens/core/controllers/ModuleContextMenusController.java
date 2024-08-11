@@ -29,6 +29,7 @@ import javafx.stage.FileChooser;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.Opener;
 import lol.koblizek.bytelens.api.util.ASMUtil;
+import lol.koblizek.bytelens.api.util.Constants;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
@@ -160,7 +161,7 @@ public class ModuleContextMenusController extends Controller {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            getLogger().error("Failed to decompile file", e);
+            getLogger().error(Constants.ERROR_FAILED_TO_DECOMPILE, e);
         }
     }
 
@@ -181,7 +182,7 @@ public class ModuleContextMenusController extends Controller {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            getLogger().error("Failed to decompile file", e);
+            getLogger().error(Constants.ERROR_FAILED_TO_DECOMPILE, e);
         }
     }
 
@@ -196,7 +197,7 @@ public class ModuleContextMenusController extends Controller {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            getLogger().error("Failed to decompile file", e);
+            getLogger().error(Constants.ERROR_FAILED_TO_DECOMPILE, e);
         }
     }
 }

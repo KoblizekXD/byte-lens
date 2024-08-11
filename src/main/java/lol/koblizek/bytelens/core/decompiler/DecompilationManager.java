@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Class used to manage decompiler versioning.
@@ -113,7 +114,7 @@ public class DecompilationManager {
             /* Check for hash difference because why not? */
             var internalImpl = getClass().getResource("/libs/" + toString().toLowerCase() + "-impl.jar");
             Files.createDirectories(target.getParent());
-            if (!Files.exists(target) || (Files.exists(target) && !StringUtils.hashOf(internalImpl.openStream()).equals(StringUtils.hashOf(target)))) {
+            if (!Files.exists(target) || (Files.exists(target) && !StringUtils.hashOf(internalImpl).equals(StringUtils.hashOf(target)))) {
                 if (Files.exists(target))
                     Files.delete(target);
                 LOGGER.warn("Hash changed or file does not exist, extracting new internal implementation jar");
@@ -147,9 +148,8 @@ public class DecompilationManager {
      * @return Array of cached decompilers
      */
     public String[] getCachedDecompilers() {
-        try {
-            return Files.list(getDecompilerCache())
-                    .map(Path::getFileName)
+        try (Stream<Path> files = Files.list(getDecompilerCache())) {
+            return files.map(Path::getFileName)
                     .map(Path::toString)
                     .map(str -> FilenameUtils.getBaseName(str).replace('-', ' '))
                     .map(StringUtils::capitalize)

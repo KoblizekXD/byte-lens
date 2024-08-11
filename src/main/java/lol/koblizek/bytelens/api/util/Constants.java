@@ -40,4 +40,6 @@ public class Constants {
      */
     public static final String ERROR_FAILED_TO_DECOMPILE = "Failed to decompile file";
     public static final String LOG_TASK_SUBMIT = "Submitted new task for parallel execution";
+    public static final String ERROR_FAILED_TO_HASH = "Failed to compute hash for stream";
+    public static final String READ_FAILED = "Read Error\n";
 }

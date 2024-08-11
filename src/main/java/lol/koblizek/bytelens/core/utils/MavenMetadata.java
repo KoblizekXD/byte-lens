@@ -120,6 +120,7 @@ public record MavenMetadata(
                                     lastUpd,
                                     DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
                             );
+                    default -> next = unused -> {};
                 }
             }
 

@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.core.utils;
 
+import lol.koblizek.bytelens.api.util.Constants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -160,14 +161,12 @@ public class StringUtils {
         return false;
     }
 
-    public static String hashOf(InputStream stream) {
+    public static String hashOf(URL stream) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            DigestInputStream dis = new DigestInputStream(stream, md);
-            dis.readAllBytes();
-            return new String(dis.getMessageDigest().digest());
-        } catch (NoSuchAlgorithmException | IOException e) {
-            LOGGER.error("Failed to hash input stream", e);
+            return digestedURLToString(stream, md);
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("MD5 algorithm was not found", e);
             return "ReadError";
         }
     }
@@ -175,16 +174,30 @@ public class StringUtils {
     public static String hashOf(Path file) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            try (DigestInputStream dis = new DigestInputStream(Files.newInputStream(file), md)) {
-                dis.readAllBytes();
-                return new String(dis.getMessageDigest().digest());
-            } catch (IOException e) {
-                LOGGER.error("Failed to hash input stream", e);
-                return "ReadError";
-            }
+            return digestedPathToString(file, md);
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Failed to get MD5 instance", e);
-            return "ReadError";
+            LOGGER.error("MD5 algorithm was not found", e);
+            return Constants.READ_FAILED + StringUtils.stackTraceToString(e);
+        }
+    }
+
+    private static String digestedPathToString(Path path, MessageDigest digest) {
+        try (DigestInputStream dis = new DigestInputStream(Files.newInputStream(path), digest)) {
+            dis.readAllBytes();
+            return new String(dis.getMessageDigest().digest());
+        } catch (IOException e) {
+            LOGGER.error(Constants.ERROR_FAILED_TO_HASH, e);
+            return Constants.READ_FAILED + StringUtils.stackTraceToString(e);
+        }
+    }
+
+    private static String digestedURLToString(URL path, MessageDigest digest) {
+        try (DigestInputStream dis = new DigestInputStream(path.openStream(), digest)) {
+            dis.readAllBytes();
+            return new String(dis.getMessageDigest().digest());
+        } catch (IOException e) {
+            LOGGER.error(Constants.ERROR_FAILED_TO_HASH, e);
+            return Constants.READ_FAILED + StringUtils.stackTraceToString(e);
         }
     }
 }
