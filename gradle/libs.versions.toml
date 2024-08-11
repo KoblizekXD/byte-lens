@@ -1,0 +1,24 @@
+[versions]
+asm         = "9.7"
+slf4j       = "2.0.13"
+log4j       = "2.23.1"
+javaparser  = "3.24.0"
+annotations = "24.1.0"
+richtextfx  = "0.11.2"
+jackson     = "2.17.1"
+resolve     = "2024.05.26"
+batik       = "1.14"
+
+[libraries]
+javaparser-core = { module = "com.github.javaparser:javaparser-core", version.ref = "javaparser" }
+log4j-slf4j2-impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+resolve = { module = "dev.mccue:resolve", version.ref = "resolve" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+batik-transcoder = { module = "org.apache.xmlgraphics:batik-transcoder", version.ref = "batik" }
+batik-codec = { module = "org.apache.xmlgraphics:batik-codec", version.ref = "batik" }
+batik-dom = { module = "org.apache.xmlgraphics:batik-dom", version.ref = "batik" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+richtextfx = { module = "org.fxmisc.richtext:richtextfx", version.ref = "richtextfx" }
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }

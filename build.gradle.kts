@@ -62,24 +62,24 @@ allprojects {
     }
 
     dependencies {
-        implementation("com.github.javaparser:javaparser-core:3.26.1")
-        implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
-        implementation("dev.mccue:resolve:2024.05.26")
-        implementation("org.slf4j:slf4j-api:2.0.13")
-        implementation("org.ow2.asm:asm:9.7")
-        implementation("org.ow2.asm:asm-util:9.7")
-        implementation("org.apache.xmlgraphics:batik-transcoder:1.17") {
+        implementation(libs.javaparser.core)
+        implementation(libs.log4j.slf4j2.impl)
+        implementation(libs.resolve)
+        implementation(libs.slf4j.api)
+        implementation(libs.asm)
+        implementation(libs.asm.util)
+        implementation(libs.batik.transcoder) {
             exclude("xml-apis", "xml-apis")
         }
-        implementation("org.apache.xmlgraphics:batik-codec:1.17") {
+        implementation(libs.batik.codec) {
             exclude("xml-apis", "xml-apis")
         }
-        implementation("org.apache.xmlgraphics:batik-dom:1.17") {
+        implementation(libs.batik.dom) {
             exclude("xml-apis", "xml-apis")
         }
-        implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
-        implementation("org.fxmisc.richtext:richtextfx:0.11.2")
-        implementation("org.jetbrains:annotations:24.1.0")
+        implementation(libs.jackson.databind)
+        implementation(libs.richtextfx)
+        implementation(libs.annotations)
     }
 }
 
