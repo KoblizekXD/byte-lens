@@ -161,7 +161,8 @@ public class StringUtils {
         return false;
     }
 
-    public static String hashOf(URL stream) {
+    public static String hashOf(@NotNull URL stream) {
+        Preconditions.nonNull(stream);
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             return digestedURLToString(stream, md);
@@ -171,7 +172,8 @@ public class StringUtils {
         }
     }
 
-    public static String hashOf(Path file) {
+    public static String hashOf(@NotNull Path file) {
+        Preconditions.nonNull(file);
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             return digestedPathToString(file, md);

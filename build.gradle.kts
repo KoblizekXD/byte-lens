@@ -45,6 +45,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Jar> {
     outputs.upToDateWhen { false }
+    dependsOn(":decompiler-api:vineflower-impl:jar")
     from(project(":decompiler-api:vineflower-impl").layout.buildDirectory.file("libs").get()) {
         into("libs")
         include("vineflower-impl.jar")
@@ -68,6 +69,7 @@ allprojects {
         implementation(libs.slf4j.api)
         implementation(libs.asm)
         implementation(libs.asm.util)
+        implementation(libs.commons.io)
         implementation(libs.batik.transcoder) {
             exclude("xml-apis", "xml-apis")
         }
@@ -75,6 +77,9 @@ allprojects {
             exclude("xml-apis", "xml-apis")
         }
         implementation(libs.batik.dom) {
+            exclude("xml-apis", "xml-apis")
+        }
+        implementation("org.apache.xmlgraphics:batik-script:1.17") {
             exclude("xml-apis", "xml-apis")
         }
         implementation(libs.jackson.databind)

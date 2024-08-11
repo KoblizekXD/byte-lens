@@ -8,6 +8,7 @@ richtextfx  = "0.11.2"
 jackson     = "2.17.1"
 resolve     = "2024.05.26"
 batik       = "1.14"
+commons-io  = "2.16.1"
 
 [libraries]
 javaparser-core = { module = "com.github.javaparser:javaparser-core", version.ref = "javaparser" }
@@ -21,4 +22,5 @@ batik-codec = { module = "org.apache.xmlgraphics:batik-codec", version.ref = "ba
 batik-dom = { module = "org.apache.xmlgraphics:batik-dom", version.ref = "batik" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 richtextfx = { module = "org.fxmisc.richtext:richtextfx", version.ref = "richtextfx" }
+commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
