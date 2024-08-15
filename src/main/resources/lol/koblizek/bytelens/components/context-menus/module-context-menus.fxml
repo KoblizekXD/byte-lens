@@ -80,4 +80,9 @@
             <IconifiedMenuItem onAction="#deleteAction" icon="AllIcons.Expui.General.Delete" text="Delete" accelerator="Delete" />
         </items>
     </LigmaContextMenu>
+    <LigmaContextMenu fx:id="fileContentTab" id="file-showed">
+        <items>
+            <IconifiedMenuItem onAction="#save" icon="AllIcons.Expui.General.Save" text="Save" />
+        </items>
+    </LigmaContextMenu>
 </ContextMenuContainer>

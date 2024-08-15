@@ -19,6 +19,8 @@
 
 package lol.koblizek.bytelens.api.util;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TreeItem;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
@@ -29,7 +31,7 @@ import java.nio.file.Path;
 
 public class IconifiedTreeItem extends TreeItem<String> implements CustomContextMenuTarget {
 
-    private Path path;
+    private ObjectProperty<Path> path;
     private ContextMenu contextMenu;
 
     /**
@@ -37,8 +39,8 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
      */
     public IconifiedTreeItem(Path value) {
         super();
-        this.path = value;
-        valueProperty().addListener((observable, oldValue, newValue) -> updateGraphics(path));
+        this.path = new SimpleObjectProperty<>(value);
+        valueProperty().addListener((observable, oldValue, newValue) -> updateGraphics(getPath()));
         setValue(value.getFileName().toString());
     }
 
@@ -52,7 +54,7 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
     }
 
     public void updateGraphics() {
-        updateGraphics(path);
+        updateGraphics(getPath());
     }
 
     public void updateGraphics(Path p) {
@@ -68,7 +70,7 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
             case "csv", "tiny", "tsrg", "mappings", "proguard" -> "AllIcons.Expui.Nodes.DataTables";
             default -> "AllIcons.Expui.FileTypes.Text";
         };
-        path = p;
+        path.set(p);
         setGraphic(new JetBrainsImage(targetIcon));
     }
 
@@ -77,15 +79,15 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
     }
 
     public Path getPath() {
-        return path;
+        return path.get();
     }
 
     public boolean isDirectory() {
-        return path != null && Files.isDirectory(path);
+        return path != null && Files.isDirectory(getPath());
     }
 
     public String getExtension() {
-        return FilenameUtils.getExtension(path.getFileName().toString());
+        return FilenameUtils.getExtension(getPath().getFileName().toString());
     }
 
     public boolean isFileSystemManaged() {
@@ -99,5 +101,13 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
 
     public void setContextMenu(ContextMenu contextMenu) {
         this.contextMenu = contextMenu;
+    }
+
+    public ObjectProperty<Path> pathProperty() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path.set(path);
     }
 }

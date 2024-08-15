@@ -28,12 +28,16 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.Opener;
+import lol.koblizek.bytelens.api.ui.TreeItemOpener;
+import lol.koblizek.bytelens.api.ui.contextmenus.LigmaContextMenu;
 import lol.koblizek.bytelens.api.util.ASMUtil;
 import lol.koblizek.bytelens.api.util.Constants;
+import lol.koblizek.bytelens.api.util.IconifiedMenuItem;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.utils.ui.MenuTargetedTreeCell;
 import org.apache.commons.io.FileUtils;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
 
 import java.io.File;
@@ -46,6 +50,7 @@ import java.util.Collections;
 
 public class ModuleContextMenusController extends Controller {
 
+    @FXML private LigmaContextMenu fileContentTab;
     private IconifiedTreeItem selectedTreeItem;
 
     public ModuleContextMenusController(ByteLens byteLens) {
@@ -88,6 +93,22 @@ public class ModuleContextMenusController extends Controller {
                                 StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     getLogger().error("Failed to copy file", e);
+                }
+            });
+        }
+    }
+
+    private void savePrompt(String title, String text, @Nullable Path initialDirectory) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.setInitialDirectory((initialDirectory == null ? null : initialDirectory.toFile()));
+        File f = fileChooser.showSaveDialog(getByteLens().getPrimaryStage());
+        if (f != null) {
+            getByteLens().submitTask(() -> {
+                try {
+                    Files.writeString(f.toPath(), text);
+                } catch (IOException e) {
+                    getLogger().error("Failed to save file", e);
                 }
             });
         }
@@ -191,13 +212,41 @@ public class ModuleContextMenusController extends Controller {
         try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
             ExtendedCodeArea codeArea = new ExtendedCodeArea();
             codeArea.bridge(getByteLens());
+            codeArea.setStyle("-fx-font-family: Inter"); // For some reason its set to jbr mono by default?!
+            codeArea.setContextMenu(fileContentTab);
+            codeArea.setUserData(new Object[] { selectedTreeItem, false }); // Selected + if is saved or is previewed
             codeArea.appendText(getByteLens().submitTask(() -> getByteLens().getDecompilationManager().getDecompiler()
                     .decompilePreview(is)).get());
-            ((Opener) getByteLens().getSceneController()).open(codeArea, selectedTreeItem.getValue() + ".java");
+            if (getByteLens().getSceneController() instanceof TreeItemOpener opener)
+                opener.open(selectedTreeItem, codeArea);
+            else if (getByteLens().getSceneController() instanceof Opener opener)
+                opener.open(codeArea, selectedTreeItem.getValue() + ".java");
+            else getLogger().error("No opener found for scene controller {}", getByteLens().getSceneController());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
             getLogger().error(Constants.ERROR_FAILED_TO_DECOMPILE, e);
+        }
+    }
+
+    @FXML
+    public void save(ActionEvent event) {
+        try {
+            ExtendedCodeArea area = (ExtendedCodeArea) ((IconifiedMenuItem) event.getSource()).getParentPopup().getOwnerNode();
+            Object[] data = (Object[]) area.getUserData();
+            IconifiedTreeItem item = (IconifiedTreeItem) data[0];
+            boolean isSaved = (boolean) data[1];
+            if (item == null) return;
+            Path path = item.getPath();
+            if (isSaved) {
+                Files.writeString(path, area.getText());
+                item.setPath(path);
+                getLogger().info("Saved file: {}", path);
+            } else {
+                savePrompt("Save File", area.getText(), path.getParent());
+            }
+        } catch (Exception e) {
+            getLogger().error("Failed to save file, because you're stoopid", e);
         }
     }
 }

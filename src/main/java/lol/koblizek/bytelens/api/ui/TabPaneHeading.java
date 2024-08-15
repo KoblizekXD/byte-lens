@@ -59,9 +59,9 @@ public class TabPaneHeading extends VBox {
     @FXML
     public void initialize() {
         if (item.getGraphic() != null)
-            headIcon.setImage(((JetBrainsImage) item.getGraphic()).getImage());
+            headIcon.setIcon(((JetBrainsImage) item.getGraphic()).getIcon());
         else headIcon.setIcon("AllIcons.Expui.FileTypes.Text");
-        headLabel.setText(item.getValue());
+        headLabel.textProperty().bind(item.valueProperty());
     }
 
     public void setCloseTabHandler(EventHandler<ActionEvent> e) {

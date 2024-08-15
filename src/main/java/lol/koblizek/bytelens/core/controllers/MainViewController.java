@@ -32,7 +32,6 @@ import lol.koblizek.bytelens.api.ui.*;
 import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ import java.util.stream.Collectors;
 // This code will have to be "eventually" rewritten to be more effective and more understandable
 // ^^ PS: I got no time for this
 
-public class MainViewController extends Controller implements Opener {
+public class MainViewController extends Controller implements TreeItemOpener {
 
     @FXML private ProjectTabPane projectTabPane;
     @FXML private TabPane tabPane;
@@ -127,8 +126,8 @@ public class MainViewController extends Controller implements Opener {
     }
 
     @Override
-    public void open(Node node, @Nullable String name) {
-        projectTabPane.addTab(new IconifiedTreeItem(name), node);
+    public void open(IconifiedTreeItem item, Node content) {
+        projectTabPane.addTab(item, content);
     }
 
     @FXML

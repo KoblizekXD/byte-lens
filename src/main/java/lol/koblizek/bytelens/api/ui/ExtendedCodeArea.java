@@ -20,6 +20,7 @@
 package lol.koblizek.bytelens.api.ui;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.ContextMenu;
 import lol.koblizek.bytelens.core.ByteLens;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -109,5 +110,13 @@ public class ExtendedCodeArea extends CodeArea {
                     }
                 })
                 .subscribe(this::applyHighlighting);
+    }
+
+    public static ExtendedCodeArea createWith(ByteLens byteLens, String text, ContextMenu contextMenu) {
+        ExtendedCodeArea codeArea = new ExtendedCodeArea();
+        codeArea.appendText(text);
+        codeArea.bridge(byteLens);
+        codeArea.setContextMenu(contextMenu);
+        return codeArea;
     }
 }
