@@ -70,6 +70,7 @@ allprojects {
         implementation(libs.asm)
         implementation(libs.asm.util)
         implementation(libs.commons.io)
+        implementation(libs.log4j.core)
         implementation(libs.batik.transcoder) {
             exclude("xml-apis", "xml-apis")
         }

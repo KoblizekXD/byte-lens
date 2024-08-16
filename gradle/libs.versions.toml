@@ -13,6 +13,7 @@ commons-io  = "2.16.1"
 [libraries]
 javaparser-core = { module = "com.github.javaparser:javaparser-core", version.ref = "javaparser" }
 log4j-slf4j2-impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 resolve = { module = "dev.mccue:resolve", version.ref = "resolve" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }

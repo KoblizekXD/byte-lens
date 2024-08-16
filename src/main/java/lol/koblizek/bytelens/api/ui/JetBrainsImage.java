@@ -28,8 +28,8 @@ import lol.koblizek.bytelens.api.resource.ResourceManager;
 
 public class JetBrainsImage extends ImageView {
 
-    private StringProperty icon;
-    private IntegerProperty iconSize;
+    private final StringProperty icon;
+    private final IntegerProperty iconSize;
 
     public JetBrainsImage(String icon, int width, int height) {
         if (!icon.isBlank()) {

@@ -35,7 +35,7 @@ import java.io.IOException;
 
 public class TabPaneHeading extends VBox {
 
-    private IconifiedTreeItem item;
+    private final IconifiedTreeItem item;
 
     @FXML private JetBrainsImage headIcon;
     @FXML private Label headLabel;

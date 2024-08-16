@@ -40,6 +40,7 @@ module lol.koblizek.bytelens {
     requires org.objectweb.asm.util;
     requires lol.koblizek.bytelens.core.decompiler.api;
     requires reactfx;
+    requires org.apache.logging.log4j.core;
 
     uses lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 

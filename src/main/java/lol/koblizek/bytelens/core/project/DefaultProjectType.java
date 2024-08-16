@@ -27,6 +27,7 @@ import javafx.util.converter.DefaultStringConverter;
 import lol.koblizek.bytelens.api.DefaultProject;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
 import lol.koblizek.bytelens.api.ui.JetBrainsImage;
+import lol.koblizek.bytelens.api.ui.TreeItemOpener;
 import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
 import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
@@ -198,7 +199,9 @@ public class DefaultProjectType extends ProjectCreator {
                 byteLens.getLogger().error("Error occurred on file read!", e);
                 codeArea.appendText(StringUtils.stackTraceToString(e));
             }
-            tw.opener().open(codeArea, tabName);
+            if (tw.opener() instanceof TreeItemOpener tiO)
+                tiO.open(iti, codeArea);
+            else tw.opener().open(codeArea, tabName);
         }
     }
 }

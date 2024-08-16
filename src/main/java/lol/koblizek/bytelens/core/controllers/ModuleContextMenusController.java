@@ -98,7 +98,7 @@ public class ModuleContextMenusController extends Controller {
         }
     }
 
-    private void savePrompt(String title, String text, @Nullable Path initialDirectory) {
+    private Path savePrompt(String title, String text, @Nullable Path initialDirectory) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.setInitialDirectory((initialDirectory == null ? null : initialDirectory.toFile()));
@@ -111,7 +111,9 @@ public class ModuleContextMenusController extends Controller {
                     getLogger().error("Failed to save file", e);
                 }
             });
+            return f.toPath();
         }
+        return null;
     }
 
     @FXML
@@ -173,11 +175,13 @@ public class ModuleContextMenusController extends Controller {
                     && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
                 ExtendedCodeArea codeArea = new ExtendedCodeArea();
                 codeArea.bridge(getByteLens());
+                codeArea.setStyle("-fx-font-family: Inter");
+                codeArea.setContextMenu(fileContentTab);
                 codeArea.appendText(getByteLens().submitTask(() -> {
                     ClassReader reader = new ClassReader(is);
                     return ASMUtil.wrapTextifier(reader);
                 }).get());
-                opener.open(codeArea, selectedTreeItem.getValue() + ".asm");
+                opener.open(codeArea, selectedTreeItem.getValue() + ".asm (Preview)");
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -194,11 +198,13 @@ public class ModuleContextMenusController extends Controller {
 
                 ExtendedCodeArea codeArea = new ExtendedCodeArea();
                 codeArea.bridge(getByteLens());
+                codeArea.setStyle("-fx-font-family: Inter");
+                codeArea.setContextMenu(fileContentTab);
                 codeArea.appendText(getByteLens().submitTask(() -> {
                     ClassReader reader = new ClassReader(is);
                     return ASMUtil.wrapASMifier(reader);
                 }).get());
-                opener.open(codeArea, selectedTreeItem.getValue() + ".asm");
+                opener.open(codeArea, selectedTreeItem.getValue() + ".asm (Preview)");
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -218,9 +224,9 @@ public class ModuleContextMenusController extends Controller {
             codeArea.appendText(getByteLens().submitTask(() -> getByteLens().getDecompilationManager().getDecompiler()
                     .decompilePreview(is)).get());
             if (getByteLens().getSceneController() instanceof TreeItemOpener opener)
-                opener.open(selectedTreeItem, codeArea);
+                opener.open(codeArea, selectedTreeItem.getValue() + " (Preview)");
             else if (getByteLens().getSceneController() instanceof Opener opener)
-                opener.open(codeArea, selectedTreeItem.getValue() + ".java");
+                opener.open(codeArea, selectedTreeItem.getValue() + ".java (Preview)");
             else getLogger().error("No opener found for scene controller {}", getByteLens().getSceneController());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -246,7 +252,7 @@ public class ModuleContextMenusController extends Controller {
                 savePrompt("Save File", area.getText(), path.getParent());
             }
         } catch (Exception e) {
-            getLogger().error("Failed to save file, because you're stoopid", e);
+            getLogger().error("Failed to save file", e);
         }
     }
 }
