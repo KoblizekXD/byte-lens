@@ -78,8 +78,10 @@ public class ProjectTabPane extends VBox {
         if (!tabs.isEmpty() && getCurrentTab() == null) {
             setActiveTab(0);
         } else {
-            freeSpace.getChildren().clear();
-            setItemHolderShowing(false);
+            if (tabs.isEmpty()) {
+                freeSpace.getChildren().clear();
+                setItemHolderShowing(false);
+            }
         }
     }
 
