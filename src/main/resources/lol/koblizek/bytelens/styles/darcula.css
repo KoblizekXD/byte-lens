@@ -420,3 +420,8 @@ ParagraphText {
     -fx-border-width: 2;
     -fx-border-radius: 4;
 }
+
+.settings-button-outer {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #1E1F22;
+}
