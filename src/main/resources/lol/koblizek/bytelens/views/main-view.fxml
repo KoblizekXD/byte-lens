@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import lol.koblizek.bytelens.api.ui.*?>
+<?import lol.koblizek.bytelens.api.util.IconifiedMenuItem?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.MainViewController">
     <VBox prefHeight="40.0" prefWidth="572.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <HBox style="-fx-background-color: #2b2d30">
@@ -48,7 +49,17 @@
             <Region styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
             <VBox alignment="CENTER" prefHeight="40" prefWidth="40">
                 <HBox alignment="CENTER">
-                    <JetBrainsButton alignment="CENTER" icon="AllIcons.Expui.General.Settings" />
+                    <JetBrainsButton onMouseClicked="#opened" fx:id="settingsButton" alignment="CENTER" icon="AllIcons.Expui.General.Settings">
+                        <contextMenu>
+                            <ContextMenu>
+                                <items>
+                                    <IconifiedMenuItem icon="AllIcons.Expui.Actions.SelectAll" text="Decompiler Options" />
+                                    <IconifiedMenuItem icon="AllIcons.Expui.Actions.UnselectAll" text="Select Decompiler" />
+                                    <IconifiedMenuItem icon="AllIcons.Expui.General.Settings" text="Settings" />
+                                </items>
+                            </ContextMenu>
+                        </contextMenu>
+                    </JetBrainsButton>
                 </HBox>
             </VBox>
         </HBox>

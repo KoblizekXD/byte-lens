@@ -27,6 +27,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
 
 public class MainViewController extends Controller implements Opener {
 
+    @FXML private JetBrainsButton settingsButton;
     @FXML private ProjectTabPane projectTabPane;
     @FXML private TabPane tabPane;
     @FXML private MenuBar menubar;
@@ -142,5 +144,10 @@ public class MainViewController extends Controller implements Opener {
 
     public ProjectTabPane getProjectTabPane() {
         return projectTabPane;
+    }
+
+    public void opened(MouseEvent event) {
+        JetBrainsButton src = (JetBrainsButton) event.getSource();
+        src.getContextMenu().show(src, event.getScreenX(), event.getScreenY());
     }
 }
