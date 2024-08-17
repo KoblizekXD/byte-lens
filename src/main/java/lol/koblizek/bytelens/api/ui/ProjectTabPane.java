@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.api.ui;
 
+import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +27,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -53,26 +53,26 @@ public class ProjectTabPane extends VBox {
         }
     }
 
-    public void addTab(IconifiedTreeItem treeItem, Node node) {
-        var heading = new TabPaneHeading(treeItem);
+    public void addTab(Property<String> title, Node content) {
+        var heading = new TabPaneHeading(title);
 
         heading.setCloseTabHandler(e ->
-                removeTab(tabs.indexOf(tabs.stream().filter(t -> t.item == treeItem).findFirst().orElse(null))));
+                removeTab(tabs.indexOf(tabs.stream().filter(t -> t.heading == heading).findFirst().orElse(null))));
         heading.setClickTabHandler(e ->
-                setActiveTab(tabs.indexOf(tabs.stream().filter(t -> t.item == treeItem).findFirst().orElse(null))));
+                setActiveTab(tabs.indexOf(tabs.stream().filter(t -> t.heading == heading).findFirst().orElse(null))));
 
         itemHolder.getChildren().add(heading);
 
-        AnchorPane.setTopAnchor(node, 0.0);
-        AnchorPane.setLeftAnchor(node, 0.0);
-        AnchorPane.setRightAnchor(node, 0.0);
-        AnchorPane.setBottomAnchor(node, 0.0);
+        AnchorPane.setTopAnchor(content, 0.0);
+        AnchorPane.setLeftAnchor(content, 0.0);
+        AnchorPane.setRightAnchor(content, 0.0);
+        AnchorPane.setBottomAnchor(content, 0.0);
 
-        tabs.addLast(new Tab(treeItem, heading, node));
+        tabs.addLast(new Tab(heading, content));
         setActiveTab(tabs.size() - 1);
     }
 
-    private void removeTab(int i) {
+    public void removeTab(int i) {
         itemHolder.getChildren().remove(i);
         tabs.remove(i);
         if (!tabs.isEmpty() && getCurrentTab() == null) {
@@ -89,6 +89,10 @@ public class ProjectTabPane extends VBox {
         return tabs.stream().filter(Tab::isActive).findFirst().orElse(null);
     }
 
+    public int getActiveTab() {
+        return tabs.indexOf(getCurrentTab());
+    }
+
     public void setActiveTab(int i) {
         for (int j = 0; j < tabs.size(); j++) {
             tabs.get(j).setActive(i == j);
@@ -103,7 +107,7 @@ public class ProjectTabPane extends VBox {
         itemHolder.pseudoClassStateChanged(PseudoClass.getPseudoClass("showing"), state);
     }
 
-    record Tab(IconifiedTreeItem item, TabPaneHeading heading, Node content) {
+    record Tab(TabPaneHeading heading, Node content) {
         public void setActive(boolean state) {
             heading.setSelected(state);
         }

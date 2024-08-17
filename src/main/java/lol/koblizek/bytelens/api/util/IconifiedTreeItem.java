@@ -62,7 +62,15 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
             setGraphic(new JetBrainsImage("AllIcons.Expui.Nodes.Folder"));
             return;
         }
-        var targetIcon = switch (FilenameUtils.getExtension(p.getFileName().toString())) {
+        var targetIcon = iconFor(p.getFileName().toString());
+        path.set(p);
+        setGraphic(new JetBrainsImage(targetIcon));
+    }
+
+    public static String iconFor(String fileName) {
+        String ext = FilenameUtils.getExtension(fileName);
+        if (ext.isEmpty()) return "AllIcons.Expui.FileTypes.Text";
+        return switch (ext) {
             case "class" -> "AllIcons.Expui.Nodes.Class";
             case "java" -> "AllIcons.Expui.FileTypes.Java";
             case "jar" -> "AllIcons.Expui.FileTypes.Archive";
@@ -70,8 +78,6 @@ public class IconifiedTreeItem extends TreeItem<String> implements CustomContext
             case "csv", "tiny", "tsrg", "mappings", "proguard" -> "AllIcons.Expui.Nodes.DataTables";
             default -> "AllIcons.Expui.FileTypes.Text";
         };
-        path.set(p);
-        setGraphic(new JetBrainsImage(targetIcon));
     }
 
     public void overrideIcon(String icon) {

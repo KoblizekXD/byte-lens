@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.api.ui;
 
+import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,16 +36,15 @@ import java.io.IOException;
 
 public class TabPaneHeading extends VBox {
 
-    private final IconifiedTreeItem item;
-
+    private final Property<String> bound;
     @FXML private JetBrainsImage headIcon;
     @FXML private Label headLabel;
     @FXML private JetBrainsButton closeTab;
     @FXML private Pane headingSelector;
 
-    public TabPaneHeading(IconifiedTreeItem item) {
+    public TabPaneHeading(Property<String> bound) {
         super();
-        this.item = item;
+        this.bound = bound;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/lol/koblizek/bytelens/components/tab-pane-heading.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -58,10 +58,8 @@ public class TabPaneHeading extends VBox {
 
     @FXML
     public void initialize() {
-        if (item.getGraphic() != null)
-            headIcon.setIcon(((JetBrainsImage) item.getGraphic()).getIcon());
-        else headIcon.setIcon("AllIcons.Expui.FileTypes.Text");
-        headLabel.textProperty().bind(item.valueProperty());
+        headIcon.setIcon(IconifiedTreeItem.iconFor(bound.getValue()));
+        headLabel.textProperty().bind(bound);
     }
 
     public void setCloseTabHandler(EventHandler<ActionEvent> e) {

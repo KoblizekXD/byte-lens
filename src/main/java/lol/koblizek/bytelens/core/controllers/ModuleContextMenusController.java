@@ -27,8 +27,6 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import lol.koblizek.bytelens.api.ui.ExtendedCodeArea;
-import lol.koblizek.bytelens.api.ui.Opener;
-import lol.koblizek.bytelens.api.ui.TreeItemOpener;
 import lol.koblizek.bytelens.api.ui.contextmenus.LigmaContextMenu;
 import lol.koblizek.bytelens.api.util.ASMUtil;
 import lol.koblizek.bytelens.api.util.Constants;
@@ -171,18 +169,16 @@ public class ModuleContextMenusController extends Controller {
     @FXML
     public void decompileToInstructions(ActionEvent event) {
         try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
-            if (getByteLens().getPrimaryStage().getScene().getUserData() != null
-                    && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
-                ExtendedCodeArea codeArea = new ExtendedCodeArea();
-                codeArea.bridge(getByteLens());
-                codeArea.setStyle("-fx-font-family: Inter");
-                codeArea.setContextMenu(fileContentTab);
-                codeArea.appendText(getByteLens().submitTask(() -> {
-                    ClassReader reader = new ClassReader(is);
-                    return ASMUtil.wrapTextifier(reader);
-                }).get());
-                opener.open(codeArea, selectedTreeItem.getValue() + ".asm (Preview)");
-            }
+            ExtendedCodeArea codeArea = new ExtendedCodeArea();
+            codeArea.bridge(getByteLens());
+            codeArea.setStyle("-fx-font-family: Inter");
+            codeArea.setUserData(new Object[] { selectedTreeItem, false });
+            codeArea.setContextMenu(fileContentTab);
+            codeArea.appendText(getByteLens().submitTask(() -> {
+                ClassReader reader = new ClassReader(is);
+                return ASMUtil.wrapTextifier(reader);
+            }).get());
+            getByteLens().getContext().openTab(selectedTreeItem.valueProperty(), codeArea);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
@@ -192,20 +188,18 @@ public class ModuleContextMenusController extends Controller {
 
     @FXML
     public void decompileToASMLikeCode(ActionEvent event) {
+        getByteLens().assureContext();
         try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
-            if (getByteLens().getPrimaryStage().getScene().getUserData() != null
-                    && getByteLens().getPrimaryStage().getScene().getUserData() instanceof Opener opener) {
-
-                ExtendedCodeArea codeArea = new ExtendedCodeArea();
-                codeArea.bridge(getByteLens());
-                codeArea.setStyle("-fx-font-family: Inter");
-                codeArea.setContextMenu(fileContentTab);
-                codeArea.appendText(getByteLens().submitTask(() -> {
-                    ClassReader reader = new ClassReader(is);
-                    return ASMUtil.wrapASMifier(reader);
-                }).get());
-                opener.open(codeArea, selectedTreeItem.getValue() + ".asm (Preview)");
-            }
+            ExtendedCodeArea codeArea = new ExtendedCodeArea();
+            codeArea.bridge(getByteLens());
+            codeArea.setStyle("-fx-font-family: Inter");
+            codeArea.setContextMenu(fileContentTab);
+            codeArea.setUserData(new Object[] { selectedTreeItem, false });
+            codeArea.appendText(getByteLens().submitTask(() -> {
+                ClassReader reader = new ClassReader(is);
+                return ASMUtil.wrapASMifier(reader);
+            }).get());
+            getByteLens().getContext().openTab(selectedTreeItem.valueProperty(), codeArea);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
@@ -215,6 +209,7 @@ public class ModuleContextMenusController extends Controller {
 
     @FXML
     public void decompile(ActionEvent event) {
+        getByteLens().assureContext();
         try (InputStream is = Files.newInputStream(selectedTreeItem.getPath())) {
             ExtendedCodeArea codeArea = new ExtendedCodeArea();
             codeArea.bridge(getByteLens());
@@ -223,11 +218,8 @@ public class ModuleContextMenusController extends Controller {
             codeArea.setUserData(new Object[] { selectedTreeItem, false }); // Selected + if is saved or is previewed
             codeArea.appendText(getByteLens().submitTask(() -> getByteLens().getDecompilationManager().getDecompiler()
                     .decompilePreview(is)).get());
-            if (getByteLens().getSceneController() instanceof TreeItemOpener opener)
-                opener.open(codeArea, selectedTreeItem.getValue() + " (Preview)");
-            else if (getByteLens().getSceneController() instanceof Opener opener)
-                opener.open(codeArea, selectedTreeItem.getValue() + ".java (Preview)");
-            else getLogger().error("No opener found for scene controller {}", getByteLens().getSceneController());
+            //noinspection DataFlowIssue
+            getByteLens().getContext().openTab(selectedTreeItem.valueProperty(), codeArea);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (Exception e) {
@@ -237,6 +229,7 @@ public class ModuleContextMenusController extends Controller {
 
     @FXML
     public void save(ActionEvent event) {
+        getByteLens().assureContext();
         try {
             ExtendedCodeArea area = (ExtendedCodeArea) ((IconifiedMenuItem) event.getSource()).getParentPopup().getOwnerNode();
             Object[] data = (Object[]) area.getUserData();
@@ -246,10 +239,13 @@ public class ModuleContextMenusController extends Controller {
             Path path = item.getPath();
             if (isSaved) {
                 Files.writeString(path, area.getText());
-                item.setPath(path);
                 getLogger().info("Saved file: {}", path);
             } else {
-                savePrompt("Save File", area.getText(), path.getParent());
+                Path saved = savePrompt("Save File", area.getText(), path.getParent());
+                if (saved != null) { //noinspection DataFlowIssue
+                    getByteLens().getContext().closeActiveTab();
+                    getByteLens().getContext().open(saved);
+                }
             }
         } catch (Exception e) {
             getLogger().error("Failed to save file", e);

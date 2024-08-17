@@ -32,6 +32,7 @@ import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.util.ProjectCreator;
 import lol.koblizek.bytelens.core.controllers.Controller;
+import lol.koblizek.bytelens.core.controllers.MainViewController;
 import lol.koblizek.bytelens.core.decompiler.DecompilationManager;
 import lol.koblizek.bytelens.core.project.DefaultProjectType;
 import lol.koblizek.bytelens.core.utils.CustomNioPathDeserializer;
@@ -39,6 +40,7 @@ import lol.koblizek.bytelens.core.utils.CustomNioPathSerializer;
 import lol.koblizek.bytelens.core.utils.ThrowingConsumer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +69,7 @@ public final class ByteLens extends Application {
     private final ResourceManager resourceManager;
     private final DecompilationManager decompilationManager;
     private DefaultProject currentProject;
+    private ApplicationContext context;
 
     @Override
     public void start(Stage stage) {
@@ -273,6 +276,7 @@ public final class ByteLens extends Application {
         Stage stage = new Stage();
         stage.setTitle("ByteLens -" + project.getName());
         stage.setScene(getScene("main-view"));
+        context = new ApplicationContext((MainViewController) stage.getScene().getUserData(), this);
         stage.show();
         if (primaryStage != null) {
             primaryStage.close();
@@ -295,6 +299,7 @@ public final class ByteLens extends Application {
             primaryStage.close();
         }
         primaryStage = stage;
+        context = null;
         currentProject = null;
         logger.info("Closed project");
     }
@@ -357,5 +362,27 @@ public final class ByteLens extends Application {
             logger.warn("Scene controller is not an instance of Controller, this may cause issues while casting\n" +
                     "Please do not manually set user data of scenes!");
         return userData;
+    }
+
+    /**
+     * @return The context of main window of ByteLens, will be null if the main window is not opened
+     */
+    public @Nullable ApplicationContext getContext() {
+        if (context == null)
+            logger.warn("""
+                    Context is null, this may cause issues
+                    Please do not manually set context of ByteLens!
+                    If you believe this is a bug, please report it to the developers!
+                    """);
+        return context;
+    }
+
+    /**
+     * Assures that the context is not null, if it is, throws an exception
+     * @throws IllegalStateException If the context is null
+     */
+    public void assureContext() {
+        if (context == null)
+            throw new IllegalStateException("Context is null, but was expected to not be");
     }
 }

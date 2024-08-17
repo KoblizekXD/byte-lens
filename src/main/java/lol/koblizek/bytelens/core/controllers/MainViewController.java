@@ -20,6 +20,7 @@
 package lol.koblizek.bytelens.core.controllers;
 
 import javafx.application.Platform;
+import javafx.beans.property.Property;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -30,7 +31,6 @@ import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
 import lol.koblizek.bytelens.api.ui.toolwindows.ProjectTreeToolWindow;
-import lol.koblizek.bytelens.api.util.IconifiedTreeItem;
 import lol.koblizek.bytelens.core.ByteLens;
 
 import java.io.IOException;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 // This code will have to be "eventually" rewritten to be more effective and more understandable
 // ^^ PS: I got no time for this
 
-public class MainViewController extends Controller implements TreeItemOpener {
+public class MainViewController extends Controller implements Opener {
 
     @FXML private ProjectTabPane projectTabPane;
     @FXML private TabPane tabPane;
@@ -125,11 +125,6 @@ public class MainViewController extends Controller implements TreeItemOpener {
         getByteLens().getLogger().info("Powered by {}, version {}", dm.getProvider(), dm.getVersion());
     }
 
-    @Override
-    public void open(IconifiedTreeItem item, Node content) {
-        projectTabPane.addTab(item, content);
-    }
-
     @FXML
     public void closeProject(ActionEvent event) {
         getByteLens().closeActiveProject();
@@ -138,5 +133,14 @@ public class MainViewController extends Controller implements TreeItemOpener {
     @FXML
     public void exit(ActionEvent event) {
         Platform.exit();
+    }
+
+    @Override
+    public void open(Property<String> bindableName, Node node) {
+        projectTabPane.addTab(bindableName, node);
+    }
+
+    public ProjectTabPane getProjectTabPane() {
+        return projectTabPane;
     }
 }

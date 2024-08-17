@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.api.ui;
 
+import javafx.beans.NamedArg;
 import javafx.concurrent.Task;
 import javafx.scene.control.ContextMenu;
 import lol.koblizek.bytelens.core.ByteLens;
@@ -44,6 +45,13 @@ public class ExtendedCodeArea extends CodeArea {
     public ExtendedCodeArea() {
         super();
         setParagraphGraphicFactory(LineNumberFactory.get(this));
+    }
+
+    public ExtendedCodeArea(@NamedArg("text") String text, ByteLens byteLens) {
+        super(text);
+        setParagraphGraphicFactory(LineNumberFactory.get(this));
+        bridge(byteLens);
+        createMultiChange().insertText(0, "a").deleteTextAbsolutely(0, 1).commit();
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync(ExecutorService service) {

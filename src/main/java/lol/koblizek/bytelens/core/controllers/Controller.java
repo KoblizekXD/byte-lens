@@ -21,6 +21,7 @@ package lol.koblizek.bytelens.core.controllers;
 
 import javafx.fxml.FXML;
 import lol.koblizek.bytelens.core.ByteLens;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,7 @@ public abstract class Controller {
         this.logger = LoggerFactory.getLogger(getClass());
     }
 
+    @NotNull
     ByteLens getByteLens() {
         return byteLens;
     }
