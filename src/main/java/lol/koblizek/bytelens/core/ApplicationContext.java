@@ -58,18 +58,32 @@ public class ApplicationContext {
         }
     }
 
+    /**
+     * @return the index of the active tab
+     */
     public int getActiveTab() {
         return mainViewController.getProjectTabPane().getActiveTab();
     }
 
+    /**
+     * Closes the active tab
+     */
     public void closeActiveTab() {
         mainViewController.getProjectTabPane().removeTab(mainViewController.getProjectTabPane().getActiveTab());
     }
 
+    /**
+     * Sets the active tab
+     * @param index the index of the tab to set as active
+     */
     public void setActiveTab(int index) {
         mainViewController.getProjectTabPane().setActiveTab(index);
     }
 
+    /**
+     * Closes the tab at the specified index
+     * @param index the index of the tab to close
+     */
     public void closeTab(int index) {
         mainViewController.getProjectTabPane().removeTab(index);
     }
