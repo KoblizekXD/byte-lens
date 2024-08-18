@@ -49,11 +49,11 @@
             <Region styleClass="menu-bar" HBox.hgrow="SOMETIMES" />
             <VBox styleClass="settings-button-outer" alignment="CENTER" prefHeight="40" prefWidth="40">
                 <HBox alignment="CENTER">
-                    <JetBrainsButton onMouseClicked="#opened" fx:id="settingsButton" alignment="CENTER" icon="AllIcons.Expui.General.Settings">
+                    <JetBrainsButton onMouseClicked="#settingMiniMenuOpened" fx:id="settingsButton" alignment="CENTER" icon="AllIcons.Expui.General.Settings">
                         <contextMenu>
                             <ContextMenu>
                                 <items>
-                                    <IconifiedMenuItem icon="AllIcons.Expui.Actions.SelectAll" text="Decompiler Options" />
+                                    <IconifiedMenuItem onAction="#showDecompilerOptions" icon="AllIcons.Expui.Actions.SelectAll" text="Decompiler Options" />
                                     <IconifiedMenuItem icon="AllIcons.Expui.Actions.UnselectAll" text="Select Decompiler" />
                                     <IconifiedMenuItem icon="AllIcons.Expui.General.Settings" text="Settings" />
                                 </items>
@@ -72,7 +72,6 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="251.0" prefWidth="310.0">
                     <ProjectTabPane fx:id="projectTabPane" AnchorPane.bottomAnchor="0"
                                     AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-
                     </ProjectTabPane>
                 </AnchorPane>
                 <SidePane fx:id="rightPanel" />

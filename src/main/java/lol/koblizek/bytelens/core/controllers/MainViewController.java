@@ -28,6 +28,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import lol.koblizek.bytelens.api.ToolWindow;
 import lol.koblizek.bytelens.api.resource.ResourceManager;
 import lol.koblizek.bytelens.api.ui.*;
@@ -146,8 +147,19 @@ public class MainViewController extends Controller implements Opener {
         return projectTabPane;
     }
 
-    public void opened(MouseEvent event) {
+    @FXML
+    public void settingMiniMenuOpened(MouseEvent event) {
         JetBrainsButton src = (JetBrainsButton) event.getSource();
         src.getContextMenu().show(src, event.getScreenX(), event.getScreenY());
+    }
+
+    @FXML
+    public void showDecompilerOptions(ActionEvent event) {
+        Stage stage = new Stage();
+        stage.setTitle("Decompiler Options");
+        stage.setScene(getByteLens().getScene("decompiler-options-view"));
+        stage.initOwner(getByteLens().getPrimaryStage());
+        stage.initModality(javafx.stage.Modality.WINDOW_MODAL);
+        stage.show();
     }
 }

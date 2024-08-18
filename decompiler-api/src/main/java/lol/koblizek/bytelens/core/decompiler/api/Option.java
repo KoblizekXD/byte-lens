@@ -21,9 +21,19 @@ package lol.koblizek.bytelens.core.decompiler.api;
 
 /**
  * Represents a simple decompiler option.
+ * @param id The identifier of the option
  * @param name     name of the option
  * @param desc     description of the option
  * @param shortName short name of the option
+ * @param defaultValue default value of the option
  */
-public record Option(String name, String desc, String shortName) {
+public record Option(String id, String name, String desc, String shortName, Object defaultValue) {
+
+    public Option(String name, String desc, String shortName) {
+        this(shortName, name, desc, shortName, null);
+    }
+
+    public Option(String name, String desc, String shortName, Object defaultValue) {
+        this(shortName, name, desc, shortName, defaultValue);
+    }
 }

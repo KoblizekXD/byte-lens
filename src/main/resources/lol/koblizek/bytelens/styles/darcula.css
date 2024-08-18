@@ -425,3 +425,25 @@ ParagraphText {
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #1E1F22;
 }
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-text-fill: #dfe1e5;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: #313438;
+}
+
+.table-view .table-column {
+    -fx-border-width: 0 1 0 1;
+    -fx-border-color: #313438;
+    -fx-text-fill: #dfe1e5;
+}
+
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-background-color: #2B2D30;
+}
