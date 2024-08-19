@@ -443,6 +443,11 @@ ParagraphText {
     -fx-text-fill: #dfe1e5;
 }
 
+.text-field-table-cell .text-field {
+    -fx-background-color: #2B2D30;
+    -fx-text-fill: #dfe1e5;
+}
+
 .table-view .column-header,
 .table-view .column-header-background .filler {
     -fx-background-color: #2B2D30;

@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.DecompilerOptionsViewController">
-    <TableView fx:id="optionGrid" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+<VBox prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #1e1f22" stylesheets="@../styles/darcula.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lol.koblizek.bytelens.core.controllers.DecompilerOptionsViewController">
+    <VBox>
+        <HBox>
+            <VBox alignment="CENTER">
+                <Label fx:id="editingLabel" alignment="CENTER" text="Editing decompiler options for undefined" />
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS" />
+            <Button onAction="#saveConfiguration" text="Save" />
+        </HBox>
+        <padding>
+            <Insets left="10" right="10" top="10" />
+        </padding>
+    </VBox>
+    <TableView fx:id="optionGrid" editable="true" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+        </padding>
         <columns>
-            <TableColumn prefWidth="320" fx:id="nameCol" text="Name" editable="false" />
-            <TableColumn prefWidth="120" fx:id="shortNameCol" text="Short Name" editable="false" />
-            <TableColumn prefWidth="600" fx:id="descCol" text="Description" editable="false" />
-            <TableColumn fx:id="valueCol" text="Value"/>
+            <TableColumn fx:id="nameCol" editable="false" prefWidth="320" text="Name" />
+            <TableColumn fx:id="shortNameCol" editable="false" prefWidth="120" text="Identifier" />
+            <TableColumn fx:id="descCol" editable="false" prefWidth="600" text="Description" />
+            <TableColumn fx:id="valueCol" text="Value" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
     </TableView>
-</AnchorPane>
+</VBox>

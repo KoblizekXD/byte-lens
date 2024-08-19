@@ -202,4 +202,13 @@ public class StringUtils {
             return Constants.READ_FAILED + StringUtils.stackTraceToString(e);
         }
     }
+
+    public static boolean stringNumberToBoolean(String num) {
+        try {
+            int i = Integer.parseInt(num);
+            return i == 1;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
