@@ -452,3 +452,21 @@ ParagraphText {
 .table-view .column-header-background .filler {
     -fx-background-color: #2B2D30;
 }
+
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-border-color: #5A5D63;
+    -fx-border-radius: 3;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #3574F0;
+    -fx-border-color: #3574F0;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: transparent;
+    -fx-border-color: #dfe1e5;
+    -fx-border-width: 2;
+    -fx-shape: "M20 6L9 17L4 12";
+}

@@ -203,10 +203,28 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Converts a string number to a boolean.
+     * @param num number to convert
+     * @return true if the number is 1, false otherwise
+     */
     public static boolean stringNumberToBoolean(String num) {
         try {
             int i = Integer.parseInt(num);
             return i == 1;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param num number to check
+     * @return true if the number is a valid integer, false otherwise
+     */
+    public static boolean isNumber(String num) {
+        try {
+            Integer.parseInt(num);
+            return true;
         } catch (NumberFormatException e) {
             return false;
         }

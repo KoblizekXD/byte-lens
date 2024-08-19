@@ -31,6 +31,7 @@ import javafx.util.converter.DefaultStringConverter;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 import lol.koblizek.bytelens.core.decompiler.api.Option;
+import lol.koblizek.bytelens.core.utils.StringUtils;
 
 public class DecompilerOptionsViewController extends Controller {
 
@@ -82,7 +83,34 @@ public class DecompilerOptionsViewController extends Controller {
             @Override
             public void commitEdit(String newValue) {
                 super.commitEdit(newValue);
-                updateItem(newValue, false);
+                postCommitUpdate(newValue);
+            }
+
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (StringUtils.isNumber(item)) {
+                    CheckBox cb = new CheckBox();
+                    cb.setSelected(StringUtils.stringNumberToBoolean(item));
+                    cb.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                        commitEdit(Boolean.TRUE.equals(newVal) ? "1" : "0");
+                    });
+                    setGraphic(cb);
+                    setText(null);
+                } else setText(item);
+            }
+
+            private void postCommitUpdate(String item) {
+                getLogger().debug("Post commit update with item: {}", item);
+                if (item.equals("1")) {
+                    ((CheckBox) getGraphic()).setSelected(true);
+                } else if (item.equals("0")) {
+                    ((CheckBox) getGraphic()).setSelected(false);
+                } else {
+                    super.updateItem(item, false);
+                    setText(item);
+                    setGraphic(null);
+                }
             }
         };
     }
