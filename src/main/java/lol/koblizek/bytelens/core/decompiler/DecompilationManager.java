@@ -178,6 +178,7 @@ public class DecompilationManager {
             decompiler = optDecompiler.get();
             this.provider = provider.getName();
             this.version = version;
+
         } else {
             LOGGER.error("Failed to set decompiler");
         }
@@ -222,5 +223,16 @@ public class DecompilationManager {
      */
     public Path getDecompilerCache() {
         return ByteLens.getCache().resolve("decompilers");
+    }
+
+    public void saveConfiguration() {
+        Preconditions.nonNull(decompiler);
+
+        Path p = getDecompilerCache().resolve(getProvider().toLowerCase() + "-" + version + ".json");
+        try {
+            ByteLens.getMapper().writerWithDefaultPrettyPrinter().writeValue(p.toFile(), decompiler.getOptions());
+        } catch (IOException e) {
+            LOGGER.error("Failed to save decompiler configuration", e);
+        }
     }
 }

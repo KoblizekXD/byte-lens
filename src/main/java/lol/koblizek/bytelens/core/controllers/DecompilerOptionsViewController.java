@@ -117,7 +117,8 @@ public class DecompilerOptionsViewController extends Controller {
 
     @FXML
     public void saveConfiguration(ActionEvent event) {
-        
+        getByteLens().getDecompilationManager().saveConfiguration();
+        editingLabel.getScene().getWindow().hide();
     }
 
     record ObservableBasedOption(StringProperty id, StringProperty name, StringProperty desc, StringProperty shortName, ObjectProperty<?> defaultValue) {
