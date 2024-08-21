@@ -1,6 +1,9 @@
 # Byte Lens
 Java bytecode analyzer and decompiler.  
 
+> [!NOTE]  
+> This project is currently paused(or will remain with decreased activity) due to school projects I need to work on.
+
 > [!WARNING]  
 > This project is in an early state of development, there's no release date, if you would like to try ByteLens before it officialy releases, clone the repository and run the application task.
 
