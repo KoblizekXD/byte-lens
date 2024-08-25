@@ -81,18 +81,27 @@ public class VineflowerDecompiler extends Decompiler {
         List<Option> opts = new ArrayList<>();
         for (Field field : IFernflowerPreferences.class.getDeclaredFields()) {
             if (field.isAnnotationPresent(IFernflowerPreferences.Name.class)) {
-                String id = null;
+                String id;
                 try {
-                    id = field.get(null).toString();
+                    id = (String) field.get(null);
                     String name = field.getAnnotation(IFernflowerPreferences.Name.class).value();
                     String desc = field.getAnnotation(IFernflowerPreferences.Description.class).value();
                     String shortName = field.getAnnotation(IFernflowerPreferences.ShortName.class).value();
-                    opts.add(new Option(id, name, desc, shortName, IFernflowerPreferences.getDefaults().get(id)));
+                    String val = (String) IFernflowerPreferences.getDefaults().get(id);
+                    opts.add(new Option(id, name, desc, shortName, tryParse(val == null ? "" : val)));
                 } catch (IllegalAccessException ignored) { // Doesn't happen, fields are static
                     LOGGER.error("Failed to get field value");
                 }
             }
         }
         return opts;
+    }
+
+    public static Object tryParse(String num) {
+        try {
+            return Integer.parseInt(num);
+        } catch (NumberFormatException e) {
+            return num;
+        }
     }
 }

@@ -33,6 +33,8 @@ import lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 import lol.koblizek.bytelens.core.decompiler.api.Option;
 import lol.koblizek.bytelens.core.utils.StringUtils;
 
+import java.util.stream.Collectors;
+
 public class DecompilerOptionsViewController extends Controller {
 
     @FXML private Label editingLabel;
@@ -63,7 +65,7 @@ public class DecompilerOptionsViewController extends Controller {
         valueCol.setCellValueFactory(tv -> tv.getValue().defaultValue().asString());
         Decompiler decompiler = getByteLens().getDecompilationManager().getDecompiler();
         for (Option supportedOption : decompiler.getSupportedOptions()) {
-            optionGrid.getItems().add(new ObservableBasedOption(supportedOption));
+            optionGrid.getItems().add(new ObservableBasedOption(supportedOption, decompiler.getOptions().get(supportedOption.id())));
         }
     }
 
@@ -89,7 +91,7 @@ public class DecompilerOptionsViewController extends Controller {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (StringUtils.isNumber(item)) {
+                if (item != null && StringUtils.isNumberBoolean(item)) {
                     CheckBox cb = new CheckBox();
                     cb.setSelected(StringUtils.stringNumberToBoolean(item));
                     cb.selectedProperty().addListener((obs, oldVal, newVal) -> {
@@ -111,23 +113,39 @@ public class DecompilerOptionsViewController extends Controller {
                     setText(item);
                     setGraphic(null);
                 }
+
+                optionGrid.getItems().get(getIndex()).defaultValue.set(StringUtils.isNumber(item) ? Integer.parseInt(item) : item);
             }
         };
     }
 
     @FXML
     public void saveConfiguration(ActionEvent event) {
+        getByteLens().getDecompilationManager().getDecompiler()
+                        .setOptions(optionGrid.getItems().stream().collect(Collectors.toMap(
+                                o -> o.id.get(),
+                                v -> v.defaultValue.get()
+                        )));
         getByteLens().getDecompilationManager().saveConfiguration();
         editingLabel.getScene().getWindow().hide();
     }
 
-    record ObservableBasedOption(StringProperty id, StringProperty name, StringProperty desc, StringProperty shortName, ObjectProperty<?> defaultValue) {
+    record ObservableBasedOption(StringProperty id, StringProperty name, StringProperty desc, StringProperty shortName, ObjectProperty<Object> defaultValue) {
         public ObservableBasedOption(Option dOption) {
             this(new SimpleStringProperty(dOption.id()),
                     new SimpleStringProperty(dOption.name()),
                     new SimpleStringProperty(dOption.desc()),
                     new SimpleStringProperty(dOption.shortName()),
                     new SimpleObjectProperty<>(dOption.defaultValue() == null ? "" : dOption.defaultValue())
+            );
+        }
+
+        public ObservableBasedOption(Option dOption, Object value) {
+            this(new SimpleStringProperty(dOption.id()),
+                    new SimpleStringProperty(dOption.name()),
+                    new SimpleStringProperty(dOption.desc()),
+                    new SimpleStringProperty(dOption.shortName()),
+                    new SimpleObjectProperty<>(value)
             );
         }
     }

@@ -229,4 +229,12 @@ public class StringUtils {
             return false;
         }
     }
+
+    /**
+     * @param num number to check
+     * @return true if the number is a valid boolean(1 or 0), if it is not(or is not a number) returns false
+     */
+    public static boolean isNumberBoolean(String num) {
+        return num.equals("1") || num.equals("0");
+    }
 }

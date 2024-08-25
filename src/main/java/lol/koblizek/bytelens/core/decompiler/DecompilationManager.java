@@ -19,6 +19,7 @@
 
 package lol.koblizek.bytelens.core.decompiler;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import lol.koblizek.bytelens.core.ByteLens;
 import lol.koblizek.bytelens.core.decompiler.api.Decompiler;
 import lol.koblizek.bytelens.core.utils.MavenMetadata;
@@ -36,6 +37,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -178,7 +180,7 @@ public class DecompilationManager {
             decompiler = optDecompiler.get();
             this.provider = provider.getName();
             this.version = version;
-
+            loadConfiguration();
         } else {
             LOGGER.error("Failed to set decompiler");
         }
@@ -225,14 +227,49 @@ public class DecompilationManager {
         return ByteLens.getCache().resolve("decompilers");
     }
 
+    /**
+     * Saves the current decompiler configuration to a file.
+     */
     public void saveConfiguration() {
         Preconditions.nonNull(decompiler);
 
-        Path p = getDecompilerCache().resolve(getProvider().toLowerCase() + "-" + version + ".json");
+        Path p = getConfigurationFile();
         try {
             ByteLens.getMapper().writerWithDefaultPrettyPrinter().writeValue(p.toFile(), decompiler.getOptions());
         } catch (IOException e) {
             LOGGER.error("Failed to save decompiler configuration", e);
         }
+    }
+
+    public void loadConfiguration() {
+        Preconditions.nonNull(decompiler);
+
+        try {
+            if (Files.exists(getConfigurationFile())) {
+                getDecompiler().setOptions(ByteLens.getMapper().readValue(getConfigurationFile().toFile(), new TypeReference<>() {}));
+            } else {
+                LOGGER.warn("Configuration file does not exist, no options will be passed");
+                ByteLens.getMapper().writerWithDefaultPrettyPrinter().writeValue(getConfigurationFile().toFile(),
+                        decompiler.getSupportedOptions().stream().collect(
+                                HashMap::new,
+                                (map, option) -> map.put(option.id(), option.defaultValue()),
+                                HashMap::putAll
+                        )
+                );
+            }
+        } catch (IOException e) {
+            LOGGER.error("Failed to load decompiler configuration", e);
+        }
+    }
+
+    /**
+     * Returns the path to the configuration file of the current decompiler.
+     * The file may or may not exist.
+     * @return Path to the configuration file
+     */
+    public Path getConfigurationFile() {
+        Preconditions.nonNull(decompiler);
+
+        return getDecompilerCache().resolve(getProvider().toLowerCase() + "-" + version + ".json");
     }
 }
